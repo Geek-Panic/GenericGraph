@@ -21,11 +21,11 @@ public:
 	
 	UGraphDefinitionBase(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 	virtual ~UGraphDefinitionBase() override;
-
+	
 	
 	/** Outputs graph structure to console/log */
 	UFUNCTION(BlueprintCallable, Category = "GenericGraph")
-	void Print(bool ToConsole = true, bool ToScreen = true);
+	void Print(bool ToConsole = true, bool ToScreen = true) const;
 
 	/** Returns total depth of the graph hierarchy */
 	UFUNCTION(BlueprintCallable, Category = "GenericGraph")
@@ -33,7 +33,7 @@ public:
 
 	/** Gets all nodes at specified hierarchy level */
 	UFUNCTION(BlueprintCallable, Category = "GenericGraph")
-	void GetNodesByLevel(int Level, TArray<UGraphNodeDefinitionBase*>& Nodes);
+	void GetNodesByLevel(int Level, TArray<UGraphNodeDefinitionBase*>& Nodes) const;
 
 	/** Resets graph by clearing all nodes and connections */
 	void ClearGraph();
@@ -41,7 +41,7 @@ public:
 	
 	/** Display name of the graph, used for debug purpose */
 	UPROPERTY(EditDefaultsOnly, Category = "GenericGraph")
-	FString Name;
+	FString DisplayName;
 
 	/** Class for graph nodes */
 	UPROPERTY(EditDefaultsOnly, Category = "GenericGraph")

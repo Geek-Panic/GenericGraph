@@ -1,6 +1,9 @@
 #include "GraphEdgeDefinitionBase.h"
 
-UGraphEdgeDefinitionBase::UGraphEdgeDefinitionBase() {}
+UGraphEdgeDefinitionBase::UGraphEdgeDefinitionBase(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.Get())
+{
+	
+}
 
 UGraphEdgeDefinitionBase::~UGraphEdgeDefinitionBase() {}
 
@@ -12,6 +15,6 @@ UGraphDefinitionBase* UGraphEdgeDefinitionBase::GetGraph() const
 #if WITH_EDITOR
 void UGraphEdgeDefinitionBase::SetNodeTitle(const FText& NewTitle)
 {
-	NodeTitle = NewTitle;
+	DisplayName = NewTitle;
 }
 #endif // #if WITH_EDITOR

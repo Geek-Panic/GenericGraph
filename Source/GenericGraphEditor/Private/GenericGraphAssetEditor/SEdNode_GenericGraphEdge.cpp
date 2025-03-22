@@ -160,7 +160,7 @@ const FSlateBrush* SEdNode_GenericGraphEdge::GetEdgeImage() const
 EVisibility SEdNode_GenericGraphEdge::GetEdgeImageVisibility() const
 {
 	UEdNode_GenericGraphEdge* EdgeNode = CastChecked<UEdNode_GenericGraphEdge>(GraphNode);
-	if (EdgeNode && EdgeNode->GenericGraphEdge && EdgeNode->GenericGraphEdge->bShouldDrawTitle)
+	if (EdgeNode && EdgeNode->GenericGraphEdge && EdgeNode->GenericGraphEdge->bShouldDrawDisplayName)
 	{
 		return EVisibility::Hidden;
 	}
@@ -171,7 +171,7 @@ EVisibility SEdNode_GenericGraphEdge::GetEdgeImageVisibility() const
 EVisibility SEdNode_GenericGraphEdge::GetEdgeTitleVisbility() const
 {
 	UEdNode_GenericGraphEdge* EdgeNode = CastChecked<UEdNode_GenericGraphEdge>(GraphNode);
-	if (EdgeNode && EdgeNode->GenericGraphEdge && EdgeNode->GenericGraphEdge->bShouldDrawTitle)
+	if (EdgeNode && EdgeNode->GenericGraphEdge && EdgeNode->GenericGraphEdge->bShouldDrawDisplayName)
 	{
 		return EVisibility::Visible;
 	}

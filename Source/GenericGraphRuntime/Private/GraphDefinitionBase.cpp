@@ -20,7 +20,7 @@ UGraphDefinitionBase::UGraphDefinitionBase(const FObjectInitializer& ObjectIniti
 
 UGraphDefinitionBase::~UGraphDefinitionBase() {}
 
-void UGraphDefinitionBase::Print(bool ToConsole /*= true*/, bool ToScreen /*= true*/)
+void UGraphDefinitionBase::Print(const bool ToConsole /*= true*/, const bool ToScreen /*= true*/) const
 {
 	int Level = 0;
 	TArray<UGraphNodeDefinitionBase*> CurrLevelNodes = RootNodes;
@@ -84,16 +84,16 @@ int UGraphDefinitionBase::GetLevelNum() const
 	return Level;
 }
 
-void UGraphDefinitionBase::GetNodesByLevel(int Level, TArray<UGraphNodeDefinitionBase*>& Nodes)
+void UGraphDefinitionBase::GetNodesByLevel(const int Level, TArray<UGraphNodeDefinitionBase*>& Nodes) const
 {
-	int CurrLEvel = 0;
+	int CurrentLevel = 0;
 	TArray<UGraphNodeDefinitionBase*> NextLevelNodes;
 
 	Nodes = RootNodes;
 
 	while (Nodes.Num() != 0)
 	{
-		if (CurrLEvel == Level)
+		if (CurrentLevel == Level)
 		{
 			break;
 		}
@@ -111,7 +111,7 @@ void UGraphDefinitionBase::GetNodesByLevel(int Level, TArray<UGraphNodeDefinitio
 
 		Nodes = NextLevelNodes;
 		NextLevelNodes.Reset();
-		++CurrLEvel;
+		++CurrentLevel;
 	}
 }
 
@@ -119,8 +119,7 @@ void UGraphDefinitionBase::ClearGraph()
 {
 	for (int i = 0; i < AllNodes.Num(); ++i)
 	{
-		UGraphNodeDefinitionBase* Node = AllNodes[i];
-		if (Node)
+		if (UGraphNodeDefinitionBase* Node = AllNodes[i])
 		{
 			Node->ParentNodes.Empty();
 			Node->ChildrenNodes.Empty();

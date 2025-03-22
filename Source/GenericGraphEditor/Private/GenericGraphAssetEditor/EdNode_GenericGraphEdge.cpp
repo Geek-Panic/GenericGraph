@@ -26,7 +26,7 @@ FText UEdNode_GenericGraphEdge::GetNodeTitle(ENodeTitleType::Type TitleType) con
 {
 	if (GenericGraphEdge)
 	{
-		return GenericGraphEdge->GetNodeTitle();
+		return GenericGraphEdge->GetDisplayName();
 	}
 	return FText();
 }

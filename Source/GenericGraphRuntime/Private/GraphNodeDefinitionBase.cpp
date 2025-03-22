@@ -35,14 +35,14 @@ FLinearColor UGraphNodeDefinitionBase::GetBackgroundColor() const
 	return BackgroundColor;
 }
 
-FText UGraphNodeDefinitionBase::GetNodeTitle() const
+FText UGraphNodeDefinitionBase::GetDisplayName() const
 {
-	return NodeTitle.IsEmpty() ? GetDescription() : NodeTitle;
+	return DisplayName.IsEmpty() ? GetDescription() : DisplayName;
 }
 
-void UGraphNodeDefinitionBase::SetNodeTitle(const FText& NewTitle)
+void UGraphNodeDefinitionBase::SetDisplayName(const FText& NewDisplayName)
 {
-	NodeTitle = NewTitle;
+	DisplayName = NewDisplayName;
 }
 
 bool UGraphNodeDefinitionBase::CanCreateConnection(UGraphNodeDefinitionBase* Other, FText& ErrorMessage)

@@ -29,7 +29,7 @@ FText UEdNode_GenericGraphNode::GetNodeTitle(ENodeTitleType::Type TitleType) con
 	{
 		return Super::GetNodeTitle(TitleType);
 	}
-	return GenericGraphNode->GetNodeTitle();
+	return GenericGraphNode->GetDisplayName();
 }
 
 void UEdNode_GenericGraphNode::PrepareForCopying()

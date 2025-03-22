@@ -19,21 +19,28 @@ class GENERICGRAPHRUNTIME_API UGraphNodeDefinitionBase : public UObject
 {
 	GENERATED_BODY()
 
+	friend class UGraphDefinitionBase;
+	
 public:
+	
 	UGraphNodeDefinitionBase();
 	virtual ~UGraphNodeDefinitionBase() override;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "GenericGraphNode")
-	UGraphDefinitionBase* Graph;
 
-	UPROPERTY(BlueprintReadOnly, Category = "GenericGraphNode")
-	TArray<UGraphNodeDefinitionBase*> ParentNodes;
+#if WITH_EDITOR
+	virtual bool IsNameEditable() const;
 
-	UPROPERTY(BlueprintReadOnly, Category = "GenericGraphNode")
-	TArray<UGraphNodeDefinitionBase*> ChildrenNodes;
+	virtual FLinearColor GetBackgroundColor() const;
 
-	UPROPERTY(BlueprintReadOnly, Category = "GenericGraphNode")
-	TMap<UGraphNodeDefinitionBase*, UGraphEdgeDefinitionBase*> Edges;
+	virtual FText GetDisplayName() const;
+
+	virtual void SetDisplayName(const FText& NewDisplayName);
+
+	virtual bool CanCreateConnection(UGraphNodeDefinitionBase* Other, FText& ErrorMessage);
+
+	virtual bool CanCreateConnectionTo(UGraphNodeDefinitionBase* Other, int32 NumberOfChildrenNodes, FText& ErrorMessage);
+	virtual bool CanCreateConnectionFrom(UGraphNodeDefinitionBase* Other, int32 NumberOfParentNodes, FText& ErrorMessage);
+#endif
 
 	UFUNCTION(BlueprintCallable, Category = "GenericGraphNode")
 	virtual UGraphEdgeDefinitionBase* GetEdge(UGraphNodeDefinitionBase* ChildNode);
@@ -48,11 +55,25 @@ public:
 	FText GetDescription() const;
 	virtual FText GetDescription_Implementation() const;
 
-	//////////////////////////////////////////////////////////////////////////
-#if WITH_EDITORONLY_DATA
-	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor")
-	FText NodeTitle;
+protected:
+	
+	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode")
+	FText DisplayName;
+	
+	UPROPERTY(VisibleDefaultsOnly, Category = "GenericGraphNode")
+	UGraphDefinitionBase* Graph;
+	
+	UPROPERTY(BlueprintReadOnly, Category = "GenericGraphNode")
+	TArray<TObjectPtr<UGraphNodeDefinitionBase>> ParentNodes;
 
+	UPROPERTY(BlueprintReadOnly, Category = "GenericGraphNode")
+	TArray<TObjectPtr<UGraphNodeDefinitionBase>> ChildrenNodes;
+	
+	UPROPERTY(BlueprintReadOnly, Category = "GenericGraphNode")
+	TMap<TObjectPtr<UGraphNodeDefinitionBase>, TObjectPtr<UGraphEdgeDefinitionBase>> Edges;
+	
+	
+#if WITH_EDITORONLY_DATA
 	UPROPERTY(VisibleDefaultsOnly, Category = "GenericGraphNode_Editor")
 	TSubclassOf<UGraphDefinitionBase> CompatibleGraphType;
 
@@ -73,21 +94,5 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor", meta = (ClampMin = "0", EditCondition = "ChildrenLimitType == ENodeLimit::Limited", EditConditionHides))
 	int32 ChildrenLimit;
-
-#endif
-
-#if WITH_EDITOR
-	virtual bool IsNameEditable() const;
-
-	virtual FLinearColor GetBackgroundColor() const;
-
-	virtual FText GetNodeTitle() const;
-
-	virtual void SetNodeTitle(const FText& NewTitle);
-
-	virtual bool CanCreateConnection(UGraphNodeDefinitionBase* Other, FText& ErrorMessage);
-
-	virtual bool CanCreateConnectionTo(UGraphNodeDefinitionBase* Other, int32 NumberOfChildrenNodes, FText& ErrorMessage);
-	virtual bool CanCreateConnectionFrom(UGraphNodeDefinitionBase* Other, int32 NumberOfParentNodes, FText& ErrorMessage);
 #endif
 };
