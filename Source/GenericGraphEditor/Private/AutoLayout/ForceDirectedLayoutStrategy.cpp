@@ -51,7 +51,7 @@ void UForceDirectedLayoutStrategy::Layout(UEdGraph* _EdGraph)
 	}
 }
 
-FBox2D UForceDirectedLayoutStrategy::LayoutOneTree(UGenericGraphNode* RootNode, const FBox2D& PreTreeBound)
+FBox2D UForceDirectedLayoutStrategy::LayoutOneTree(UGraphNodeDefinitionBase* RootNode, const FBox2D& PreTreeBound)
 {
 	float Temp = InitTemperature;
 	FBox2D TreeBound = GetActualBounds(RootNode);
@@ -97,14 +97,14 @@ FBox2D UForceDirectedLayoutStrategy::LayoutOneTree(UGenericGraphNode* RootNode, 
 
 		// Calculate the attractive forces.
 		int Level = 0;
-		TArray<UGenericGraphNode*> CurrLevelNodes = {RootNode};
-		TArray<UGenericGraphNode*> NextLevelNodes;
+		TArray<UGraphNodeDefinitionBase*> CurrLevelNodes = {RootNode};
+		TArray<UGraphNodeDefinitionBase*> NextLevelNodes;
 
 		while (CurrLevelNodes.Num() != 0)
 		{
 			for (int32 i = 0; i < CurrLevelNodes.Num(); ++i)
 			{
-				UGenericGraphNode* Node = CurrLevelNodes[i];
+				UGraphNodeDefinitionBase* Node = CurrLevelNodes[i];
 				check(Node != nullptr);
 
 				UEdNode_GenericGraphNode* EdNode_ParentNode = EdGraph->NodeMap[Node];

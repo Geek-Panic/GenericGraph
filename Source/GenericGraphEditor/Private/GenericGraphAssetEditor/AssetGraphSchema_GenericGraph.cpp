@@ -196,7 +196,7 @@ EGraphType UAssetGraphSchema_GenericGraph::GetGraphType(const UEdGraph* TestEdGr
 
 void UAssetGraphSchema_GenericGraph::GetGraphContextActions(FGraphContextMenuBuilder& ContextMenuBuilder) const
 {
-	UGenericGraphDefinition* Graph = CastChecked<UGenericGraphDefinition>(ContextMenuBuilder.CurrentGraph->GetOuter());
+	UGraphDefinitionBase* Graph = CastChecked<UGraphDefinitionBase>(ContextMenuBuilder.CurrentGraph->GetOuter());
 
 	if (Graph->NodeType == nullptr)
 	{
@@ -207,7 +207,7 @@ void UAssetGraphSchema_GenericGraph::GetGraphContextActions(FGraphContextMenuBui
 
 	const FText AddToolTip = LOCTEXT("NewGenericGraphNodeTooltip", "Add node here");
 
-	TSet<TSubclassOf<UGenericGraphNode>> Visited;
+	TSet<TSubclassOf<UGraphNodeDefinitionBase>> Visited;
 
 	FText Desc = Graph->NodeType.GetDefaultObject()->ContextMenuName;
 
@@ -222,7 +222,7 @@ void UAssetGraphSchema_GenericGraph::GetGraphContextActions(FGraphContextMenuBui
 	{
 		TSharedPtr<FAssetSchemaAction_GenericGraph_NewNode> NewNodeAction(new FAssetSchemaAction_GenericGraph_NewNode(LOCTEXT("GenericGraphNodeAction", "Generic Graph Node"), Desc, AddToolTip, 0));
 		NewNodeAction->NodeTemplate = NewObject<UEdNode_GenericGraphNode>(ContextMenuBuilder.OwnerOfTemporaries);
-		NewNodeAction->NodeTemplate->GenericGraphNode = NewObject<UGenericGraphNode>(NewNodeAction->NodeTemplate, Graph->NodeType);
+		NewNodeAction->NodeTemplate->GenericGraphNode = NewObject<UGraphNodeDefinitionBase>(NewNodeAction->NodeTemplate, Graph->NodeType);
 		NewNodeAction->NodeTemplate->GenericGraphNode->Graph = Graph;
 		ContextMenuBuilder.AddAction(NewNodeAction);
 
@@ -233,7 +233,7 @@ void UAssetGraphSchema_GenericGraph::GetGraphContextActions(FGraphContextMenuBui
 	{
 		if (It->IsChildOf(Graph->NodeType) && !It->HasAnyClassFlags(CLASS_Abstract) && !Visited.Contains(*It))
 		{
-			TSubclassOf<UGenericGraphNode> NodeType = *It;
+			TSubclassOf<UGraphNodeDefinitionBase> NodeType = *It;
 
 			if (It->GetName().StartsWith("REINST") || It->GetName().StartsWith("SKEL"))
 			{
@@ -256,7 +256,7 @@ void UAssetGraphSchema_GenericGraph::GetGraphContextActions(FGraphContextMenuBui
 
 			TSharedPtr<FAssetSchemaAction_GenericGraph_NewNode> Action(new FAssetSchemaAction_GenericGraph_NewNode(LOCTEXT("GenericGraphNodeAction", "Generic Graph Node"), Desc, AddToolTip, 0));
 			Action->NodeTemplate = NewObject<UEdNode_GenericGraphNode>(ContextMenuBuilder.OwnerOfTemporaries);
-			Action->NodeTemplate->GenericGraphNode = NewObject<UGenericGraphNode>(Action->NodeTemplate, NodeType);
+			Action->NodeTemplate->GenericGraphNode = NewObject<UGraphNodeDefinitionBase>(Action->NodeTemplate, NodeType);
 			Action->NodeTemplate->GenericGraphNode->Graph = Graph;
 			ContextMenuBuilder.AddAction(Action);
 
@@ -402,13 +402,13 @@ bool UAssetGraphSchema_GenericGraph::CreateAutomaticConversionNodeAndConnections
 		return false;
 	}
 
-	UGenericGraphDefinition* Graph = NodeA->GenericGraphNode->GetGraph();
+	UGraphDefinitionBase* Graph = NodeA->GenericGraphNode->GetGraph();
 
 	FVector2D InitPos((NodeA->NodePosX + NodeB->NodePosX) / 2, (NodeA->NodePosY + NodeB->NodePosY) / 2);
 
 	FAssetSchemaAction_GenericGraph_NewEdge Action;
 	Action.NodeTemplate = NewObject<UEdNode_GenericGraphEdge>(NodeA->GetGraph());
-	Action.NodeTemplate->SetEdge(NewObject<UGenericGraphEdge>(Action.NodeTemplate, Graph->EdgeType));
+	Action.NodeTemplate->SetEdge(NewObject<UGraphEdgeDefinitionBase>(Action.NodeTemplate, Graph->EdgeType));
 	UEdNode_GenericGraphEdge* EdgeNode = Cast<UEdNode_GenericGraphEdge>(Action.PerformAction(NodeA->GetGraph(), nullptr, InitPos, false));
 
 	// Always create connections from node A to B, don't allow adding in reverse

@@ -1,9 +1,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GenericGraphDefinition.h"
-#include "GenericGraphEdge.h"
-#include "GenericGraphNode.h"
+#include "GraphDefinitionBase.h"
+#include "GraphEdgeDefinitionBase.h"
+#include "GraphNodeDefinitionBase.h"
 #include "AssetGraphSchema_GenericGraph.generated.h"
 
 class UEdNode_GenericGraphNode;

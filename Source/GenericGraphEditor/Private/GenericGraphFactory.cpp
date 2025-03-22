@@ -1,5 +1,5 @@
 #include "GenericGraphFactory.h"
-#include "GenericGraphDefinition.h"
+#include "GraphDefinitionBase.h"
 
 #include "ClassFilter/AssetParentClassFilter.h"
 #include "ClassViewerModule.h"
@@ -12,7 +12,7 @@ UGenericGraphFactory::UGenericGraphFactory()
 {
 	bCreateNew = true;
 	bEditAfterNew = true;
-	SupportedClass = UGenericGraphDefinition::StaticClass();
+	SupportedClass = UGraphDefinitionBase::StaticClass();
 }
 
 UGenericGraphFactory::~UGenericGraphFactory() {}
@@ -33,12 +33,12 @@ bool UGenericGraphFactory::ConfigureProperties()
 	Options.ClassFilters.Add(Filter);
 
 	Filter->DisallowedClassFlags = CLASS_Abstract | CLASS_Deprecated | CLASS_NewerVersionExists | CLASS_HideDropDown;
-	Filter->AllowedChildrenOfClasses.Add(UGenericGraphDefinition::StaticClass());
+	Filter->AllowedChildrenOfClasses.Add(UGraphDefinitionBase::StaticClass());
 
 	const FText TitleText = LOCTEXT("CreateGenericGraphAssetOptions", "Pick Generic Graph Class");
 	UClass* ChosenClass = nullptr;
 
-	const bool bPressedOk = SClassPickerDialog::PickClass(TitleText, Options, ChosenClass, UGenericGraphDefinition::StaticClass());
+	const bool bPressedOk = SClassPickerDialog::PickClass(TitleText, Options, ChosenClass, UGraphDefinitionBase::StaticClass());
 
 	if (bPressedOk)
 	{
@@ -52,9 +52,9 @@ UObject* UGenericGraphFactory::FactoryCreateNew(UClass* Class, UObject* InParent
 {
 	if (GenericGraphClass != nullptr)
 	{
-		return NewObject<UGenericGraphDefinition>(InParent, GenericGraphClass, Name, Flags | RF_Transactional);
+		return NewObject<UGraphDefinitionBase>(InParent, GenericGraphClass, Name, Flags | RF_Transactional);
 	}
-	check(Class->IsChildOf(UGenericGraphDefinition::StaticClass()));
+	check(Class->IsChildOf(UGraphDefinitionBase::StaticClass()));
 	
 	return NewObject<UObject>(InParent, Class, Name, Flags | RF_Transactional);
 }

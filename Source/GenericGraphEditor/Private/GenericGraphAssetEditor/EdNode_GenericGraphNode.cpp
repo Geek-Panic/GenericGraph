@@ -50,7 +50,7 @@ void UEdNode_GenericGraphNode::AutowireNewNode(UEdGraphPin* FromPin)
 	}
 }
 
-void UEdNode_GenericGraphNode::SetGenericGraphNode(UGenericGraphNode* InNode)
+void UEdNode_GenericGraphNode::SetGenericGraphNode(UGraphNodeDefinitionBase* InNode)
 {
 	GenericGraphNode = InNode;
 }

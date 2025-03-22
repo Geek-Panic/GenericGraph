@@ -60,7 +60,7 @@ FAssetEditor_GenericGraph::~FAssetEditor_GenericGraph()
 #endif // #else // #if ENGINE_MAJOR_VERSION < 5
 }
 
-void FAssetEditor_GenericGraph::InitGenericGraphAssetEditor(const EToolkitMode::Type Mode, const TSharedPtr<IToolkitHost>& InitToolkitHost, UGenericGraphDefinition* Graph)
+void FAssetEditor_GenericGraph::InitGenericGraphAssetEditor(const EToolkitMode::Type Mode, const TSharedPtr<IToolkitHost>& InitToolkitHost, UGraphDefinitionBase* Graph)
 {
 	EditingGraph = Graph;
 	CreateEdGraph();
@@ -725,7 +725,7 @@ bool FAssetEditor_GenericGraph::CanRenameNodes() const
 	UEdGraph_GenericGraph* EdGraph = Cast<UEdGraph_GenericGraph>(EditingGraph->EditorGraph);
 	check(EdGraph != nullptr);
 
-	UGenericGraphDefinition* Graph = EdGraph->GetGenericGraph();
+	UGraphDefinitionBase* Graph = EdGraph->GetGenericGraph();
 	check(Graph != nullptr)
 
 			return Graph->bCanRenameNode

@@ -1,8 +1,8 @@
 #include "GenericGraphAssetEditor/EdGraph_GenericGraph.h"
 #include "GenericGraphAssetEditor/EdNode_GenericGraphEdge.h"
 #include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
-#include "GenericGraphDefinition.h"
 #include "GenericGraphEditorPCH.h"
+#include "GraphDefinitionBase.h"
 
 UEdGraph_GenericGraph::UEdGraph_GenericGraph() {}
 
@@ -12,7 +12,7 @@ void UEdGraph_GenericGraph::RebuildGenericGraph()
 {
 	LOG_INFO(TEXT("UGenericGraphEdGraph::RebuildGenericGraph has been called"));
 
-	UGenericGraphDefinition* Graph = GetGenericGraph();
+	UGraphDefinitionBase* Graph = GetGenericGraph();
 
 	Clear();
 
@@ -25,7 +25,7 @@ void UEdGraph_GenericGraph::RebuildGenericGraph()
 				continue;
 			}
 
-			UGenericGraphNode* GenericGraphNode = EdNode->GenericGraphNode;
+			UGraphNodeDefinitionBase* GenericGraphNode = EdNode->GenericGraphNode;
 
 			NodeMap.Add(GenericGraphNode, EdNode);
 
@@ -42,7 +42,7 @@ void UEdGraph_GenericGraph::RebuildGenericGraph()
 
 				for (int LinkToIdx = 0; LinkToIdx < Pin->LinkedTo.Num(); ++LinkToIdx)
 				{
-					UGenericGraphNode* ChildNode = nullptr;
+					UGraphNodeDefinitionBase* ChildNode = nullptr;
 					if (UEdNode_GenericGraphNode* EdNode_Child = Cast<UEdNode_GenericGraphNode>(Pin->LinkedTo[LinkToIdx]->GetOwningNode()))
 					{
 						ChildNode = EdNode_Child->GenericGraphNode;
@@ -74,7 +74,7 @@ void UEdGraph_GenericGraph::RebuildGenericGraph()
 		{
 			UEdNode_GenericGraphNode* StartNode = EdgeNode->GetStartNode();
 			UEdNode_GenericGraphNode* EndNode = EdgeNode->GetEndNode();
-			UGenericGraphEdge* Edge = EdgeNode->GenericGraphEdge;
+			UGraphEdgeDefinitionBase* Edge = EdgeNode->GenericGraphEdge;
 
 			if (StartNode == nullptr || EndNode == nullptr || Edge == nullptr)
 			{
@@ -94,7 +94,7 @@ void UEdGraph_GenericGraph::RebuildGenericGraph()
 
 	for (int i = 0; i < Graph->AllNodes.Num(); ++i)
 	{
-		UGenericGraphNode* Node = Graph->AllNodes[i];
+		UGraphNodeDefinitionBase* Node = Graph->AllNodes[i];
 		if (Node->ParentNodes.Num() == 0)
 		{
 			Graph->RootNodes.Add(Node);
@@ -107,7 +107,7 @@ void UEdGraph_GenericGraph::RebuildGenericGraph()
 	}
 
 	Graph->RootNodes.Sort(
-		[&](const UGenericGraphNode& L, const UGenericGraphNode& R)
+		[&](const UGraphNodeDefinitionBase& L, const UGraphNodeDefinitionBase& R)
 		{
 			UEdNode_GenericGraphNode* EdNode_LNode = NodeMap[&L];
 			UEdNode_GenericGraphNode* EdNode_RNode = NodeMap[&R];
@@ -115,9 +115,9 @@ void UEdGraph_GenericGraph::RebuildGenericGraph()
 		});
 }
 
-UGenericGraphDefinition* UEdGraph_GenericGraph::GetGenericGraph() const
+UGraphDefinitionBase* UEdGraph_GenericGraph::GetGenericGraph() const
 {
-	return CastChecked<UGenericGraphDefinition>(GetOuter());
+	return CastChecked<UGraphDefinitionBase>(GetOuter());
 }
 
 bool UEdGraph_GenericGraph::Modify(bool bAlwaysMarkDirty /*= true*/)
@@ -136,7 +136,7 @@ bool UEdGraph_GenericGraph::Modify(bool bAlwaysMarkDirty /*= true*/)
 
 void UEdGraph_GenericGraph::Clear()
 {
-	UGenericGraphDefinition* Graph = GetGenericGraph();
+	UGraphDefinitionBase* Graph = GetGenericGraph();
 
 	Graph->ClearGraph();
 	NodeMap.Reset();
@@ -146,7 +146,7 @@ void UEdGraph_GenericGraph::Clear()
 	{
 		if (UEdNode_GenericGraphNode* EdNode = Cast<UEdNode_GenericGraphNode>(Nodes[i]))
 		{
-			UGenericGraphNode* GenericGraphNode = EdNode->GenericGraphNode;
+			UGraphNodeDefinitionBase* GenericGraphNode = EdNode->GenericGraphNode;
 			if (GenericGraphNode)
 			{
 				GenericGraphNode->ParentNodes.Reset();
@@ -157,22 +157,22 @@ void UEdGraph_GenericGraph::Clear()
 	}
 }
 
-void UEdGraph_GenericGraph::SortNodes(UGenericGraphNode* RootNode)
+void UEdGraph_GenericGraph::SortNodes(UGraphNodeDefinitionBase* RootNode)
 {
 	int Level = 0;
-	TArray<UGenericGraphNode*> CurrLevelNodes = {RootNode};
-	TArray<UGenericGraphNode*> NextLevelNodes;
-	TSet<UGenericGraphNode*> Visited;
+	TArray<UGraphNodeDefinitionBase*> CurrLevelNodes = {RootNode};
+	TArray<UGraphNodeDefinitionBase*> NextLevelNodes;
+	TSet<UGraphNodeDefinitionBase*> Visited;
 
 	while (CurrLevelNodes.Num() != 0)
 	{
 		int32 LevelWidth = 0;
 		for (int i = 0; i < CurrLevelNodes.Num(); ++i)
 		{
-			UGenericGraphNode* Node = CurrLevelNodes[i];
+			UGraphNodeDefinitionBase* Node = CurrLevelNodes[i];
 			Visited.Add(Node);
 
-			auto Comp = [&](const UGenericGraphNode& L, const UGenericGraphNode& R)
+			auto Comp = [&](const UGraphNodeDefinitionBase& L, const UGraphNodeDefinitionBase& R)
 			{
 				UEdNode_GenericGraphNode* EdNode_LNode = NodeMap[&L];
 				UEdNode_GenericGraphNode* EdNode_RNode = NodeMap[&R];
@@ -184,7 +184,7 @@ void UEdGraph_GenericGraph::SortNodes(UGenericGraphNode* RootNode)
 
 			for (int j = 0; j < Node->ChildrenNodes.Num(); ++j)
 			{
-				UGenericGraphNode* ChildNode = Node->ChildrenNodes[j];
+				UGraphNodeDefinitionBase* ChildNode = Node->ChildrenNodes[j];
 				if (!Visited.Contains(ChildNode))
 				{
 					NextLevelNodes.Add(Node->ChildrenNodes[j]);

@@ -2,25 +2,25 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
-#include "GenericGraphEdge.h"
-#include "GenericGraphNode.h"
+#include "GraphEdgeDefinitionBase.h"
+#include "GraphNodeDefinitionBase.h"
 
-#include "GenericGraphDefinition.generated.h"
+#include "GraphDefinitionBase.generated.h"
 
 /**
- * @class UGenericGraphDefinition
+ * @class UGraphDefinitionBase
  * @see UObject
  * @brief Base class defining a generic graph data structure with nodes and edges.
  */
 UCLASS(Blueprintable, Abstract, BlueprintType)
-class GENERICGRAPHRUNTIME_API UGenericGraphDefinition : public UObject
+class GENERICGRAPHRUNTIME_API UGraphDefinitionBase : public UObject
 {
 	GENERATED_BODY()
 
 public:
 	
-	UGenericGraphDefinition(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-	virtual ~UGenericGraphDefinition() override;
+	UGraphDefinitionBase(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+	virtual ~UGraphDefinitionBase() override;
 
 	
 	/** Outputs graph structure to console/log */
@@ -33,7 +33,7 @@ public:
 
 	/** Gets all nodes at specified hierarchy level */
 	UFUNCTION(BlueprintCallable, Category = "GenericGraph")
-	void GetNodesByLevel(int Level, TArray<UGenericGraphNode*>& Nodes);
+	void GetNodesByLevel(int Level, TArray<UGraphNodeDefinitionBase*>& Nodes);
 
 	/** Resets graph by clearing all nodes and connections */
 	void ClearGraph();
@@ -45,11 +45,11 @@ public:
 
 	/** Class for graph nodes */
 	UPROPERTY(EditDefaultsOnly, Category = "GenericGraph")
-	TSubclassOf<UGenericGraphNode> NodeType;
+	TSubclassOf<UGraphNodeDefinitionBase> NodeType;
 
 	/** Class for graph edges */
 	UPROPERTY(EditDefaultsOnly, Category = "GenericGraph")
-	TSubclassOf<UGenericGraphEdge> EdgeType;
+	TSubclassOf<UGraphEdgeDefinitionBase> EdgeType;
 
 	/** Gameplay tags associated with this graph */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "GenericGraph")
@@ -60,11 +60,11 @@ protected:
 	
 	/** Root nodes of the graph hierarchy */
 	UPROPERTY(BlueprintReadOnly, Category = "GenericGraph")
-	TArray<UGenericGraphNode*> RootNodes;
+	TArray<UGraphNodeDefinitionBase*> RootNodes;
 
 	/** All nodes in the graph */
 	UPROPERTY(BlueprintReadOnly, Category = "GenericGraph")
-	TArray<UGenericGraphNode*> AllNodes;
+	TArray<UGraphNodeDefinitionBase*> AllNodes;
 	
 	/** Enable/disable edge connections between nodes */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "GenericGraph")

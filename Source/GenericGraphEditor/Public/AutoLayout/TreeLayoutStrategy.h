@@ -15,15 +15,15 @@ public:
 	virtual void Layout(UEdGraph* EdGraph) override;
 
 protected:
-	void InitPass(UGenericGraphNode* RootNode, const FVector2D& Anchor);
-	bool ResolveConflictPass(UGenericGraphNode* Node);
+	void InitPass(UGraphNodeDefinitionBase* RootNode, const FVector2D& Anchor);
+	bool ResolveConflictPass(UGraphNodeDefinitionBase* Node);
 
-	bool ResolveConflict(UGenericGraphNode* LRoot, UGenericGraphNode* RRoot);
+	bool ResolveConflict(UGraphNodeDefinitionBase* LRoot, UGraphNodeDefinitionBase* RRoot);
 
-	void GetLeftContour(UGenericGraphNode* RootNode, int32 Level, TArray<UEdNode_GenericGraphNode*>& Contour);
-	void GetRightContour(UGenericGraphNode* RootNode, int32 Level, TArray<UEdNode_GenericGraphNode*>& Contour);
+	void GetLeftContour(UGraphNodeDefinitionBase* RootNode, int32 Level, TArray<UEdNode_GenericGraphNode*>& Contour);
+	void GetRightContour(UGraphNodeDefinitionBase* RootNode, int32 Level, TArray<UEdNode_GenericGraphNode*>& Contour);
 
-	void ShiftSubTree(UGenericGraphNode* RootNode, const FVector2D& Offset);
+	void ShiftSubTree(UGraphNodeDefinitionBase* RootNode, const FVector2D& Offset);
 
-	void UpdateParentNodePosition(UGenericGraphNode* RootNode);
+	void UpdateParentNodePosition(UGraphNodeDefinitionBase* RootNode);
 };

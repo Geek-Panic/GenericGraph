@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "EdGraph/EdGraphNode.h"
-#include "GenericGraphNode.h"
+#include "GraphNodeDefinitionBase.h"
 #include "EdNode_GenericGraphNode.generated.h"
 
 class UEdNode_GenericGraphEdge;
@@ -19,9 +19,9 @@ public:
 	virtual ~UEdNode_GenericGraphNode() override;
 
 	UPROPERTY(VisibleAnywhere, Instanced, Category = "GenericGraph")
-	UGenericGraphNode* GenericGraphNode;
+	UGraphNodeDefinitionBase* GenericGraphNode;
 
-	void SetGenericGraphNode(UGenericGraphNode* InNode);
+	void SetGenericGraphNode(UGraphNodeDefinitionBase* InNode);
 	UEdGraph_GenericGraph* GetGenericGraphEdGraph();
 
 	SEdNode_GenericGraphNode* SEdNode;

@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Factories/Factory.h"
-#include "GenericGraphDefinition.h"
+#include "GraphDefinitionBase.h"
 #include "GenericGraphFactory.generated.h"
 
 UCLASS()
@@ -16,7 +16,7 @@ public:
 	virtual ~UGenericGraphFactory() override;
 
 	UPROPERTY(EditAnywhere, Category = DataAsset)
-	TSubclassOf<UGenericGraphDefinition> GenericGraphClass;
+	TSubclassOf<UGraphDefinitionBase> GenericGraphClass;
 
 	virtual bool ConfigureProperties() override;
 	virtual UObject* FactoryCreateNew(UClass* Class, UObject* InParent, FName Name, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn) override;

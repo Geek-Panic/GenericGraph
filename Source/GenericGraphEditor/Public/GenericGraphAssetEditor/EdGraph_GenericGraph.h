@@ -4,9 +4,9 @@
 #include "EdGraph/EdGraph.h"
 #include "EdGraph_GenericGraph.generated.h"
 
-class UGenericGraphDefinition;
-class UGenericGraphNode;
-class UGenericGraphEdge;
+class UGraphDefinitionBase;
+class UGraphNodeDefinitionBase;
+class UGraphEdgeDefinitionBase;
 class UEdNode_GenericGraphNode;
 class UEdNode_GenericGraphEdge;
 
@@ -21,19 +21,19 @@ public:
 
 	virtual void RebuildGenericGraph();
 
-	UGenericGraphDefinition* GetGenericGraph() const;
+	UGraphDefinitionBase* GetGenericGraph() const;
 
 	virtual bool Modify(bool bAlwaysMarkDirty = true) override;
 	virtual void PostEditUndo() override;
 
 	UPROPERTY(Transient)
-	TMap<UGenericGraphNode*, UEdNode_GenericGraphNode*> NodeMap;
+	TMap<UGraphNodeDefinitionBase*, UEdNode_GenericGraphNode*> NodeMap;
 
 	UPROPERTY(Transient)
-	TMap<UGenericGraphEdge*, UEdNode_GenericGraphEdge*> EdgeMap;
+	TMap<UGraphEdgeDefinitionBase*, UEdNode_GenericGraphEdge*> EdgeMap;
 
 protected:
 	void Clear();
 
-	void SortNodes(UGenericGraphNode* RootNode);
+	void SortNodes(UGraphNodeDefinitionBase* RootNode);
 };

@@ -21,11 +21,11 @@ FBox2D UAutoLayoutStrategy::GetNodeBound(UEdGraphNode* EdNode)
 	return FBox2D(Min, Max);
 }
 
-FBox2D UAutoLayoutStrategy::GetActualBounds(UGenericGraphNode* RootNode)
+FBox2D UAutoLayoutStrategy::GetActualBounds(UGraphNodeDefinitionBase* RootNode)
 {
 	int Level = 0;
-	TArray<UGenericGraphNode*> CurrLevelNodes = {RootNode};
-	TArray<UGenericGraphNode*> NextLevelNodes;
+	TArray<UGraphNodeDefinitionBase*> CurrLevelNodes = {RootNode};
+	TArray<UGraphNodeDefinitionBase*> NextLevelNodes;
 
 	FBox2D Rtn = GetNodeBound(EdGraph->NodeMap[RootNode]);
 
@@ -33,7 +33,7 @@ FBox2D UAutoLayoutStrategy::GetActualBounds(UGenericGraphNode* RootNode)
 	{
 		for (int i = 0; i < CurrLevelNodes.Num(); ++i)
 		{
-			UGenericGraphNode* Node = CurrLevelNodes[i];
+			UGraphNodeDefinitionBase* Node = CurrLevelNodes[i];
 			check(Node != nullptr);
 
 			Rtn += GetNodeBound(EdGraph->NodeMap[Node]);
@@ -51,17 +51,17 @@ FBox2D UAutoLayoutStrategy::GetActualBounds(UGenericGraphNode* RootNode)
 	return Rtn;
 }
 
-void UAutoLayoutStrategy::RandomLayoutOneTree(UGenericGraphNode* RootNode, const FBox2D& Bound)
+void UAutoLayoutStrategy::RandomLayoutOneTree(UGraphNodeDefinitionBase* RootNode, const FBox2D& Bound)
 {
 	int Level = 0;
-	TArray<UGenericGraphNode*> CurrLevelNodes = {RootNode};
-	TArray<UGenericGraphNode*> NextLevelNodes;
+	TArray<UGraphNodeDefinitionBase*> CurrLevelNodes = {RootNode};
+	TArray<UGraphNodeDefinitionBase*> NextLevelNodes;
 
 	while (CurrLevelNodes.Num() != 0)
 	{
 		for (int i = 0; i < CurrLevelNodes.Num(); ++i)
 		{
-			UGenericGraphNode* Node = CurrLevelNodes[i];
+			UGraphNodeDefinitionBase* Node = CurrLevelNodes[i];
 			check(Node != nullptr);
 
 			UEdNode_GenericGraphNode* EdNode_Node = EdGraph->NodeMap[Node];

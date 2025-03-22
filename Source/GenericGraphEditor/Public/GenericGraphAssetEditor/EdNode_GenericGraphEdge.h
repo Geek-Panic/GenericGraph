@@ -4,8 +4,8 @@
 #include "EdGraph/EdGraphNode.h"
 #include "EdNode_GenericGraphEdge.generated.h"
 
-class UGenericGraphNode;
-class UGenericGraphEdge;
+class UGraphNodeDefinitionBase;
+class UGraphEdgeDefinitionBase;
 class UEdNode_GenericGraphNode;
 
 UCLASS(MinimalAPI)
@@ -20,9 +20,9 @@ public:
 	class UEdGraph* Graph;
 
 	UPROPERTY(VisibleAnywhere, Instanced, Category = "GenericGraph")
-	UGenericGraphEdge* GenericGraphEdge;
+	UGraphEdgeDefinitionBase* GenericGraphEdge;
 
-	void SetEdge(UGenericGraphEdge* Edge);
+	void SetEdge(UGraphEdgeDefinitionBase* Edge);
 
 	virtual void AllocateDefaultPins() override;
 

@@ -3,7 +3,7 @@
 #include "GenericGraphAssetEditor/ConnectionDrawingPolicy_GenericGraph.h"
 #include "GenericGraphAssetEditor/EdNode_GenericGraphEdge.h"
 #include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
-#include "GenericGraphEdge.h"
+#include "GraphEdgeDefinitionBase.h"
 #include "SGraphPanel.h"
 #include "Widgets/Images/SImage.h"
 #include "Widgets/SBoxPanel.h"

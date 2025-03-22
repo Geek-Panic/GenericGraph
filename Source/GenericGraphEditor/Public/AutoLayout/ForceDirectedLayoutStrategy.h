@@ -15,7 +15,7 @@ public:
 	virtual void Layout(UEdGraph* EdGraph) override;
 
 protected:
-	virtual FBox2D LayoutOneTree(UGenericGraphNode* RootNode, const FBox2D& PreTreeBound);
+	virtual FBox2D LayoutOneTree(UGraphNodeDefinitionBase* RootNode, const FBox2D& PreTreeBound);
 
 	bool bRandomInit;
 	float InitTemperature;

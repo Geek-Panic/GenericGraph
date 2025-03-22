@@ -27,7 +27,7 @@ void UTreeLayoutStrategy::Layout(UEdGraph* _EdGraph)
 	FVector2D Anchor(0.f, 0.f);
 	for (int32 i = 0; i < Graph->RootNodes.Num(); ++i)
 	{
-		UGenericGraphNode* RootNode = Graph->RootNodes[i];
+		UGraphNodeDefinitionBase* RootNode = Graph->RootNodes[i];
 		InitPass(RootNode, Anchor);
 
 		if (!bFirstPassOnly)
@@ -52,18 +52,18 @@ void UTreeLayoutStrategy::Layout(UEdGraph* _EdGraph)
 	}
 }
 
-void UTreeLayoutStrategy::InitPass(UGenericGraphNode* RootNode, const FVector2D& Anchor)
+void UTreeLayoutStrategy::InitPass(UGraphNodeDefinitionBase* RootNode, const FVector2D& Anchor)
 {
 	UEdNode_GenericGraphNode* EdNode_RootNode = EdGraph->NodeMap[RootNode];
 
 	FVector2D ChildAnchor(FVector2D(0.f, GetNodeHeight(EdNode_RootNode) + OptimalDistance + Anchor.Y));
 	for (int32 i = 0; i < RootNode->ChildrenNodes.Num(); ++i)
 	{
-		UGenericGraphNode* Child = RootNode->ChildrenNodes[i];
+		UGraphNodeDefinitionBase* Child = RootNode->ChildrenNodes[i];
 		UEdNode_GenericGraphNode* EdNode_ChildNode = EdGraph->NodeMap[Child];
 		if (i > 0)
 		{
-			UGenericGraphNode* PreChild = RootNode->ChildrenNodes[i - 1];
+			UGraphNodeDefinitionBase* PreChild = RootNode->ChildrenNodes[i - 1];
 			UEdNode_GenericGraphNode* EdNode_PreChildNode = EdGraph->NodeMap[PreChild];
 			ChildAnchor.X += OptimalDistance + GetNodeWidth(EdNode_PreChildNode) / 2;
 		}
@@ -84,12 +84,12 @@ void UTreeLayoutStrategy::InitPass(UGenericGraphNode* RootNode, const FVector2D&
 	}
 }
 
-bool UTreeLayoutStrategy::ResolveConflictPass(UGenericGraphNode* Node)
+bool UTreeLayoutStrategy::ResolveConflictPass(UGraphNodeDefinitionBase* Node)
 {
 	bool HasConflict = false;
 	for (int32 i = 0; i < Node->ChildrenNodes.Num(); ++i)
 	{
-		UGenericGraphNode* Child = Node->ChildrenNodes[i];
+		UGraphNodeDefinitionBase* Child = Node->ChildrenNodes[i];
 		if (ResolveConflictPass(Child))
 		{
 			HasConflict = true;
@@ -98,10 +98,10 @@ bool UTreeLayoutStrategy::ResolveConflictPass(UGenericGraphNode* Node)
 
 	for (int32 i = 0; i < Node->ParentNodes.Num(); ++i)
 	{
-		UGenericGraphNode* ParentNode = Node->ParentNodes[i];
+		UGraphNodeDefinitionBase* ParentNode = Node->ParentNodes[i];
 		for (int32 j = 0; j < ParentNode->ChildrenNodes.Num(); ++j)
 		{
-			UGenericGraphNode* LeftSibling = ParentNode->ChildrenNodes[j];
+			UGraphNodeDefinitionBase* LeftSibling = ParentNode->ChildrenNodes[j];
 			if (LeftSibling == Node)
 			{
 				break;
@@ -116,7 +116,7 @@ bool UTreeLayoutStrategy::ResolveConflictPass(UGenericGraphNode* Node)
 	return HasConflict;
 }
 
-bool UTreeLayoutStrategy::ResolveConflict(UGenericGraphNode* LRoot, UGenericGraphNode* RRoot)
+bool UTreeLayoutStrategy::ResolveConflict(UGraphNodeDefinitionBase* LRoot, UGraphNodeDefinitionBase* RRoot)
 {
 	TArray<UEdNode_GenericGraphNode*> RightContour, LeftContour;
 
@@ -145,8 +145,8 @@ bool UTreeLayoutStrategy::ResolveConflict(UGenericGraphNode* LRoot, UGenericGrap
 	{
 		ShiftSubTree(RRoot, FVector2D(MaxOverlapDistance, 0.f));
 
-		TArray<UGenericGraphNode*> ParentNodes = RRoot->ParentNodes;
-		TArray<UGenericGraphNode*> NextParentNodes;
+		TArray<UGraphNodeDefinitionBase*> ParentNodes = RRoot->ParentNodes;
+		TArray<UGraphNodeDefinitionBase*> NextParentNodes;
 		while (ParentNodes.Num() != 0)
 		{
 			for (int32 i = 0; i < ParentNodes.Num(); ++i)
@@ -165,7 +165,7 @@ bool UTreeLayoutStrategy::ResolveConflict(UGenericGraphNode* LRoot, UGenericGrap
 	return false;
 }
 
-void UTreeLayoutStrategy::GetLeftContour(UGenericGraphNode* RootNode, int32 Level, TArray<UEdNode_GenericGraphNode*>& Contour)
+void UTreeLayoutStrategy::GetLeftContour(UGraphNodeDefinitionBase* RootNode, int32 Level, TArray<UEdNode_GenericGraphNode*>& Contour)
 {
 	UEdNode_GenericGraphNode* EdNode_Node = EdGraph->NodeMap[RootNode];
 	if (Level >= Contour.Num())
@@ -183,7 +183,7 @@ void UTreeLayoutStrategy::GetLeftContour(UGenericGraphNode* RootNode, int32 Leve
 	}
 }
 
-void UTreeLayoutStrategy::GetRightContour(UGenericGraphNode* RootNode, int32 Level, TArray<UEdNode_GenericGraphNode*>& Contour)
+void UTreeLayoutStrategy::GetRightContour(UGraphNodeDefinitionBase* RootNode, int32 Level, TArray<UEdNode_GenericGraphNode*>& Contour)
 {
 	UEdNode_GenericGraphNode* EdNode_Node = EdGraph->NodeMap[RootNode];
 	if (Level >= Contour.Num())
@@ -201,7 +201,7 @@ void UTreeLayoutStrategy::GetRightContour(UGenericGraphNode* RootNode, int32 Lev
 	}
 }
 
-void UTreeLayoutStrategy::ShiftSubTree(UGenericGraphNode* RootNode, const FVector2D& Offset)
+void UTreeLayoutStrategy::ShiftSubTree(UGraphNodeDefinitionBase* RootNode, const FVector2D& Offset)
 {
 	UEdNode_GenericGraphNode* EdNode_Node = EdGraph->NodeMap[RootNode];
 	EdNode_Node->NodePosX += Offset.X;
@@ -209,7 +209,7 @@ void UTreeLayoutStrategy::ShiftSubTree(UGenericGraphNode* RootNode, const FVecto
 
 	for (int32 i = 0; i < RootNode->ChildrenNodes.Num(); ++i)
 	{
-		UGenericGraphNode* Child = RootNode->ChildrenNodes[i];
+		UGraphNodeDefinitionBase* Child = RootNode->ChildrenNodes[i];
 
 		if (Child->ParentNodes[0] == RootNode)
 		{
@@ -218,7 +218,7 @@ void UTreeLayoutStrategy::ShiftSubTree(UGenericGraphNode* RootNode, const FVecto
 	}
 }
 
-void UTreeLayoutStrategy::UpdateParentNodePosition(UGenericGraphNode* ParentNode)
+void UTreeLayoutStrategy::UpdateParentNodePosition(UGraphNodeDefinitionBase* ParentNode)
 {
 	UEdNode_GenericGraphNode* EdNode_ParentNode = EdGraph->NodeMap[ParentNode];
 	if (ParentNode->ChildrenNodes.Num() % 2 == 0)

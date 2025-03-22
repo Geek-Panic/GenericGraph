@@ -1,13 +1,13 @@
 #include "Engine/Engine.h"
-#include "GenericGraphDefinition.h"
 #include "GenericGraphRuntimePCH.h"
+#include "GraphDefinitionBase.h"
 
 #define LOCTEXT_NAMESPACE "GenericGraph"
 
-UGenericGraphDefinition::UGenericGraphDefinition(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.Get())
+UGraphDefinitionBase::UGraphDefinitionBase(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.Get())
 {
-	NodeType = UGenericGraphNode::StaticClass();
-	EdgeType = UGenericGraphEdge::StaticClass();
+	NodeType = UGraphNodeDefinitionBase::StaticClass();
+	EdgeType = UGraphEdgeDefinitionBase::StaticClass();
 
 	bEdgeEnabled = true;
 
@@ -18,19 +18,19 @@ UGenericGraphDefinition::UGenericGraphDefinition(const FObjectInitializer& Objec
 	#endif
 }
 
-UGenericGraphDefinition::~UGenericGraphDefinition() {}
+UGraphDefinitionBase::~UGraphDefinitionBase() {}
 
-void UGenericGraphDefinition::Print(bool ToConsole /*= true*/, bool ToScreen /*= true*/)
+void UGraphDefinitionBase::Print(bool ToConsole /*= true*/, bool ToScreen /*= true*/)
 {
 	int Level = 0;
-	TArray<UGenericGraphNode*> CurrLevelNodes = RootNodes;
-	TArray<UGenericGraphNode*> NextLevelNodes;
+	TArray<UGraphNodeDefinitionBase*> CurrLevelNodes = RootNodes;
+	TArray<UGraphNodeDefinitionBase*> NextLevelNodes;
 
 	while (CurrLevelNodes.Num() != 0)
 	{
 		for (int i = 0; i < CurrLevelNodes.Num(); ++i)
 		{
-			UGenericGraphNode* Node = CurrLevelNodes[i];
+			UGraphNodeDefinitionBase* Node = CurrLevelNodes[i];
 			check(Node != nullptr);
 
 			FString Message = FString::Printf(TEXT("%s, Level %d"), *Node->GetDescription().ToString(), Level);
@@ -57,17 +57,17 @@ void UGenericGraphDefinition::Print(bool ToConsole /*= true*/, bool ToScreen /*=
 	}
 }
 
-int UGenericGraphDefinition::GetLevelNum() const
+int UGraphDefinitionBase::GetLevelNum() const
 {
 	int Level = 0;
-	TArray<UGenericGraphNode*> CurrLevelNodes = RootNodes;
-	TArray<UGenericGraphNode*> NextLevelNodes;
+	TArray<UGraphNodeDefinitionBase*> CurrLevelNodes = RootNodes;
+	TArray<UGraphNodeDefinitionBase*> NextLevelNodes;
 
 	while (CurrLevelNodes.Num() != 0)
 	{
 		for (int i = 0; i < CurrLevelNodes.Num(); ++i)
 		{
-			UGenericGraphNode* Node = CurrLevelNodes[i];
+			UGraphNodeDefinitionBase* Node = CurrLevelNodes[i];
 			check(Node != nullptr);
 
 			for (int j = 0; j < Node->ChildrenNodes.Num(); ++j)
@@ -84,10 +84,10 @@ int UGenericGraphDefinition::GetLevelNum() const
 	return Level;
 }
 
-void UGenericGraphDefinition::GetNodesByLevel(int Level, TArray<UGenericGraphNode*>& Nodes)
+void UGraphDefinitionBase::GetNodesByLevel(int Level, TArray<UGraphNodeDefinitionBase*>& Nodes)
 {
 	int CurrLEvel = 0;
-	TArray<UGenericGraphNode*> NextLevelNodes;
+	TArray<UGraphNodeDefinitionBase*> NextLevelNodes;
 
 	Nodes = RootNodes;
 
@@ -100,7 +100,7 @@ void UGenericGraphDefinition::GetNodesByLevel(int Level, TArray<UGenericGraphNod
 
 		for (int i = 0; i < Nodes.Num(); ++i)
 		{
-			UGenericGraphNode* Node = Nodes[i];
+			UGraphNodeDefinitionBase* Node = Nodes[i];
 			check(Node != nullptr);
 
 			for (int j = 0; j < Node->ChildrenNodes.Num(); ++j)
@@ -115,11 +115,11 @@ void UGenericGraphDefinition::GetNodesByLevel(int Level, TArray<UGenericGraphNod
 	}
 }
 
-void UGenericGraphDefinition::ClearGraph()
+void UGraphDefinitionBase::ClearGraph()
 {
 	for (int i = 0; i < AllNodes.Num(); ++i)
 	{
-		UGenericGraphNode* Node = AllNodes[i];
+		UGraphNodeDefinitionBase* Node = AllNodes[i];
 		if (Node)
 		{
 			Node->ParentNodes.Empty();

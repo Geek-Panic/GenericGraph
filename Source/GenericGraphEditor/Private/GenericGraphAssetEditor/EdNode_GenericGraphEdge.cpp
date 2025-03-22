@@ -1,6 +1,6 @@
 #include "GenericGraphAssetEditor/EdNode_GenericGraphEdge.h"
 #include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
-#include "GenericGraphEdge.h"
+#include "GraphEdgeDefinitionBase.h"
 
 #define LOCTEXT_NAMESPACE "EdNode_GenericGraphEdge"
 
@@ -9,7 +9,7 @@ UEdNode_GenericGraphEdge::UEdNode_GenericGraphEdge()
 	bCanRenameNode = true;
 }
 
-void UEdNode_GenericGraphEdge::SetEdge(UGenericGraphEdge* Edge)
+void UEdNode_GenericGraphEdge::SetEdge(UGraphEdgeDefinitionBase* Edge)
 {
 	GenericGraphEdge = Edge;
 }

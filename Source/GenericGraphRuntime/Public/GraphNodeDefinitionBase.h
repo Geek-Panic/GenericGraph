@@ -2,10 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "Templates/SubclassOf.h"
-#include "GenericGraphNode.generated.h"
+#include "GraphNodeDefinitionBase.generated.h"
 
-class UGenericGraphDefinition;
-class UGenericGraphEdge;
+class UGraphDefinitionBase;
+class UGraphEdgeDefinitionBase;
 
 UENUM(BlueprintType)
 enum class ENodeLimit : uint8
@@ -15,34 +15,34 @@ enum class ENodeLimit : uint8
 };
 
 UCLASS(Blueprintable)
-class GENERICGRAPHRUNTIME_API UGenericGraphNode : public UObject
+class GENERICGRAPHRUNTIME_API UGraphNodeDefinitionBase : public UObject
 {
 	GENERATED_BODY()
 
 public:
-	UGenericGraphNode();
-	virtual ~UGenericGraphNode() override;
+	UGraphNodeDefinitionBase();
+	virtual ~UGraphNodeDefinitionBase() override;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "GenericGraphNode")
-	UGenericGraphDefinition* Graph;
+	UGraphDefinitionBase* Graph;
 
 	UPROPERTY(BlueprintReadOnly, Category = "GenericGraphNode")
-	TArray<UGenericGraphNode*> ParentNodes;
+	TArray<UGraphNodeDefinitionBase*> ParentNodes;
 
 	UPROPERTY(BlueprintReadOnly, Category = "GenericGraphNode")
-	TArray<UGenericGraphNode*> ChildrenNodes;
+	TArray<UGraphNodeDefinitionBase*> ChildrenNodes;
 
 	UPROPERTY(BlueprintReadOnly, Category = "GenericGraphNode")
-	TMap<UGenericGraphNode*, UGenericGraphEdge*> Edges;
+	TMap<UGraphNodeDefinitionBase*, UGraphEdgeDefinitionBase*> Edges;
 
 	UFUNCTION(BlueprintCallable, Category = "GenericGraphNode")
-	virtual UGenericGraphEdge* GetEdge(UGenericGraphNode* ChildNode);
+	virtual UGraphEdgeDefinitionBase* GetEdge(UGraphNodeDefinitionBase* ChildNode);
 
 	UFUNCTION(BlueprintCallable, Category = "GenericGraphNode")
 	bool IsLeafNode() const;
 
 	UFUNCTION(BlueprintCallable, Category = "GenericGraphNode")
-	UGenericGraphDefinition* GetGraph() const;
+	UGraphDefinitionBase* GetGraph() const;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "GenericGraphNode")
 	FText GetDescription() const;
@@ -54,7 +54,7 @@ public:
 	FText NodeTitle;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "GenericGraphNode_Editor")
-	TSubclassOf<UGenericGraphDefinition> CompatibleGraphType;
+	TSubclassOf<UGraphDefinitionBase> CompatibleGraphType;
 
 	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor")
 	FLinearColor BackgroundColor;
@@ -85,9 +85,9 @@ public:
 
 	virtual void SetNodeTitle(const FText& NewTitle);
 
-	virtual bool CanCreateConnection(UGenericGraphNode* Other, FText& ErrorMessage);
+	virtual bool CanCreateConnection(UGraphNodeDefinitionBase* Other, FText& ErrorMessage);
 
-	virtual bool CanCreateConnectionTo(UGenericGraphNode* Other, int32 NumberOfChildrenNodes, FText& ErrorMessage);
-	virtual bool CanCreateConnectionFrom(UGenericGraphNode* Other, int32 NumberOfParentNodes, FText& ErrorMessage);
+	virtual bool CanCreateConnectionTo(UGraphNodeDefinitionBase* Other, int32 NumberOfChildrenNodes, FText& ErrorMessage);
+	virtual bool CanCreateConnectionFrom(UGraphNodeDefinitionBase* Other, int32 NumberOfParentNodes, FText& ErrorMessage);
 #endif
 };
