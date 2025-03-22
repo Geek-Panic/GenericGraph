@@ -1,58 +1,12 @@
 #include "GenericGraphFactory.h"
 #include "GenericGraphDefinition.h"
 
-#include "ClassViewerFilter.h"
+#include "ClassFilter/AssetParentClassFilter.h"
 #include "ClassViewerModule.h"
-#include "Kismet2/KismetEditorUtilities.h"
 #include "Kismet2/SClassPickerDialog.h"
 
 #define LOCTEXT_NAMESPACE "GenericGraphFactory"
 
-class FAssetClassParentFilter : public IClassViewerFilter
-{
-public:
-	FAssetClassParentFilter()
-		: DisallowedClassFlags(CLASS_None)
-		, bDisallowBlueprintBase(false)
-	{
-	}
-
-	/** All children of these classes will be included unless filtered out by
-	 * another setting. */
-	TSet<const UClass*> AllowedChildrenOfClasses;
-
-	/** Disallowed class flags. */
-	EClassFlags DisallowedClassFlags;
-
-	/** Disallow blueprint base classes. */
-	bool bDisallowBlueprintBase;
-
-	virtual bool IsClassAllowed(const FClassViewerInitializationOptions& InInitOptions, const UClass* InClass, TSharedRef<FClassViewerFilterFuncs> InFilterFuncs) override
-	{
-		bool bAllowed = !InClass->HasAnyClassFlags(DisallowedClassFlags) && InFilterFuncs->IfInChildOfClassesSet(AllowedChildrenOfClasses, InClass) != EFilterReturn::Failed;
-
-		if (bAllowed && bDisallowBlueprintBase)
-		{
-			if (FKismetEditorUtilities::CanCreateBlueprintOfClass(InClass))
-			{
-				return false;
-			}
-		}
-
-		return bAllowed;
-	}
-
-	virtual bool
-	IsUnloadedClassAllowed(const FClassViewerInitializationOptions& InInitOptions, const TSharedRef<const IUnloadedBlueprintData> InUnloadedClassData, TSharedRef<FClassViewerFilterFuncs> InFilterFuncs) override
-	{
-		if (bDisallowBlueprintBase)
-		{
-			return false;
-		}
-
-		return !InUnloadedClassData->HasAnyClassFlags(DisallowedClassFlags) && InFilterFuncs->IfInChildOfClassesSet(AllowedChildrenOfClasses, InUnloadedClassData) != EFilterReturn::Failed;
-	}
-};
 
 UGenericGraphFactory::UGenericGraphFactory()
 {
@@ -68,14 +22,14 @@ bool UGenericGraphFactory::ConfigureProperties()
 	// nullptr the GenericGraphClass so we can check for selection
 	GenericGraphClass = nullptr;
 
-	// Load the classviewer module to display a class picker
-	FClassViewerModule& ClassViewerModule = FModuleManager::LoadModuleChecked<FClassViewerModule>("ClassViewer");
+	// Load the ClassViewer module to display a class picker
+	FModuleManager::LoadModuleChecked<FClassViewerModule>("ClassViewer");
 
 	// Fill in options
 	FClassViewerInitializationOptions Options;
 	Options.Mode = EClassViewerMode::ClassPicker;
 
-	TSharedRef<FAssetClassParentFilter> Filter = MakeShareable(new FAssetClassParentFilter);
+	const TSharedRef<FAssetClassParentFilter> Filter = MakeShareable(new FAssetClassParentFilter);
 	Options.ClassFilters.Add(Filter);
 
 	Filter->DisallowedClassFlags = CLASS_Abstract | CLASS_Deprecated | CLASS_NewerVersionExists | CLASS_HideDropDown;
@@ -83,6 +37,7 @@ bool UGenericGraphFactory::ConfigureProperties()
 
 	const FText TitleText = LOCTEXT("CreateGenericGraphAssetOptions", "Pick Generic Graph Class");
 	UClass* ChosenClass = nullptr;
+
 	const bool bPressedOk = SClassPickerDialog::PickClass(TitleText, Options, ChosenClass, UGenericGraphDefinition::StaticClass());
 
 	if (bPressedOk)
@@ -100,6 +55,7 @@ UObject* UGenericGraphFactory::FactoryCreateNew(UClass* Class, UObject* InParent
 		return NewObject<UGenericGraphDefinition>(InParent, GenericGraphClass, Name, Flags | RF_Transactional);
 	}
 	check(Class->IsChildOf(UGenericGraphDefinition::StaticClass()));
+	
 	return NewObject<UObject>(InParent, Class, Name, Flags | RF_Transactional);
 }
 
