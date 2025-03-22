@@ -1,6 +1,6 @@
 #include "GenericGraphAssetEditor/EdGraph_GenericGraph.h"
-#include "GenericGraphAssetEditor/EdNode_GenericGraphEdge.h"
-#include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
+#include "GenericGraphAssetEditor/GraphEditorEdEdgeNodeBase.h"
+#include "GenericGraphAssetEditor/GraphEditorEdNodeBase.h"
 #include "GenericGraphEditorPCH.h"
 #include "GraphDefinitionBase.h"
 
@@ -18,7 +18,7 @@ void UEdGraph_GenericGraph::RebuildGenericGraph()
 
 	for (int i = 0; i < Nodes.Num(); ++i)
 	{
-		if (UEdNode_GenericGraphNode* EdNode = Cast<UEdNode_GenericGraphNode>(Nodes[i]))
+		if (UGraphEditorEdNodeBase* EdNode = Cast<UGraphEditorEdNodeBase>(Nodes[i]))
 		{
 			if (EdNode->GenericGraphNode == nullptr)
 			{
@@ -43,13 +43,13 @@ void UEdGraph_GenericGraph::RebuildGenericGraph()
 				for (int LinkToIdx = 0; LinkToIdx < Pin->LinkedTo.Num(); ++LinkToIdx)
 				{
 					UGraphNodeDefinitionBase* ChildNode = nullptr;
-					if (UEdNode_GenericGraphNode* EdNode_Child = Cast<UEdNode_GenericGraphNode>(Pin->LinkedTo[LinkToIdx]->GetOwningNode()))
+					if (UGraphEditorEdNodeBase* EdNode_Child = Cast<UGraphEditorEdNodeBase>(Pin->LinkedTo[LinkToIdx]->GetOwningNode()))
 					{
 						ChildNode = EdNode_Child->GenericGraphNode;
 					}
-					else if (UEdNode_GenericGraphEdge* EdNode_Edge = Cast<UEdNode_GenericGraphEdge>(Pin->LinkedTo[LinkToIdx]->GetOwningNode()))
+					else if (UGraphEditorEdEdgeNodeBase* EdNode_Edge = Cast<UGraphEditorEdEdgeNodeBase>(Pin->LinkedTo[LinkToIdx]->GetOwningNode()))
 					{
-						UEdNode_GenericGraphNode* Child = EdNode_Edge->GetEndNode();
+						UGraphEditorEdNodeBase* Child = EdNode_Edge->GetEndNode();
 						if (Child != nullptr)
 						{
 							ChildNode = Child->GenericGraphNode;
@@ -70,10 +70,10 @@ void UEdGraph_GenericGraph::RebuildGenericGraph()
 				}
 			}
 		}
-		else if (UEdNode_GenericGraphEdge* EdgeNode = Cast<UEdNode_GenericGraphEdge>(Nodes[i]))
+		else if (UGraphEditorEdEdgeNodeBase* EdgeNode = Cast<UGraphEditorEdEdgeNodeBase>(Nodes[i]))
 		{
-			UEdNode_GenericGraphNode* StartNode = EdgeNode->GetStartNode();
-			UEdNode_GenericGraphNode* EndNode = EdgeNode->GetEndNode();
+			UGraphEditorEdNodeBase* StartNode = EdgeNode->GetStartNode();
+			UGraphEditorEdNodeBase* EndNode = EdgeNode->GetEndNode();
 			UGraphEdgeDefinitionBase* Edge = EdgeNode->GenericGraphEdge;
 
 			if (StartNode == nullptr || EndNode == nullptr || Edge == nullptr)
@@ -109,8 +109,8 @@ void UEdGraph_GenericGraph::RebuildGenericGraph()
 	Graph->RootNodes.Sort(
 		[&](const UGraphNodeDefinitionBase& L, const UGraphNodeDefinitionBase& R)
 		{
-			UEdNode_GenericGraphNode* EdNode_LNode = NodeMap[&L];
-			UEdNode_GenericGraphNode* EdNode_RNode = NodeMap[&R];
+			UGraphEditorEdNodeBase* EdNode_LNode = NodeMap[&L];
+			UGraphEditorEdNodeBase* EdNode_RNode = NodeMap[&R];
 			return EdNode_LNode->NodePosX < EdNode_RNode->NodePosX;
 		});
 }
@@ -144,7 +144,7 @@ void UEdGraph_GenericGraph::Clear()
 
 	for (int i = 0; i < Nodes.Num(); ++i)
 	{
-		if (UEdNode_GenericGraphNode* EdNode = Cast<UEdNode_GenericGraphNode>(Nodes[i]))
+		if (UGraphEditorEdNodeBase* EdNode = Cast<UGraphEditorEdNodeBase>(Nodes[i]))
 		{
 			UGraphNodeDefinitionBase* GenericGraphNode = EdNode->GenericGraphNode;
 			if (GenericGraphNode)
@@ -174,8 +174,8 @@ void UEdGraph_GenericGraph::SortNodes(UGraphNodeDefinitionBase* RootNode)
 
 			auto Comp = [&](const UGraphNodeDefinitionBase& L, const UGraphNodeDefinitionBase& R)
 			{
-				UEdNode_GenericGraphNode* EdNode_LNode = NodeMap[&L];
-				UEdNode_GenericGraphNode* EdNode_RNode = NodeMap[&R];
+				UGraphEditorEdNodeBase* EdNode_LNode = NodeMap[&L];
+				UGraphEditorEdNodeBase* EdNode_RNode = NodeMap[&R];
 				return EdNode_LNode->NodePosX < EdNode_RNode->NodePosX;
 			};
 

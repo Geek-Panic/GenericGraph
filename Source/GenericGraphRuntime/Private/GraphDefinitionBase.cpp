@@ -1,6 +1,8 @@
+
+#include "GraphDefinitionBase.h"
+
 #include "Engine/Engine.h"
 #include "GenericGraphRuntimePCH.h"
-#include "GraphDefinitionBase.h"
 
 #define LOCTEXT_NAMESPACE "GenericGraph"
 

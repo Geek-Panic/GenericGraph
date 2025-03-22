@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "Styling/SlateStyle.h"
 
-class GENERICGRAPHEDITOR_API FGenericGraphEditorStyle
+class GENERICGRAPHEDITOR_API FGraphEditorStyle
 {
 public:
 	static void Initialize();

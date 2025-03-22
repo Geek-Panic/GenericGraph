@@ -9,8 +9,8 @@
 #include "GenericGraphAssetEditor/AssetGraphSchema_GenericGraph.h"
 #include "GenericGraphAssetEditor/EdGraph_GenericGraph.h"
 #include "GenericGraphAssetEditor/EditorCommands_GenericGraph.h"
-#include "GenericGraphAssetEditor/EdNode_GenericGraphEdge.h"
-#include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
+#include "GenericGraphAssetEditor/GraphEditorEdEdgeNodeBase.h"
+#include "GenericGraphAssetEditor/GraphEditorEdNodeBase.h"
 #include "GenericGraphEditorPCH.h"
 #include "GraphEditorActions.h"
 #include "HAL/PlatformApplicationMisc.h"
@@ -420,7 +420,7 @@ void FAssetEditor_GenericGraph::DeleteSelectedNodes()
 			continue;
 		}
 
-		if (UEdNode_GenericGraphNode* EdNode_Node = Cast<UEdNode_GenericGraphNode>(EdNode))
+		if (UGraphEditorEdNodeBase* EdNode_Node = Cast<UGraphEditorEdNodeBase>(EdNode))
 		{
 			EdNode_Node->Modify();
 
@@ -517,10 +517,10 @@ void FAssetEditor_GenericGraph::CopySelectedNodes()
 			continue;
 		}
 
-		if (UEdNode_GenericGraphEdge* EdNode_Edge = Cast<UEdNode_GenericGraphEdge>(*SelectedIter))
+		if (UGraphEditorEdEdgeNodeBase* EdNode_Edge = Cast<UGraphEditorEdEdgeNodeBase>(*SelectedIter))
 		{
-			UEdNode_GenericGraphNode* StartNode = EdNode_Edge->GetStartNode();
-			UEdNode_GenericGraphNode* EndNode = EdNode_Edge->GetEndNode();
+			UGraphEditorEdNodeBase* StartNode = EdNode_Edge->GetStartNode();
+			UGraphEditorEdNodeBase* EndNode = EdNode_Edge->GetEndNode();
 
 			if (!SelectedNodes.Contains(StartNode) || !SelectedNodes.Contains(EndNode))
 			{

@@ -1,6 +1,6 @@
 #include "AutoLayout/AutoLayoutStrategy.h"
-#include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
-#include "GenericGraphAssetEditor/SEdNode_GenericGraphNode.h"
+#include "GenericGraphAssetEditor/GraphEditorEdNodeBase.h"
+#include "GenericGraphAssetEditor/SGraphEditorNode.h"
 #include "Kismet/KismetMathLibrary.h"
 
 UAutoLayoutStrategy::UAutoLayoutStrategy()
@@ -14,8 +14,8 @@ UAutoLayoutStrategy::~UAutoLayoutStrategy() {}
 
 FBox2D UAutoLayoutStrategy::GetNodeBound(UEdGraphNode* EdNode)
 {
-	int32 NodeWidth = GetNodeWidth(Cast<UEdNode_GenericGraphNode>(EdNode));
-	int32 NodeHeight = GetNodeHeight(Cast<UEdNode_GenericGraphNode>(EdNode));
+	int32 NodeWidth = GetNodeWidth(Cast<UGraphEditorEdNodeBase>(EdNode));
+	int32 NodeHeight = GetNodeHeight(Cast<UGraphEditorEdNodeBase>(EdNode));
 	FVector2D Min(EdNode->NodePosX, EdNode->NodePosY);
 	FVector2D Max(EdNode->NodePosX + NodeWidth, EdNode->NodePosY + NodeHeight);
 	return FBox2D(Min, Max);
@@ -64,7 +64,7 @@ void UAutoLayoutStrategy::RandomLayoutOneTree(UGraphNodeDefinitionBase* RootNode
 			UGraphNodeDefinitionBase* Node = CurrLevelNodes[i];
 			check(Node != nullptr);
 
-			UEdNode_GenericGraphNode* EdNode_Node = EdGraph->NodeMap[Node];
+			UGraphEditorEdNodeBase* EdNode_Node = EdGraph->NodeMap[Node];
 
 			EdNode_Node->NodePosX = UKismetMathLibrary::RandomFloatInRange(Bound.Min.X, Bound.Max.X);
 			EdNode_Node->NodePosY = UKismetMathLibrary::RandomFloatInRange(Bound.Min.Y, Bound.Max.Y);
@@ -81,12 +81,12 @@ void UAutoLayoutStrategy::RandomLayoutOneTree(UGraphNodeDefinitionBase* RootNode
 	}
 }
 
-int32 UAutoLayoutStrategy::GetNodeWidth(UEdNode_GenericGraphNode* EdNode)
+int32 UAutoLayoutStrategy::GetNodeWidth(UGraphEditorEdNodeBase* EdNode)
 {
 	return EdNode->SEdNode->GetCachedGeometry().GetLocalSize().X;
 }
 
-int32 UAutoLayoutStrategy::GetNodeHeight(UEdNode_GenericGraphNode* EdNode)
+int32 UAutoLayoutStrategy::GetNodeHeight(UGraphEditorEdNodeBase* EdNode)
 {
 	return EdNode->SEdNode->GetCachedGeometry().GetLocalSize().Y;
 }

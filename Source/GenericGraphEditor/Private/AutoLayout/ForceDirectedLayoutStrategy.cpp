@@ -107,13 +107,13 @@ FBox2D UForceDirectedLayoutStrategy::LayoutOneTree(UGraphNodeDefinitionBase* Roo
 				UGraphNodeDefinitionBase* Node = CurrLevelNodes[i];
 				check(Node != nullptr);
 
-				UEdNode_GenericGraphNode* EdNode_ParentNode = EdGraph->NodeMap[Node];
+				UGraphEditorEdNodeBase* EdNode_ParentNode = EdGraph->NodeMap[Node];
 
 				for (int32 j = 0; j < Node->ChildrenNodes.Num(); ++j)
 				{
 					NextLevelNodes.Add(Node->ChildrenNodes[j]);
 
-					UEdNode_GenericGraphNode* EdNode_ChildNode = EdGraph->NodeMap[Node->ChildrenNodes[j]];
+					UGraphEditorEdNodeBase* EdNode_ChildNode = EdGraph->NodeMap[Node->ChildrenNodes[j]];
 
 					Diff.X = EdNode_ChildNode->NodePosX - EdNode_ParentNode->NodePosY;
 					Diff.Y = EdNode_ChildNode->NodePosY - EdNode_ParentNode->NodePosY;

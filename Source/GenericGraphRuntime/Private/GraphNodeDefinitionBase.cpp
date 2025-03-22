@@ -1,9 +1,12 @@
-#include "GraphDefinitionBase.h"
+
 #include "GraphNodeDefinitionBase.h"
+
+#include "GraphDefinitionBase.h"
 
 #define LOCTEXT_NAMESPACE "GenericGraphNode"
 
-UGraphNodeDefinitionBase::UGraphNodeDefinitionBase()
+
+UGraphNodeDefinitionBase::UGraphNodeDefinitionBase(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.Get())
 {
 #if WITH_EDITORONLY_DATA
 	CompatibleGraphType = UGraphDefinitionBase::StaticClass();
@@ -40,9 +43,9 @@ FText UGraphNodeDefinitionBase::GetDisplayName() const
 	return DisplayName.IsEmpty() ? GetDescription() : DisplayName;
 }
 
-void UGraphNodeDefinitionBase::SetDisplayName(const FText& NewDisplayName)
+void UGraphNodeDefinitionBase::SetDisplayName(const FText& InDisplayName)
 {
-	DisplayName = NewDisplayName;
+	DisplayName = InDisplayName;
 }
 
 bool UGraphNodeDefinitionBase::CanCreateConnection(UGraphNodeDefinitionBase* Other, FText& ErrorMessage)

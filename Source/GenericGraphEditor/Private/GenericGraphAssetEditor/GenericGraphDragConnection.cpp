@@ -3,7 +3,7 @@
 #include "GenericGraphAssetEditor/GenericGraphDragConnection.h"
 #include "EdGraph/EdGraph.h"
 #include "Framework/Application/SlateApplication.h"
-#include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
+#include "GenericGraphAssetEditor/GraphEditorEdNodeBase.h"
 #include "ScopedTransaction.h"
 #include "SGraphPanel.h"
 #include "Widgets/Images/SImage.h"
@@ -64,7 +64,7 @@ void FGenericGraphDragConnection::HoverTargetChanged()
 			UniqueMessages.AddUnique(Response);
 		}
 	}
-	else if (const UEdNode_GenericGraphNode* TargetNodeObj = Cast<UEdNode_GenericGraphNode>(GetHoveredNode()))
+	else if (const UGraphEditorEdNodeBase* TargetNodeObj = Cast<UGraphEditorEdNodeBase>(GetHoveredNode()))
 	{
 		TArray<UEdGraphPin*> ValidSourcePins;
 		ValidateGraphPinList(/*out*/ ValidSourcePins);

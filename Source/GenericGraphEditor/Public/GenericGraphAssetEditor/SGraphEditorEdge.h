@@ -8,15 +8,15 @@
 #include "Widgets/SWidget.h"
 
 class SToolTip;
-class UEdNode_GenericGraphEdge;
+class UGraphEditorEdEdgeNodeBase;
 
-class GENERICGRAPHEDITOR_API SEdNode_GenericGraphEdge : public SGraphNode
+class GENERICGRAPHEDITOR_API SGraphEditorEdge : public SGraphNode
 {
 public:
-	SLATE_BEGIN_ARGS(SEdNode_GenericGraphEdge) {}
+	SLATE_BEGIN_ARGS(SGraphEditorEdge) {}
 	SLATE_END_ARGS()
 
-	void Construct(const FArguments& InArgs, UEdNode_GenericGraphEdge* InNode);
+	void Construct(const FArguments& InArgs, UGraphEditorEdEdgeNodeBase* InNode);
 
 	virtual bool RequiresSecondPassLayout() const override;
 	virtual void PerformSecondPassLayout(const TMap<UObject*, TSharedRef<SNode>>& NodeToWidgetLookup) const override;

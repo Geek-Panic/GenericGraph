@@ -3,8 +3,8 @@
 #include "AutoLayout/TreeLayoutStrategy.h"
 #include "Framework/Commands/GenericCommands.h"
 #include "GenericGraphAssetEditor/ConnectionDrawingPolicy_GenericGraph.h"
-#include "GenericGraphAssetEditor/EdNode_GenericGraphEdge.h"
-#include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
+#include "GenericGraphAssetEditor/GraphEditorEdEdgeNodeBase.h"
+#include "GenericGraphAssetEditor/GraphEditorEdNodeBase.h"
 #include "GenericGraphEditorPCH.h"
 #include "GraphEditorActions.h"
 #include "ToolMenus.h"
@@ -221,7 +221,7 @@ void UAssetGraphSchema_GenericGraph::GetGraphContextActions(FGraphContextMenuBui
 	if (!Graph->NodeType->HasAnyClassFlags(CLASS_Abstract))
 	{
 		TSharedPtr<FAssetSchemaAction_GenericGraph_NewNode> NewNodeAction(new FAssetSchemaAction_GenericGraph_NewNode(LOCTEXT("GenericGraphNodeAction", "Generic Graph Node"), Desc, AddToolTip, 0));
-		NewNodeAction->NodeTemplate = NewObject<UEdNode_GenericGraphNode>(ContextMenuBuilder.OwnerOfTemporaries);
+		NewNodeAction->NodeTemplate = NewObject<UGraphEditorEdNodeBase>(ContextMenuBuilder.OwnerOfTemporaries);
 		NewNodeAction->NodeTemplate->GenericGraphNode = NewObject<UGraphNodeDefinitionBase>(NewNodeAction->NodeTemplate, Graph->NodeType);
 		NewNodeAction->NodeTemplate->GenericGraphNode->Graph = Graph;
 		ContextMenuBuilder.AddAction(NewNodeAction);
@@ -255,7 +255,7 @@ void UAssetGraphSchema_GenericGraph::GetGraphContextActions(FGraphContextMenuBui
 			}
 
 			TSharedPtr<FAssetSchemaAction_GenericGraph_NewNode> Action(new FAssetSchemaAction_GenericGraph_NewNode(LOCTEXT("GenericGraphNodeAction", "Generic Graph Node"), Desc, AddToolTip, 0));
-			Action->NodeTemplate = NewObject<UEdNode_GenericGraphNode>(ContextMenuBuilder.OwnerOfTemporaries);
+			Action->NodeTemplate = NewObject<UGraphEditorEdNodeBase>(ContextMenuBuilder.OwnerOfTemporaries);
 			Action->NodeTemplate->GenericGraphNode = NewObject<UGraphNodeDefinitionBase>(Action->NodeTemplate, NodeType);
 			Action->NodeTemplate->GenericGraphNode->Graph = Graph;
 			ContextMenuBuilder.AddAction(Action);
@@ -319,8 +319,8 @@ const FPinConnectionResponse UAssetGraphSchema_GenericGraph::CanCreateConnection
 	const UEdGraphPin* Out = A;
 	const UEdGraphPin* In = B;
 
-	UEdNode_GenericGraphNode* EdNode_Out = Cast<UEdNode_GenericGraphNode>(Out->GetOwningNode());
-	UEdNode_GenericGraphNode* EdNode_In = Cast<UEdNode_GenericGraphNode>(In->GetOwningNode());
+	UGraphEditorEdNodeBase* EdNode_Out = Cast<UGraphEditorEdNodeBase>(Out->GetOwningNode());
+	UGraphEditorEdNodeBase* EdNode_In = Cast<UGraphEditorEdNodeBase>(In->GetOwningNode());
 
 	if (EdNode_Out == nullptr || EdNode_In == nullptr)
 	{
@@ -363,14 +363,14 @@ bool UAssetGraphSchema_GenericGraph::TryCreateConnection(UEdGraphPin* A, UEdGrap
 {
 	// We don't actually care about the pin, we want the node that is being
 	// dragged between
-	UEdNode_GenericGraphNode* NodeA = Cast<UEdNode_GenericGraphNode>(A->GetOwningNode());
-	UEdNode_GenericGraphNode* NodeB = Cast<UEdNode_GenericGraphNode>(B->GetOwningNode());
+	UGraphEditorEdNodeBase* NodeA = Cast<UGraphEditorEdNodeBase>(A->GetOwningNode());
+	UGraphEditorEdNodeBase* NodeB = Cast<UGraphEditorEdNodeBase>(B->GetOwningNode());
 
 	// Check that this edge doesn't already exist
 	for (UEdGraphPin* TestPin : NodeA->GetOutputPin()->LinkedTo)
 	{
 		UEdGraphNode* ChildNode = TestPin->GetOwningNode();
-		if (UEdNode_GenericGraphEdge* EdNode_Edge = Cast<UEdNode_GenericGraphEdge>(ChildNode))
+		if (UGraphEditorEdEdgeNodeBase* EdNode_Edge = Cast<UGraphEditorEdEdgeNodeBase>(ChildNode))
 		{
 			ChildNode = EdNode_Edge->GetEndNode();
 		}
@@ -393,8 +393,8 @@ bool UAssetGraphSchema_GenericGraph::TryCreateConnection(UEdGraphPin* A, UEdGrap
 
 bool UAssetGraphSchema_GenericGraph::CreateAutomaticConversionNodeAndConnections(UEdGraphPin* A, UEdGraphPin* B) const
 {
-	UEdNode_GenericGraphNode* NodeA = Cast<UEdNode_GenericGraphNode>(A->GetOwningNode());
-	UEdNode_GenericGraphNode* NodeB = Cast<UEdNode_GenericGraphNode>(B->GetOwningNode());
+	UGraphEditorEdNodeBase* NodeA = Cast<UGraphEditorEdNodeBase>(A->GetOwningNode());
+	UGraphEditorEdNodeBase* NodeB = Cast<UGraphEditorEdNodeBase>(B->GetOwningNode());
 
 	// Are nodes and pins all valid?
 	if (!NodeA || !NodeA->GetOutputPin() || !NodeB || !NodeB->GetInputPin())
@@ -407,9 +407,9 @@ bool UAssetGraphSchema_GenericGraph::CreateAutomaticConversionNodeAndConnections
 	FVector2D InitPos((NodeA->NodePosX + NodeB->NodePosX) / 2, (NodeA->NodePosY + NodeB->NodePosY) / 2);
 
 	FAssetSchemaAction_GenericGraph_NewEdge Action;
-	Action.NodeTemplate = NewObject<UEdNode_GenericGraphEdge>(NodeA->GetGraph());
+	Action.NodeTemplate = NewObject<UGraphEditorEdEdgeNodeBase>(NodeA->GetGraph());
 	Action.NodeTemplate->SetEdge(NewObject<UGraphEdgeDefinitionBase>(Action.NodeTemplate, Graph->EdgeType));
-	UEdNode_GenericGraphEdge* EdgeNode = Cast<UEdNode_GenericGraphEdge>(Action.PerformAction(NodeA->GetGraph(), nullptr, InitPos, false));
+	UGraphEditorEdEdgeNodeBase* EdgeNode = Cast<UGraphEditorEdEdgeNodeBase>(Action.PerformAction(NodeA->GetGraph(), nullptr, InitPos, false));
 
 	// Always create connections from node A to B, don't allow adding in reverse
 	EdgeNode->CreateConnections(NodeA, NodeB);
@@ -456,7 +456,7 @@ void UAssetGraphSchema_GenericGraph::BreakSinglePinLink(UEdGraphPin* SourcePin, 
 
 UEdGraphPin* UAssetGraphSchema_GenericGraph::DropPinOnNode(UEdGraphNode* InTargetNode, const FName& InSourcePinName, const FEdGraphPinType& InSourcePinType, EEdGraphPinDirection InSourcePinDirection) const
 {
-	UEdNode_GenericGraphNode* EdNode = Cast<UEdNode_GenericGraphNode>(InTargetNode);
+	UGraphEditorEdNodeBase* EdNode = Cast<UGraphEditorEdNodeBase>(InTargetNode);
 	switch (InSourcePinDirection)
 	{
 		case EGPD_Input:
@@ -470,7 +470,7 @@ UEdGraphPin* UAssetGraphSchema_GenericGraph::DropPinOnNode(UEdGraphNode* InTarge
 
 bool UAssetGraphSchema_GenericGraph::SupportsDropPinOnNode(UEdGraphNode* InTargetNode, const FEdGraphPinType& InSourcePinType, EEdGraphPinDirection InSourcePinDirection, FText& OutErrorMessage) const
 {
-	return Cast<UEdNode_GenericGraphNode>(InTargetNode) != nullptr;
+	return Cast<UGraphEditorEdNodeBase>(InTargetNode) != nullptr;
 }
 
 bool UAssetGraphSchema_GenericGraph::IsCacheVisualizationOutOfDate(int32 InVisualizationCacheID) const

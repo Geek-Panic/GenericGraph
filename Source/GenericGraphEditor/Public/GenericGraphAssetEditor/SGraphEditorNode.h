@@ -3,15 +3,15 @@
 #include "CoreMinimal.h"
 #include "SGraphNode.h"
 
-class UEdNode_GenericGraphNode;
+class UGraphEditorEdNodeBase;
 
-class GENERICGRAPHEDITOR_API SEdNode_GenericGraphNode : public SGraphNode
+class GENERICGRAPHEDITOR_API SGraphEditorNode : public SGraphNode
 {
 public:
-	SLATE_BEGIN_ARGS(SEdNode_GenericGraphNode) {}
+	SLATE_BEGIN_ARGS(SGraphEditorNode) {}
 	SLATE_END_ARGS()
 
-	void Construct(const FArguments& InArgs, UEdNode_GenericGraphNode* InNode);
+	void Construct(const FArguments& InArgs, UGraphEditorEdNodeBase* InNode);
 
 	virtual void UpdateGraphNode() override;
 	virtual void CreatePinWidgets() override;

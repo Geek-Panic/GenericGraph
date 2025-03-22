@@ -7,8 +7,8 @@
 class UGraphDefinitionBase;
 class UGraphNodeDefinitionBase;
 class UGraphEdgeDefinitionBase;
-class UEdNode_GenericGraphNode;
-class UEdNode_GenericGraphEdge;
+class UGraphEditorEdNodeBase;
+class UGraphEditorEdEdgeNodeBase;
 
 UCLASS()
 class GENERICGRAPHEDITOR_API UEdGraph_GenericGraph : public UEdGraph
@@ -27,10 +27,10 @@ public:
 	virtual void PostEditUndo() override;
 
 	UPROPERTY(Transient)
-	TMap<UGraphNodeDefinitionBase*, UEdNode_GenericGraphNode*> NodeMap;
+	TMap<UGraphNodeDefinitionBase*, UGraphEditorEdNodeBase*> NodeMap;
 
 	UPROPERTY(Transient)
-	TMap<UGraphEdgeDefinitionBase*, UEdNode_GenericGraphEdge*> EdgeMap;
+	TMap<UGraphEdgeDefinitionBase*, UGraphEditorEdEdgeNodeBase*> EdgeMap;
 
 protected:
 	void Clear();

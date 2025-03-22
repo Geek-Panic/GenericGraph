@@ -23,7 +23,7 @@ class GENERICGRAPHRUNTIME_API UGraphNodeDefinitionBase : public UObject
 	
 public:
 	
-	UGraphNodeDefinitionBase();
+	UGraphNodeDefinitionBase(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 	virtual ~UGraphNodeDefinitionBase() override;
 
 
@@ -33,66 +33,64 @@ public:
 	virtual FLinearColor GetBackgroundColor() const;
 
 	virtual FText GetDisplayName() const;
-
-	virtual void SetDisplayName(const FText& NewDisplayName);
+	virtual void SetDisplayName(const FText& InDisplayName);
 
 	virtual bool CanCreateConnection(UGraphNodeDefinitionBase* Other, FText& ErrorMessage);
-
 	virtual bool CanCreateConnectionTo(UGraphNodeDefinitionBase* Other, int32 NumberOfChildrenNodes, FText& ErrorMessage);
 	virtual bool CanCreateConnectionFrom(UGraphNodeDefinitionBase* Other, int32 NumberOfParentNodes, FText& ErrorMessage);
 #endif
 
-	UFUNCTION(BlueprintCallable, Category = "GenericGraphNode")
+	UFUNCTION(BlueprintCallable, Category = "Node")
 	virtual UGraphEdgeDefinitionBase* GetEdge(UGraphNodeDefinitionBase* ChildNode);
 
-	UFUNCTION(BlueprintCallable, Category = "GenericGraphNode")
+	UFUNCTION(BlueprintCallable, Category = "Node")
 	bool IsLeafNode() const;
 
-	UFUNCTION(BlueprintCallable, Category = "GenericGraphNode")
+	UFUNCTION(BlueprintCallable, Category = "Node")
 	UGraphDefinitionBase* GetGraph() const;
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "GenericGraphNode")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Node")
 	FText GetDescription() const;
 	virtual FText GetDescription_Implementation() const;
 
-protected:
 	
-	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode")
-	FText DisplayName;
+	UPROPERTY(EditDefaultsOnly, Category = "Node")
+	FText DisplayName = FText();
 	
-	UPROPERTY(VisibleDefaultsOnly, Category = "GenericGraphNode")
-	UGraphDefinitionBase* Graph;
+	UPROPERTY(/*VisibleDefaultsOnly, Category = "Node"*/)
+	UGraphDefinitionBase* Graph = nullptr;
 	
-	UPROPERTY(BlueprintReadOnly, Category = "GenericGraphNode")
-	TArray<TObjectPtr<UGraphNodeDefinitionBase>> ParentNodes;
+	UPROPERTY(BlueprintReadOnly, Category = "Node")
+	TArray<TObjectPtr<UGraphNodeDefinitionBase>> ParentNodes = {};
 
-	UPROPERTY(BlueprintReadOnly, Category = "GenericGraphNode")
-	TArray<TObjectPtr<UGraphNodeDefinitionBase>> ChildrenNodes;
+	UPROPERTY(BlueprintReadOnly, Category = "Node")
+	TArray<TObjectPtr<UGraphNodeDefinitionBase>> ChildrenNodes = {};
 	
-	UPROPERTY(BlueprintReadOnly, Category = "GenericGraphNode")
-	TMap<TObjectPtr<UGraphNodeDefinitionBase>, TObjectPtr<UGraphEdgeDefinitionBase>> Edges;
-	
+	UPROPERTY(BlueprintReadOnly, Category = "Node")
+	TMap<TObjectPtr<UGraphNodeDefinitionBase>, TObjectPtr<UGraphEdgeDefinitionBase>> Edges = {};
+
 	
 #if WITH_EDITORONLY_DATA
-	UPROPERTY(VisibleDefaultsOnly, Category = "GenericGraphNode_Editor")
-	TSubclassOf<UGraphDefinitionBase> CompatibleGraphType;
+	UPROPERTY(VisibleDefaultsOnly, Category = "Editor")
+	TSubclassOf<UGraphDefinitionBase> CompatibleGraphType = nullptr;
 
-	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor")
-	FLinearColor BackgroundColor;
+	UPROPERTY(EditDefaultsOnly, Category = "Editor")
+	FLinearColor BackgroundColor = FLinearColor::Black;
 
-	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor")
-	FText ContextMenuName;
+	UPROPERTY(EditDefaultsOnly, Category = "Editor")
+	FText ContextMenuName = FText();
 
-	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor")
-	ENodeLimit ParentLimitType;
+	UPROPERTY(EditDefaultsOnly, Category = "Editor")
+	ENodeLimit ParentLimitType = ENodeLimit::Unlimited;
 
-	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor", meta = (ClampMin = "0", EditCondition = "ParentLimitType == ENodeLimit::Limited", EditConditionHides))
-	int32 ParentLimit;
+	UPROPERTY(EditDefaultsOnly, Category = "Editor", meta = (ClampMin = "0", EditCondition = "ParentLimitType == ENodeLimit::Limited", EditConditionHides))
+	int32 ParentLimit = 0;
 
-	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor")
-	ENodeLimit ChildrenLimitType;
+	UPROPERTY(EditDefaultsOnly, Category = "Editor")
+	ENodeLimit ChildrenLimitType = ENodeLimit::Unlimited;
 
-	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor", meta = (ClampMin = "0", EditCondition = "ChildrenLimitType == ENodeLimit::Limited", EditConditionHides))
-	int32 ChildrenLimit;
+	UPROPERTY(EditDefaultsOnly, Category = "Editor", meta = (ClampMin = "0", EditCondition = "ChildrenLimitType == ENodeLimit::Limited", EditConditionHides))
+	int32 ChildrenLimit = 0;
 #endif
+	
 };

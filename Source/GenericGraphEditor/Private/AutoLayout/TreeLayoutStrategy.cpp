@@ -1,5 +1,5 @@
 #include "AutoLayout/TreeLayoutStrategy.h"
-#include "GenericGraphAssetEditor/SEdNode_GenericGraphNode.h"
+#include "GenericGraphAssetEditor/SGraphEditorNode.h"
 #include "GenericGraphEditorPCH.h"
 
 UTreeLayoutStrategy::UTreeLayoutStrategy() {}
@@ -54,17 +54,17 @@ void UTreeLayoutStrategy::Layout(UEdGraph* _EdGraph)
 
 void UTreeLayoutStrategy::InitPass(UGraphNodeDefinitionBase* RootNode, const FVector2D& Anchor)
 {
-	UEdNode_GenericGraphNode* EdNode_RootNode = EdGraph->NodeMap[RootNode];
+	UGraphEditorEdNodeBase* EdNode_RootNode = EdGraph->NodeMap[RootNode];
 
 	FVector2D ChildAnchor(FVector2D(0.f, GetNodeHeight(EdNode_RootNode) + OptimalDistance + Anchor.Y));
 	for (int32 i = 0; i < RootNode->ChildrenNodes.Num(); ++i)
 	{
 		UGraphNodeDefinitionBase* Child = RootNode->ChildrenNodes[i];
-		UEdNode_GenericGraphNode* EdNode_ChildNode = EdGraph->NodeMap[Child];
+		UGraphEditorEdNodeBase* EdNode_ChildNode = EdGraph->NodeMap[Child];
 		if (i > 0)
 		{
 			UGraphNodeDefinitionBase* PreChild = RootNode->ChildrenNodes[i - 1];
-			UEdNode_GenericGraphNode* EdNode_PreChildNode = EdGraph->NodeMap[PreChild];
+			UGraphEditorEdNodeBase* EdNode_PreChildNode = EdGraph->NodeMap[PreChild];
 			ChildAnchor.X += OptimalDistance + GetNodeWidth(EdNode_PreChildNode) / 2;
 		}
 		ChildAnchor.X += GetNodeWidth(EdNode_ChildNode) / 2;
@@ -118,7 +118,7 @@ bool UTreeLayoutStrategy::ResolveConflictPass(UGraphNodeDefinitionBase* Node)
 
 bool UTreeLayoutStrategy::ResolveConflict(UGraphNodeDefinitionBase* LRoot, UGraphNodeDefinitionBase* RRoot)
 {
-	TArray<UEdNode_GenericGraphNode*> RightContour, LeftContour;
+	TArray<UGraphEditorEdNodeBase*> RightContour, LeftContour;
 
 	GetRightContour(LRoot, 0, RightContour);
 	GetLeftContour(RRoot, 0, LeftContour);
@@ -165,9 +165,9 @@ bool UTreeLayoutStrategy::ResolveConflict(UGraphNodeDefinitionBase* LRoot, UGrap
 	return false;
 }
 
-void UTreeLayoutStrategy::GetLeftContour(UGraphNodeDefinitionBase* RootNode, int32 Level, TArray<UEdNode_GenericGraphNode*>& Contour)
+void UTreeLayoutStrategy::GetLeftContour(UGraphNodeDefinitionBase* RootNode, int32 Level, TArray<UGraphEditorEdNodeBase*>& Contour)
 {
-	UEdNode_GenericGraphNode* EdNode_Node = EdGraph->NodeMap[RootNode];
+	UGraphEditorEdNodeBase* EdNode_Node = EdGraph->NodeMap[RootNode];
 	if (Level >= Contour.Num())
 	{
 		Contour.Add(EdNode_Node);
@@ -183,9 +183,9 @@ void UTreeLayoutStrategy::GetLeftContour(UGraphNodeDefinitionBase* RootNode, int
 	}
 }
 
-void UTreeLayoutStrategy::GetRightContour(UGraphNodeDefinitionBase* RootNode, int32 Level, TArray<UEdNode_GenericGraphNode*>& Contour)
+void UTreeLayoutStrategy::GetRightContour(UGraphNodeDefinitionBase* RootNode, int32 Level, TArray<UGraphEditorEdNodeBase*>& Contour)
 {
-	UEdNode_GenericGraphNode* EdNode_Node = EdGraph->NodeMap[RootNode];
+	UGraphEditorEdNodeBase* EdNode_Node = EdGraph->NodeMap[RootNode];
 	if (Level >= Contour.Num())
 	{
 		Contour.Add(EdNode_Node);
@@ -203,7 +203,7 @@ void UTreeLayoutStrategy::GetRightContour(UGraphNodeDefinitionBase* RootNode, in
 
 void UTreeLayoutStrategy::ShiftSubTree(UGraphNodeDefinitionBase* RootNode, const FVector2D& Offset)
 {
-	UEdNode_GenericGraphNode* EdNode_Node = EdGraph->NodeMap[RootNode];
+	UGraphEditorEdNodeBase* EdNode_Node = EdGraph->NodeMap[RootNode];
 	EdNode_Node->NodePosX += Offset.X;
 	EdNode_Node->NodePosY += Offset.Y;
 
@@ -220,18 +220,18 @@ void UTreeLayoutStrategy::ShiftSubTree(UGraphNodeDefinitionBase* RootNode, const
 
 void UTreeLayoutStrategy::UpdateParentNodePosition(UGraphNodeDefinitionBase* ParentNode)
 {
-	UEdNode_GenericGraphNode* EdNode_ParentNode = EdGraph->NodeMap[ParentNode];
+	UGraphEditorEdNodeBase* EdNode_ParentNode = EdGraph->NodeMap[ParentNode];
 	if (ParentNode->ChildrenNodes.Num() % 2 == 0)
 	{
-		UEdNode_GenericGraphNode* FirstChild = EdGraph->NodeMap[ParentNode->ChildrenNodes[0]];
-		UEdNode_GenericGraphNode* LastChild = EdGraph->NodeMap[ParentNode->ChildrenNodes.Last()];
+		UGraphEditorEdNodeBase* FirstChild = EdGraph->NodeMap[ParentNode->ChildrenNodes[0]];
+		UGraphEditorEdNodeBase* LastChild = EdGraph->NodeMap[ParentNode->ChildrenNodes.Last()];
 		float LeftBound = FirstChild->NodePosX;
 		float RightBound = LastChild->NodePosX + GetNodeWidth(LastChild);
 		EdNode_ParentNode->NodePosX = (LeftBound + RightBound) / 2 - GetNodeWidth(EdNode_ParentNode) / 2;
 	}
 	else
 	{
-		UEdNode_GenericGraphNode* MidChild = EdGraph->NodeMap[ParentNode->ChildrenNodes[ParentNode->ChildrenNodes.Num() / 2]];
+		UGraphEditorEdNodeBase* MidChild = EdGraph->NodeMap[ParentNode->ChildrenNodes[ParentNode->ChildrenNodes.Num() / 2]];
 		EdNode_ParentNode->NodePosX = MidChild->NodePosX + GetNodeWidth(MidChild) / 2 - GetNodeWidth(EdNode_ParentNode) / 2;
 	}
 }

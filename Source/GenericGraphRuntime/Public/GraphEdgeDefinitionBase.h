@@ -10,13 +10,13 @@ UCLASS(Blueprintable)
 class GENERICGRAPHRUNTIME_API UGraphEdgeDefinitionBase : public UObject
 {
 	GENERATED_BODY()
-
+	
 public:
 	
 	UGraphEdgeDefinitionBase(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 	virtual ~UGraphEdgeDefinitionBase() override;
 
-	UFUNCTION(BlueprintPure, Category = "GenericGraphEdge")
+	UFUNCTION(BlueprintPure, Category = "Edge")
 	UGraphDefinitionBase* GetGraph() const;
 
 	// TODO : Add transition logic
@@ -25,30 +25,28 @@ public:
 	virtual FText GetDisplayName() const { return DisplayName; }
 	FLinearColor GetEdgeColour() const { return EdgeColour; }
 
-	virtual void SetNodeTitle(const FText& NewTitle);
+	virtual void SetDisplayName(const FText& InDisplayName);
 #endif
-
-protected:
 	
-	UPROPERTY(VisibleAnywhere, Category = "GenericGraphNode")
+	UPROPERTY(VisibleAnywhere, Category = "Edge")
 	TObjectPtr<UGraphDefinitionBase> Graph = nullptr;
 
-	UPROPERTY(BlueprintReadOnly, Category = "GenericGraphEdge")
+	UPROPERTY(BlueprintReadOnly, Category = "Edge")
 	TObjectPtr<UGraphNodeDefinitionBase> StartNode = nullptr;
 
-	UPROPERTY(BlueprintReadOnly, Category = "GenericGraphEdge")
+	UPROPERTY(BlueprintReadOnly, Category = "Edge")
 	TObjectPtr<UGraphNodeDefinitionBase> EndNode = nullptr;
 
 	// TODO : Add transition type/behavior property
 	
 #if WITH_EDITORONLY_DATA
-	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor")
+	UPROPERTY(EditDefaultsOnly, Category = "Editor")
 	bool bShouldDrawDisplayName = false;
 
-	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor")
-	FText DisplayName;
+	UPROPERTY(EditDefaultsOnly, Category = "Editor")
+	FText DisplayName = FText();
 
-	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphEdge")
+	UPROPERTY(EditDefaultsOnly, Category = "Editor")
 	FLinearColor EdgeColour = FLinearColor(0.9f, 0.9f, 0.9f, 1.0f);
 #endif
 

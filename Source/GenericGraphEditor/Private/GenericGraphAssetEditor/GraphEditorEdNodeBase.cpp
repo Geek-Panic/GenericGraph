@@ -1,29 +1,29 @@
-#include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
 #include "GenericGraphAssetEditor/EdGraph_GenericGraph.h"
+#include "GenericGraphAssetEditor/GraphEditorEdNodeBase.h"
 #include "Kismet2/BlueprintEditorUtils.h"
 #include "Kismet2/Kismet2NameValidators.h"
 
 #define LOCTEXT_NAMESPACE "EdNode_GenericGraph"
 
-UEdNode_GenericGraphNode::UEdNode_GenericGraphNode()
+UGraphEditorEdNodeBase::UGraphEditorEdNodeBase()
 {
 	bCanRenameNode = true;
 }
 
-UEdNode_GenericGraphNode::~UEdNode_GenericGraphNode() {}
+UGraphEditorEdNodeBase::~UGraphEditorEdNodeBase() {}
 
-void UEdNode_GenericGraphNode::AllocateDefaultPins()
+void UGraphEditorEdNodeBase::AllocateDefaultPins()
 {
 	CreatePin(EGPD_Input, "MultipleNodes", FName(), TEXT("In"));
 	CreatePin(EGPD_Output, "MultipleNodes", FName(), TEXT("Out"));
 }
 
-UEdGraph_GenericGraph* UEdNode_GenericGraphNode::GetGenericGraphEdGraph()
+UEdGraph_GenericGraph* UGraphEditorEdNodeBase::GetGenericGraphEdGraph()
 {
 	return Cast<UEdGraph_GenericGraph>(GetGraph());
 }
 
-FText UEdNode_GenericGraphNode::GetNodeTitle(ENodeTitleType::Type TitleType) const
+FText UGraphEditorEdNodeBase::GetNodeTitle(ENodeTitleType::Type TitleType) const
 {
 	if (GenericGraphNode == nullptr)
 	{
@@ -32,12 +32,12 @@ FText UEdNode_GenericGraphNode::GetNodeTitle(ENodeTitleType::Type TitleType) con
 	return GenericGraphNode->GetDisplayName();
 }
 
-void UEdNode_GenericGraphNode::PrepareForCopying()
+void UGraphEditorEdNodeBase::PrepareForCopying()
 {
 	GenericGraphNode->Rename(nullptr, this, REN_DontCreateRedirectors | REN_DoNotDirty);
 }
 
-void UEdNode_GenericGraphNode::AutowireNewNode(UEdGraphPin* FromPin)
+void UGraphEditorEdNodeBase::AutowireNewNode(UEdGraphPin* FromPin)
 {
 	Super::AutowireNewNode(FromPin);
 
@@ -50,27 +50,27 @@ void UEdNode_GenericGraphNode::AutowireNewNode(UEdGraphPin* FromPin)
 	}
 }
 
-void UEdNode_GenericGraphNode::SetGenericGraphNode(UGraphNodeDefinitionBase* InNode)
+void UGraphEditorEdNodeBase::SetGenericGraphNode(UGraphNodeDefinitionBase* InNode)
 {
 	GenericGraphNode = InNode;
 }
 
-FLinearColor UEdNode_GenericGraphNode::GetBackgroundColor() const
+FLinearColor UGraphEditorEdNodeBase::GetBackgroundColor() const
 {
 	return GenericGraphNode == nullptr ? FLinearColor::Black : GenericGraphNode->GetBackgroundColor();
 }
 
-UEdGraphPin* UEdNode_GenericGraphNode::GetInputPin() const
+UEdGraphPin* UGraphEditorEdNodeBase::GetInputPin() const
 {
 	return Pins[0];
 }
 
-UEdGraphPin* UEdNode_GenericGraphNode::GetOutputPin() const
+UEdGraphPin* UGraphEditorEdNodeBase::GetOutputPin() const
 {
 	return Pins[1];
 }
 
-void UEdNode_GenericGraphNode::PostEditUndo()
+void UGraphEditorEdNodeBase::PostEditUndo()
 {
 	UEdGraphNode::PostEditUndo();
 }

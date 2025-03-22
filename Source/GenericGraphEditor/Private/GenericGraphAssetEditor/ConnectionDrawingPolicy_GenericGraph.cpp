@@ -1,6 +1,6 @@
 #include "GenericGraphAssetEditor/ConnectionDrawingPolicy_GenericGraph.h"
-#include "GenericGraphAssetEditor/EdNode_GenericGraphEdge.h"
-#include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
+#include "GenericGraphAssetEditor/GraphEditorEdEdgeNodeBase.h"
+#include "GenericGraphAssetEditor/GraphEditorEdNodeBase.h"
 
 FConnectionDrawingPolicy_GenericGraph::FConnectionDrawingPolicy_GenericGraph(
 	int32 InBackLayerID,
@@ -138,10 +138,10 @@ void FConnectionDrawingPolicy_GenericGraph::DetermineLinkGeometry(
 	FArrangedWidget*& StartWidgetGeometry,
 	FArrangedWidget*& EndWidgetGeometry)
 {
-	if (UEdNode_GenericGraphEdge* EdgeNode = Cast<UEdNode_GenericGraphEdge>(InputPin->GetOwningNode()))
+	if (UGraphEditorEdEdgeNodeBase* EdgeNode = Cast<UGraphEditorEdEdgeNodeBase>(InputPin->GetOwningNode()))
 	{
-		UEdNode_GenericGraphNode* Start = EdgeNode->GetStartNode();
-		UEdNode_GenericGraphNode* End = EdgeNode->GetEndNode();
+		UGraphEditorEdNodeBase* Start = EdgeNode->GetStartNode();
+		UGraphEditorEdNodeBase* End = EdgeNode->GetEndNode();
 		if (Start != nullptr && End != nullptr)
 		{
 			int32* StartNodeIndex = NodeWidgetMap.Find(Start);

@@ -20,8 +20,8 @@ protected:
 
 	bool ResolveConflict(UGraphNodeDefinitionBase* LRoot, UGraphNodeDefinitionBase* RRoot);
 
-	void GetLeftContour(UGraphNodeDefinitionBase* RootNode, int32 Level, TArray<UEdNode_GenericGraphNode*>& Contour);
-	void GetRightContour(UGraphNodeDefinitionBase* RootNode, int32 Level, TArray<UEdNode_GenericGraphNode*>& Contour);
+	void GetLeftContour(UGraphNodeDefinitionBase* RootNode, int32 Level, TArray<UGraphEditorEdNodeBase*>& Contour);
+	void GetRightContour(UGraphNodeDefinitionBase* RootNode, int32 Level, TArray<UGraphEditorEdNodeBase*>& Contour);
 
 	void ShiftSubTree(UGraphNodeDefinitionBase* RootNode, const FVector2D& Offset);
 

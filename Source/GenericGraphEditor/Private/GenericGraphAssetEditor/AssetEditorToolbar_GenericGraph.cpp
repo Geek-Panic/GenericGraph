@@ -1,7 +1,7 @@
 #include "GenericGraphAssetEditor/AssetEditorToolbar_GenericGraph.h"
 #include "GenericGraphAssetEditor/AssetEditor_GenericGraph.h"
 #include "GenericGraphAssetEditor/EditorCommands_GenericGraph.h"
-#include "GenericGraphAssetEditor/GenericGraphEditorStyle.h"
+#include "GenericGraphAssetEditor/GraphEditorStyle.h"
 
 #define LOCTEXT_NAMESPACE "AssetEditorToolbar_GenericGraph"
 
@@ -39,7 +39,7 @@ void FAssetEditorToolbar_GenericGraph::FillGenericGraphToolbar(FToolBarBuilder& 
 			NAME_None,
 			LOCTEXT("AutoArrange_Label", "Auto Arrange"),
 			LOCTEXT("AutoArrange_ToolTip", "Auto arrange nodes, not perfect, but still handy"),
-			FSlateIcon(FGenericGraphEditorStyle::GetStyleSetName(), "GenericGraphEditor.AutoArrange"));
+			FSlateIcon(FGraphEditorStyle::GetStyleSetName(), "GenericGraphEditor.AutoArrange"));
 	}
 	ToolbarBuilder.EndSection();
 }

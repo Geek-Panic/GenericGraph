@@ -3,8 +3,8 @@
 #include "CoreMinimal.h"
 #include "EdGraph/EdGraph.h"
 #include "GenericGraphAssetEditor/EdGraph_GenericGraph.h"
-#include "GenericGraphAssetEditor/EdNode_GenericGraphEdge.h"
-#include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
+#include "GenericGraphAssetEditor/GraphEditorEdEdgeNodeBase.h"
+#include "GenericGraphAssetEditor/GraphEditorEdNodeBase.h"
 #include "GenericGraphAssetEditor/Settings_GenericGraphEditor.h"
 #include "GraphDefinitionBase.h"
 #include "AutoLayoutStrategy.generated.h"
@@ -22,9 +22,9 @@ public:
 	class UGenericGraphEditorSettings* Settings;
 
 protected:
-	int32 GetNodeWidth(UEdNode_GenericGraphNode* EdNode);
+	int32 GetNodeWidth(UGraphEditorEdNodeBase* EdNode);
 
-	int32 GetNodeHeight(UEdNode_GenericGraphNode* EdNode);
+	int32 GetNodeHeight(UGraphEditorEdNodeBase* EdNode);
 
 	FBox2D GetNodeBound(UEdGraphNode* EdNode);
 

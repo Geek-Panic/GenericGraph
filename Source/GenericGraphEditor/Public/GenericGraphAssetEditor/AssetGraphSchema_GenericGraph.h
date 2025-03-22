@@ -6,8 +6,8 @@
 #include "GraphNodeDefinitionBase.h"
 #include "AssetGraphSchema_GenericGraph.generated.h"
 
-class UEdNode_GenericGraphNode;
-class UEdNode_GenericGraphEdge;
+class UGraphEditorEdNodeBase;
+class UGraphEditorEdEdgeNodeBase;
 class UAutoLayoutStrategy;
 
 /** Action to add a node to the graph */
@@ -30,7 +30,7 @@ struct GENERICGRAPHEDITOR_API FAssetSchemaAction_GenericGraph_NewNode : public F
 	virtual UEdGraphNode* PerformAction(class UEdGraph* ParentGraph, UEdGraphPin* FromPin, const FVector2D Location, bool bSelectNewNode = true) override;
 	virtual void AddReferencedObjects(FReferenceCollector& Collector) override;
 
-	UEdNode_GenericGraphNode* NodeTemplate;
+	UGraphEditorEdNodeBase* NodeTemplate;
 };
 
 USTRUCT()
@@ -52,7 +52,7 @@ struct GENERICGRAPHEDITOR_API FAssetSchemaAction_GenericGraph_NewEdge : public F
 	virtual UEdGraphNode* PerformAction(class UEdGraph* ParentGraph, UEdGraphPin* FromPin, const FVector2D Location, bool bSelectNewNode = true) override;
 	virtual void AddReferencedObjects(FReferenceCollector& Collector) override;
 
-	UEdNode_GenericGraphEdge* NodeTemplate;
+	UGraphEditorEdEdgeNodeBase* NodeTemplate;
 };
 
 UCLASS(MinimalAPI)

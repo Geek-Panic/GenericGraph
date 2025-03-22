@@ -13,8 +13,8 @@ UGraphDefinitionBase* UGraphEdgeDefinitionBase::GetGraph() const
 }
 
 #if WITH_EDITOR
-void UGraphEdgeDefinitionBase::SetNodeTitle(const FText& NewTitle)
+void UGraphEdgeDefinitionBase::SetDisplayName(const FText& InDisplayName)
 {
-	DisplayName = NewTitle;
+	DisplayName = InDisplayName;
 }
 #endif // #if WITH_EDITOR

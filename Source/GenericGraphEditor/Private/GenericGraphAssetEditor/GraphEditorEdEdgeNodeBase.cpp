@@ -1,20 +1,20 @@
-#include "GenericGraphAssetEditor/EdNode_GenericGraphEdge.h"
-#include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
+#include "GenericGraphAssetEditor/GraphEditorEdEdgeNodeBase.h"
+#include "GenericGraphAssetEditor/GraphEditorEdNodeBase.h"
 #include "GraphEdgeDefinitionBase.h"
 
 #define LOCTEXT_NAMESPACE "EdNode_GenericGraphEdge"
 
-UEdNode_GenericGraphEdge::UEdNode_GenericGraphEdge()
+UGraphEditorEdEdgeNodeBase::UGraphEditorEdEdgeNodeBase()
 {
 	bCanRenameNode = true;
 }
 
-void UEdNode_GenericGraphEdge::SetEdge(UGraphEdgeDefinitionBase* Edge)
+void UGraphEditorEdEdgeNodeBase::SetEdge(UGraphEdgeDefinitionBase* Edge)
 {
 	GenericGraphEdge = Edge;
 }
 
-void UEdNode_GenericGraphEdge::AllocateDefaultPins()
+void UGraphEditorEdEdgeNodeBase::AllocateDefaultPins()
 {
 	UEdGraphPin* Inputs = CreatePin(EGPD_Input, TEXT("Edge"), FName(), TEXT("In"));
 	Inputs->bHidden = true;
@@ -22,7 +22,7 @@ void UEdNode_GenericGraphEdge::AllocateDefaultPins()
 	Outputs->bHidden = true;
 }
 
-FText UEdNode_GenericGraphEdge::GetNodeTitle(ENodeTitleType::Type TitleType) const
+FText UGraphEditorEdEdgeNodeBase::GetNodeTitle(ENodeTitleType::Type TitleType) const
 {
 	if (GenericGraphEdge)
 	{
@@ -31,7 +31,7 @@ FText UEdNode_GenericGraphEdge::GetNodeTitle(ENodeTitleType::Type TitleType) con
 	return FText();
 }
 
-void UEdNode_GenericGraphEdge::PinConnectionListChanged(UEdGraphPin* Pin)
+void UGraphEditorEdEdgeNodeBase::PinConnectionListChanged(UEdGraphPin* Pin)
 {
 	if (Pin->LinkedTo.Num() == 0)
 	{
@@ -50,12 +50,12 @@ void UEdNode_GenericGraphEdge::PinConnectionListChanged(UEdGraphPin* Pin)
 	}
 }
 
-void UEdNode_GenericGraphEdge::PrepareForCopying()
+void UGraphEditorEdEdgeNodeBase::PrepareForCopying()
 {
 	GenericGraphEdge->Rename(nullptr, this, REN_DontCreateRedirectors | REN_DoNotDirty);
 }
 
-void UEdNode_GenericGraphEdge::CreateConnections(UEdNode_GenericGraphNode* Start, UEdNode_GenericGraphNode* End)
+void UGraphEditorEdEdgeNodeBase::CreateConnections(UGraphEditorEdNodeBase* Start, UGraphEditorEdNodeBase* End)
 {
 	Pins[0]->Modify();
 	Pins[0]->LinkedTo.Empty();
@@ -71,20 +71,20 @@ void UEdNode_GenericGraphEdge::CreateConnections(UEdNode_GenericGraphNode* Start
 	Pins[1]->MakeLinkTo(End->GetInputPin());
 }
 
-UEdNode_GenericGraphNode* UEdNode_GenericGraphEdge::GetStartNode()
+UGraphEditorEdNodeBase* UGraphEditorEdEdgeNodeBase::GetStartNode()
 {
 	if (Pins[0]->LinkedTo.Num() > 0)
 	{
-		return Cast<UEdNode_GenericGraphNode>(Pins[0]->LinkedTo[0]->GetOwningNode());
+		return Cast<UGraphEditorEdNodeBase>(Pins[0]->LinkedTo[0]->GetOwningNode());
 	}
 	return nullptr;
 }
 
-UEdNode_GenericGraphNode* UEdNode_GenericGraphEdge::GetEndNode()
+UGraphEditorEdNodeBase* UGraphEditorEdEdgeNodeBase::GetEndNode()
 {
 	if (Pins[1]->LinkedTo.Num() > 0)
 	{
-		return Cast<UEdNode_GenericGraphNode>(Pins[1]->LinkedTo[0]->GetOwningNode());
+		return Cast<UGraphEditorEdNodeBase>(Pins[1]->LinkedTo[0]->GetOwningNode());
 	}
 	return nullptr;
 }

@@ -1,19 +1,21 @@
 #include "GenericGraphNodeFactory.h"
-#include "GenericGraphAssetEditor/EdNode_GenericGraphEdge.h"
-#include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
-#include "GenericGraphAssetEditor/SEdNode_GenericGraphEdge.h"
-#include "GenericGraphAssetEditor/SEdNode_GenericGraphNode.h"
+#include "GenericGraphAssetEditor/GraphEditorEdEdgeNodeBase.h"
+#include "GenericGraphAssetEditor/GraphEditorEdNodeBase.h"
+#include "GenericGraphAssetEditor/SGraphEditorEdge.h"
+#include "GenericGraphAssetEditor/SGraphEditorNode.h"
 #include <EdGraph/EdGraphNode.h>
 
-TSharedPtr<class SGraphNode> FGraphPanelNodeFactory_GenericGraph::CreateNode(UEdGraphNode* Node) const
+TSharedPtr<SGraphNode> FGraphEditorNodeFactory::CreateNode(UEdGraphNode* Node) const
 {
-	if (UEdNode_GenericGraphNode* EdNode_GraphNode = Cast<UEdNode_GenericGraphNode>(Node))
+	// TODO : Add entry node
+	
+	if (UGraphEditorEdNodeBase* GraphNode = Cast<UGraphEditorEdNodeBase>(Node))
 	{
-		return SNew(SEdNode_GenericGraphNode, EdNode_GraphNode);
+		return SNew(SGraphEditorNode, GraphNode);
 	}
-	if (UEdNode_GenericGraphEdge* EdNode_Edge = Cast<UEdNode_GenericGraphEdge>(Node))
+	if (UGraphEditorEdEdgeNodeBase* GraphEdge = Cast<UGraphEditorEdEdgeNodeBase>(Node))
 	{
-		return SNew(SEdNode_GenericGraphEdge, EdNode_Edge);
+		return SNew(SGraphEditorEdge, GraphEdge);
 	}
 	return nullptr;
 }

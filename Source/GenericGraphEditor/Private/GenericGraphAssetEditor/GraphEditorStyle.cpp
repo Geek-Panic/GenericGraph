@@ -1,9 +1,9 @@
-#include "GenericGraphAssetEditor/GenericGraphEditorStyle.h"
+#include "GenericGraphAssetEditor/GraphEditorStyle.h"
 #include "Misc/Paths.h"
 #include "Styling/SlateStyleRegistry.h"
 #include "Styling/SlateTypes.h"
 
-TSharedPtr<FSlateStyleSet> FGenericGraphEditorStyle::StyleSet = nullptr;
+TSharedPtr<FSlateStyleSet> FGraphEditorStyle::StyleSet = nullptr;
 
 #define IMAGE_BRUSH(RelativePath, ...) FSlateImageBrush(StyleSet->RootToContentDir(RelativePath, TEXT(".png")), __VA_ARGS__)
 #define BOX_BRUSH(RelativePath, ...) FSlateBoxBrush(StyleSet->RootToContentDir(RelativePath, TEXT(".png")), __VA_ARGS__)
@@ -11,7 +11,7 @@ TSharedPtr<FSlateStyleSet> FGenericGraphEditorStyle::StyleSet = nullptr;
 #define TTF_FONT(RelativePath, ...) FSlateFontInfo(StyleSet->RootToContentDir(RelativePath, TEXT(".ttf")), __VA_ARGS__)
 #define OTF_FONT(RelativePath, ...) FSlateFontInfo(StyleSet->RootToContentDir(RelativePath, TEXT(".otf")), __VA_ARGS__)
 
-void FGenericGraphEditorStyle::Initialize()
+void FGraphEditorStyle::Initialize()
 {
 	const FVector2D Icon20x20(20.0f, 20.0f);
 	const FVector2D Icon40x40(40.0f, 40.0f);
@@ -32,7 +32,7 @@ void FGenericGraphEditorStyle::Initialize()
 	FSlateStyleRegistry::RegisterSlateStyle(*StyleSet.Get());
 }
 
-void FGenericGraphEditorStyle::Shutdown()
+void FGraphEditorStyle::Shutdown()
 {
 	if (StyleSet.IsValid())
 	{
@@ -42,7 +42,7 @@ void FGenericGraphEditorStyle::Shutdown()
 	}
 }
 
-const FName& FGenericGraphEditorStyle::GetStyleSetName()
+const FName& FGraphEditorStyle::GetStyleSetName()
 {
 	return StyleSet->GetStyleSetName();
 }

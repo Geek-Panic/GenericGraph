@@ -3,20 +3,20 @@
 #include "CoreMinimal.h"
 #include "EdGraph/EdGraphNode.h"
 #include "GraphNodeDefinitionBase.h"
-#include "EdNode_GenericGraphNode.generated.h"
+#include "GraphEditorEdNodeBase.generated.h"
 
-class UEdNode_GenericGraphEdge;
+class UGraphEditorEdEdgeNodeBase;
 class UEdGraph_GenericGraph;
-class SEdNode_GenericGraphNode;
+class SGraphEditorNode;
 
 UCLASS(MinimalAPI)
-class UEdNode_GenericGraphNode : public UEdGraphNode
+class UGraphEditorEdNodeBase : public UEdGraphNode
 {
 	GENERATED_BODY()
 
 public:
-	UEdNode_GenericGraphNode();
-	virtual ~UEdNode_GenericGraphNode() override;
+	UGraphEditorEdNodeBase();
+	virtual ~UGraphEditorEdNodeBase() override;
 
 	UPROPERTY(VisibleAnywhere, Instanced, Category = "GenericGraph")
 	UGraphNodeDefinitionBase* GenericGraphNode;
@@ -24,7 +24,7 @@ public:
 	void SetGenericGraphNode(UGraphNodeDefinitionBase* InNode);
 	UEdGraph_GenericGraph* GetGenericGraphEdGraph();
 
-	SEdNode_GenericGraphNode* SEdNode;
+	SGraphEditorNode* SEdNode;
 
 	virtual void AllocateDefaultPins() override;
 	virtual FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;

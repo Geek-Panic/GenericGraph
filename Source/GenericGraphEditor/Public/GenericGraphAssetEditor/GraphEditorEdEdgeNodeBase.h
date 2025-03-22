@@ -2,19 +2,19 @@
 
 #include "CoreMinimal.h"
 #include "EdGraph/EdGraphNode.h"
-#include "EdNode_GenericGraphEdge.generated.h"
+#include "GraphEditorEdEdgeNodeBase.generated.h"
 
 class UGraphNodeDefinitionBase;
 class UGraphEdgeDefinitionBase;
-class UEdNode_GenericGraphNode;
+class UGraphEditorEdNodeBase;
 
 UCLASS(MinimalAPI)
-class UEdNode_GenericGraphEdge : public UEdGraphNode
+class UGraphEditorEdEdgeNodeBase : public UEdGraphNode
 {
 	GENERATED_BODY()
 
 public:
-	UEdNode_GenericGraphEdge();
+	UGraphEditorEdEdgeNodeBase();
 
 	UPROPERTY()
 	class UEdGraph* Graph;
@@ -35,8 +35,8 @@ public:
 	virtual UEdGraphPin* GetInputPin() const { return Pins[0]; }
 	virtual UEdGraphPin* GetOutputPin() const { return Pins[1]; }
 
-	void CreateConnections(UEdNode_GenericGraphNode* Start, UEdNode_GenericGraphNode* End);
+	void CreateConnections(UGraphEditorEdNodeBase* Start, UGraphEditorEdNodeBase* End);
 
-	UEdNode_GenericGraphNode* GetStartNode();
-	UEdNode_GenericGraphNode* GetEndNode();
+	UGraphEditorEdNodeBase* GetStartNode();
+	UGraphEditorEdNodeBase* GetEndNode();
 };
