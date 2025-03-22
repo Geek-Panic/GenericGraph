@@ -12,7 +12,7 @@ UGenericGraphDefinition::UGenericGraphDefinition(const FObjectInitializer& Objec
 	bEdgeEnabled = true;
 
 	#if WITH_EDITORONLY_DATA
-	EdGraph = nullptr;
+	EditorGraph = nullptr;
 
 	bCanRenameNode = true;
 	#endif

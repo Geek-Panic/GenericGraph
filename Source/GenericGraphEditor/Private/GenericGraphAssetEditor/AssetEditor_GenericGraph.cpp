@@ -191,7 +191,7 @@ void FAssetEditor_GenericGraph::SaveAsset_Execute()
 void FAssetEditor_GenericGraph::AddReferencedObjects(FReferenceCollector& Collector)
 {
 	Collector.AddReferencedObject(EditingGraph);
-	Collector.AddReferencedObject(EditingGraph->EdGraph);
+	Collector.AddReferencedObject(EditingGraph->EditorGraph);
 }
 
 UGenericGraphEditorSettings* FAssetEditor_GenericGraph::GetSettings() const
@@ -267,7 +267,7 @@ TSharedRef<SGraphEditor> FAssetEditor_GenericGraph::CreateViewportWidget()
 		.AdditionalCommands(GraphEditorCommands)
 		.IsEditable(true)
 		.Appearance(AppearanceInfo)
-		.GraphToEdit(EditingGraph->EdGraph)
+		.GraphToEdit(EditingGraph->EditorGraph)
 		.GraphEvents(InEvents)
 		.AutoExpandActionMenu(true)
 		.ShowGraphStateOverlay(false);
@@ -288,15 +288,15 @@ void FAssetEditor_GenericGraph::BindCommands()
 
 void FAssetEditor_GenericGraph::CreateEdGraph()
 {
-	if (EditingGraph->EdGraph == nullptr)
+	if (EditingGraph->EditorGraph == nullptr)
 	{
-		EditingGraph->EdGraph = CastChecked<UEdGraph_GenericGraph>(FBlueprintEditorUtils::CreateNewGraph(EditingGraph, NAME_None, UEdGraph_GenericGraph::StaticClass(), UAssetGraphSchema_GenericGraph::StaticClass()));
-		EditingGraph->EdGraph->bAllowDeletion = false;
+		EditingGraph->EditorGraph = CastChecked<UEdGraph_GenericGraph>(FBlueprintEditorUtils::CreateNewGraph(EditingGraph, NAME_None, UEdGraph_GenericGraph::StaticClass(), UAssetGraphSchema_GenericGraph::StaticClass()));
+		EditingGraph->EditorGraph->bAllowDeletion = false;
 
 		// Give the schema a chance to fill out any required nodes (like the results
 		// node)
-		const UEdGraphSchema* Schema = EditingGraph->EdGraph->GetSchema();
-		Schema->CreateDefaultNodesForGraph(*EditingGraph->EdGraph);
+		const UEdGraphSchema* Schema = EditingGraph->EditorGraph->GetSchema();
+		Schema->CreateDefaultNodesForGraph(*EditingGraph->EditorGraph);
 	}
 }
 
@@ -377,7 +377,7 @@ void FAssetEditor_GenericGraph::RebuildGenericGraph()
 		return;
 	}
 
-	UEdGraph_GenericGraph* EdGraph = Cast<UEdGraph_GenericGraph>(EditingGraph->EdGraph);
+	UEdGraph_GenericGraph* EdGraph = Cast<UEdGraph_GenericGraph>(EditingGraph->EditorGraph);
 	check(EdGraph != nullptr);
 
 	EdGraph->RebuildGenericGraph();
@@ -665,7 +665,7 @@ bool FAssetEditor_GenericGraph::CanGraphSettings() const
 
 void FAssetEditor_GenericGraph::AutoArrange()
 {
-	UEdGraph_GenericGraph* EdGraph = Cast<UEdGraph_GenericGraph>(EditingGraph->EdGraph);
+	UEdGraph_GenericGraph* EdGraph = Cast<UEdGraph_GenericGraph>(EditingGraph->EditorGraph);
 	check(EdGraph != nullptr);
 
 	const FScopedTransaction Transaction(LOCTEXT("GenericGraphEditorAutoArrange", "Generic Graph Editor: Auto Arrange"));
@@ -699,7 +699,7 @@ void FAssetEditor_GenericGraph::AutoArrange()
 
 bool FAssetEditor_GenericGraph::CanAutoArrange() const
 {
-	return EditingGraph != nullptr && Cast<UEdGraph_GenericGraph>(EditingGraph->EdGraph) != nullptr;
+	return EditingGraph != nullptr && Cast<UEdGraph_GenericGraph>(EditingGraph->EditorGraph) != nullptr;
 }
 
 void FAssetEditor_GenericGraph::OnRenameNode()
@@ -722,7 +722,7 @@ void FAssetEditor_GenericGraph::OnRenameNode()
 
 bool FAssetEditor_GenericGraph::CanRenameNodes() const
 {
-	UEdGraph_GenericGraph* EdGraph = Cast<UEdGraph_GenericGraph>(EditingGraph->EdGraph);
+	UEdGraph_GenericGraph* EdGraph = Cast<UEdGraph_GenericGraph>(EditingGraph->EditorGraph);
 	check(EdGraph != nullptr);
 
 	UGenericGraphDefinition* Graph = EdGraph->GetGenericGraph();
@@ -760,7 +760,7 @@ void FAssetEditor_GenericGraph::OnFinishedChangingProperties(const FPropertyChan
 		return;
 	}
 
-	EditingGraph->EdGraph->GetSchema()->ForceVisualizationCacheClear();
+	EditingGraph->EditorGraph->GetSchema()->ForceVisualizationCacheClear();
 }
 
 #if ENGINE_MAJOR_VERSION < 5

@@ -15,5 +15,5 @@ public:
 	virtual uint32 GetCategories() override;
 
 private:
-	EAssetTypeCategories::Type MyAssetCategory;
+	EAssetTypeCategories::Type AssetCategory;
 };

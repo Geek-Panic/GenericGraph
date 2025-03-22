@@ -11,6 +11,7 @@ class GENERICGRAPHEDITOR_API UGenericGraphFactory : public UFactory
 	GENERATED_BODY()
 
 public:
+	
 	UGenericGraphFactory();
 	virtual ~UGenericGraphFactory() override;
 

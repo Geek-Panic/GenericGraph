@@ -5,7 +5,7 @@
 #define LOCTEXT_NAMESPACE "AssetTypeActions_GenericGraph"
 
 FAssetTypeActions_GenericGraph::FAssetTypeActions_GenericGraph(EAssetTypeCategories::Type InAssetCategory)
-	: MyAssetCategory(InAssetCategory)
+	: AssetCategory(InAssetCategory)
 {
 }
 
@@ -32,7 +32,8 @@ void FAssetTypeActions_GenericGraph::OpenAssetEditor(const TArray<UObject*>& InO
 	{
 		if (UGenericGraphDefinition* Graph = Cast<UGenericGraphDefinition>(*ObjIt))
 		{
-			TSharedRef<FAssetEditor_GenericGraph> NewGraphEditor(new FAssetEditor_GenericGraph());
+			// Open generic graph editor for each
+			const TSharedRef<FAssetEditor_GenericGraph> NewGraphEditor(new FAssetEditor_GenericGraph());
 			NewGraphEditor->InitGenericGraphAssetEditor(Mode, EditWithinLevelEditor, Graph);
 		}
 	}
@@ -40,7 +41,7 @@ void FAssetTypeActions_GenericGraph::OpenAssetEditor(const TArray<UObject*>& InO
 
 uint32 FAssetTypeActions_GenericGraph::GetCategories()
 {
-	return MyAssetCategory;
+	return AssetCategory;
 }
 
 //////////////////////////////////////////////////////////////////////////
