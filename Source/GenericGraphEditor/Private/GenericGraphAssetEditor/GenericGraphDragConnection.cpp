@@ -1,13 +1,13 @@
 ﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
-
 #include "GenericGraphAssetEditor/GenericGraphDragConnection.h"
-#include "Widgets/SBoxPanel.h"
-#include "Framework/Application/SlateApplication.h"
-#include "Widgets/Images/SImage.h"
 #include "EdGraph/EdGraph.h"
-#include "SGraphPanel.h"
+#include "Framework/Application/SlateApplication.h"
+#include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
 #include "ScopedTransaction.h"
+#include "SGraphPanel.h"
+#include "Widgets/Images/SImage.h"
+#include "Widgets/SBoxPanel.h"
 
 TSharedRef<FGenericGraphDragConnection> FGenericGraphDragConnection::New(const TSharedRef<SGraphPanel>& GraphPanel, const FDraggedPinTable& DraggedPins)
 {
@@ -52,7 +52,7 @@ void FGenericGraphDragConnection::HoverTargetChanged()
 			// Determine what the schema thinks about the wiring action
 			const FPinConnectionResponse Response = GraphObj->GetSchema()->CanCreateConnection(StartingPinObj, TargetPinObj);
 
-			if (Response.Response == ECanCreateConnectionResponse::CONNECT_RESPONSE_DISALLOW)
+			if (Response.Response == CONNECT_RESPONSE_DISALLOW)
 			{
 				TSharedPtr<SGraphNode> NodeWidget = TargetPinObj->GetOwningNode()->DEPRECATED_NodeWidget.Pin();
 				if (NodeWidget.IsValid())
@@ -64,7 +64,7 @@ void FGenericGraphDragConnection::HoverTargetChanged()
 			UniqueMessages.AddUnique(Response);
 		}
 	}
-	else if (UEdNode_GenericGraphNode* TargetNodeObj = Cast<UEdNode_GenericGraphNode>(GetHoveredNode()))
+	else if (const UEdNode_GenericGraphNode* TargetNodeObj = Cast<UEdNode_GenericGraphNode>(GetHoveredNode()))
 	{
 		TArray<UEdGraphPin*> ValidSourcePins;
 		ValidateGraphPinList(/*out*/ ValidSourcePins);
@@ -72,16 +72,16 @@ void FGenericGraphDragConnection::HoverTargetChanged()
 		// Check the schema for connection responses
 		for (UEdGraphPin* StartingPinObj : ValidSourcePins)
 		{
-			FPinConnectionResponse Response;			
+			FPinConnectionResponse Response;
 			FText ResponseText;
 
-			const UEdGraphSchema *Schema = StartingPinObj->GetSchema();
-			UEdGraphPin *TargetPin = TargetNodeObj->GetInputPin();
+			const UEdGraphSchema* Schema = StartingPinObj->GetSchema();
+			UEdGraphPin* TargetPin = TargetNodeObj->GetInputPin();
 
 			if (Schema && TargetPin)
 			{
 				Response = Schema->CanCreateConnection(StartingPinObj, TargetPin);
-				if (Response.Response == ECanCreateConnectionResponse::CONNECT_RESPONSE_DISALLOW)
+				if (Response.Response == CONNECT_RESPONSE_DISALLOW)
 				{
 					TSharedPtr<SGraphNode> NodeWidget = TargetPin->GetOwningNode()->DEPRECATED_NodeWidget.Pin();
 					if (NodeWidget.IsValid())
@@ -119,11 +119,9 @@ void FGenericGraphDragConnection::HoverTargetChanged()
 	// Let the user know the status of dropping now
 	if (UniqueMessages.Num() == 0)
 	{
-		// Display the place a new node icon, we're not over a valid pin and have no message from the schema
-		SetSimpleFeedbackMessage(
-			FAppStyle::GetBrush(TEXT("Graph.ConnectorFeedback.NewNode")),
-			FLinearColor::White,
-			NSLOCTEXT("GraphEditor.Feedback", "PlaceNewNode", "Place a new node."));
+		// Display the place a new node icon, we're not over a valid pin and have no
+		// message from the schema
+		SetSimpleFeedbackMessage(FAppStyle::GetBrush(TEXT("Graph.ConnectorFeedback.NewNode")), FLinearColor::White, NSLOCTEXT("GraphEditor.Feedback", "PlaceNewNode", "Place a new node."));
 	}
 	else
 	{
@@ -132,46 +130,31 @@ void FGenericGraphDragConnection::HoverTargetChanged()
 		for (auto ResponseIt = UniqueMessages.CreateConstIterator(); ResponseIt; ++ResponseIt)
 		{
 			// Determine the icon
-			const FSlateBrush* StatusSymbol = NULL;
+			const FSlateBrush* StatusSymbol = nullptr;
 
 			switch (ResponseIt->Response)
 			{
-			case CONNECT_RESPONSE_MAKE:
-			case CONNECT_RESPONSE_BREAK_OTHERS_A:
-			case CONNECT_RESPONSE_BREAK_OTHERS_B:
-			case CONNECT_RESPONSE_BREAK_OTHERS_AB:
-				StatusSymbol = FAppStyle::GetBrush(TEXT("Graph.ConnectorFeedback.OK"));
-				break;
+				case CONNECT_RESPONSE_MAKE:
+				case CONNECT_RESPONSE_BREAK_OTHERS_A:
+				case CONNECT_RESPONSE_BREAK_OTHERS_B:
+				case CONNECT_RESPONSE_BREAK_OTHERS_AB:
+					StatusSymbol = FAppStyle::GetBrush(TEXT("Graph.ConnectorFeedback.OK"));
+					break;
 
-			case CONNECT_RESPONSE_MAKE_WITH_CONVERSION_NODE:
-				StatusSymbol = FAppStyle::GetBrush(TEXT("Graph.ConnectorFeedback.ViaCast"));
-				break;
+				case CONNECT_RESPONSE_MAKE_WITH_CONVERSION_NODE:
+					StatusSymbol = FAppStyle::GetBrush(TEXT("Graph.ConnectorFeedback.ViaCast"));
+					break;
 
-			case CONNECT_RESPONSE_DISALLOW:
-			default:
-				StatusSymbol = FAppStyle::GetBrush(TEXT("Graph.ConnectorFeedback.Error"));
-				break;
+				case CONNECT_RESPONSE_DISALLOW:
+				default:
+					StatusSymbol = FAppStyle::GetBrush(TEXT("Graph.ConnectorFeedback.Error"));
+					break;
 			}
 
 			// Add a new message row
-			FeedbackBox->AddSlot()
-				.AutoHeight()
-				[
-					SNew(SHorizontalBox)
-					+ SHorizontalBox::Slot()
-				.AutoWidth()
-				.Padding(3.0f)
-				.VAlign(VAlign_Center)
-				[
-					SNew(SImage).Image(StatusSymbol)
-				]
-			+ SHorizontalBox::Slot()
-				.AutoWidth()
-				.VAlign(VAlign_Center)
-				[
-					SNew(STextBlock).Text(ResponseIt->Message)
-				]
-				];
+			FeedbackBox->AddSlot().AutoHeight()
+				[SNew(SHorizontalBox) + SHorizontalBox::Slot().AutoWidth().Padding(3.0f).VAlign(VAlign_Center)[SNew(SImage).Image(StatusSymbol)]
+				 + SHorizontalBox::Slot().AutoWidth().VAlign(VAlign_Center)[SNew(STextBlock).Text(ResponseIt->Message)]];
 		}
 
 		SetFeedbackMessage(FeedbackBox);
@@ -211,7 +194,7 @@ FReply FGenericGraphDragConnection::DroppedOnPin(FVector2D ScreenPosition, FVect
 
 	for (UEdGraphPin* PinA : ValidSourcePins)
 	{
-		if ((PinA != NULL) && (PinB != NULL))
+		if ((PinA != nullptr) && (PinB != nullptr))
 		{
 			UEdGraph* MyGraphObj = PinA->GetOwningNode()->GetGraph();
 
@@ -276,7 +259,8 @@ FReply FGenericGraphDragConnection::DroppedOnNode(FVector2D ScreenPosition, FVec
 
 					UEdGraphPin* EdGraphPin = NodeOver->GetSchema()->DropPinOnNode(GetHoveredNode(), PinName, SourcePin->PinType, SourcePin->Direction);
 
-					// This can invalidate the source pin due to node reconstruction, abort in that case
+					// This can invalidate the source pin due to node reconstruction,
+					// abort in that case
 					if (SourcePin->GetOwningNodeUnchecked() && EdGraphPin)
 					{
 						SourcePin->Modify();
@@ -285,7 +269,8 @@ FReply FGenericGraphDragConnection::DroppedOnNode(FVector2D ScreenPosition, FVec
 					}
 				}
 
-				// If we have not handled the pin drop on node and there is an error message, do not let other actions occur.
+				// If we have not handled the pin drop on node and there is an error
+				// message, do not let other actions occur.
 				if (!bHandledPinDropOnNode && !ResponseText.IsEmpty())
 				{
 					bHandledPinDropOnNode = true;
@@ -296,21 +281,18 @@ FReply FGenericGraphDragConnection::DroppedOnNode(FVector2D ScreenPosition, FVec
 	return bHandledPinDropOnNode ? FReply::Handled() : FReply::Unhandled();
 }
 
-FReply FGenericGraphDragConnection::DroppedOnPanel(const TSharedRef< SWidget >& Panel, FVector2D ScreenPosition, FVector2D GraphPosition, UEdGraph& Graph)
+FReply FGenericGraphDragConnection::DroppedOnPanel(const TSharedRef<SWidget>& Panel, FVector2D ScreenPosition, FVector2D GraphPosition, UEdGraph& Graph)
 {
 	// Gather any source drag pins
 	TArray<UEdGraphPin*> PinObjects;
 	ValidateGraphPinList(/*out*/ PinObjects);
 
 	// Create a context menu
-	TSharedPtr<SWidget> WidgetToFocus = GraphPanel->SummonContextMenu(ScreenPosition, GraphPosition, NULL, NULL, PinObjects);
+	TSharedPtr<SWidget> WidgetToFocus = GraphPanel->SummonContextMenu(ScreenPosition, GraphPosition, nullptr, nullptr, PinObjects);
 
 	// Give the context menu focus
-	return (WidgetToFocus.IsValid())
-		? FReply::Handled().SetUserFocus(WidgetToFocus.ToSharedRef(), EFocusCause::SetDirectly)
-		: FReply::Handled();
+	return (WidgetToFocus.IsValid()) ? FReply::Handled().SetUserFocus(WidgetToFocus.ToSharedRef(), EFocusCause::SetDirectly) : FReply::Handled();
 }
-
 
 void FGenericGraphDragConnection::ValidateGraphPinList(TArray<UEdGraphPin*>& OutValidPins)
 {

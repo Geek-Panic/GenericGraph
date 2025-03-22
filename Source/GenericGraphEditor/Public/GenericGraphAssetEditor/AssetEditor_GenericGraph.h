@@ -1,11 +1,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Settings_GenericGraphEditor.h"
 #include "GenericGraph.h"
+#include "Settings_GenericGraphEditor.h"
 
 #if ENGINE_MAJOR_VERSION == 5
-#include "UObject/ObjectSaveContext.h"
+	#include "UObject/ObjectSaveContext.h"
 #endif // #if ENGINE_MAJOR_VERSION == 5
 
 class FGGAssetEditorToolbar;
@@ -14,9 +14,9 @@ class GENERICGRAPHEDITOR_API FAssetEditor_GenericGraph : public FAssetEditorTool
 {
 public:
 	FAssetEditor_GenericGraph();
-	virtual ~FAssetEditor_GenericGraph();
+	virtual ~FAssetEditor_GenericGraph() override;
 
-	void InitGenericGraphAssetEditor(const EToolkitMode::Type Mode, const TSharedPtr< IToolkitHost >& InitToolkitHost, UGenericGraph* Graph);
+	void InitGenericGraphAssetEditor(const EToolkitMode::Type Mode, const TSharedPtr<IToolkitHost>& InitToolkitHost, UGenericGraph* Graph);
 
 	// IToolkit interface
 	virtual void RegisterTabSpawners(const TSharedRef<FTabManager>& TabManager) override;
@@ -34,11 +34,10 @@ public:
 	virtual void SaveAsset_Execute() override;
 	// End of FAssetEditorToolkit
 
-	//Toolbar
+	// Toolbar
 	void UpdateToolbar();
 	TSharedPtr<class FAssetEditorToolbar_GenericGraph> GetToolbarBuilder() { return ToolbarBuilder; }
 	void RegisterToolbarTab(const TSharedRef<class FTabManager>& TabManager);
-
 
 	// FSerializableObject interface
 	virtual void AddReferencedObjects(FReferenceCollector& Collector) override;
@@ -46,10 +45,7 @@ public:
 
 #if ENGINE_MAJOR_VERSION == 5
 	// FGCObject interface
-	virtual FString GetReferencerName() const
-	{
-		return TEXT("FAssetEditor_LTGenericGraph");
-	}
+	virtual FString GetReferencerName() const override { return TEXT("FAssetEditor_LTGenericGraph"); }
 	// ~FGCObject interface
 #endif // #if ENGINE_MAJOR_VERSION == 5
 
@@ -62,7 +58,6 @@ protected:
 
 	void CreateInternalWidgets();
 	TSharedRef<SGraphEditor> CreateViewportWidget();
-
 
 	void BindCommands();
 
@@ -111,16 +106,15 @@ protected:
 
 #if ENGINE_MAJOR_VERSION < 5
 	void OnPackageSaved(const FString& PackageFileName, UObject* Outer);
-#else // #if ENGINE_MAJOR_VERSION < 5
+#else  // #if ENGINE_MAJOR_VERSION < 5
 	void OnPackageSavedWithContext(const FString& PackageFileName, UPackage* Package, FObjectPostSaveContext ObjectSaveContext);
 #endif // #else // #if ENGINE_MAJOR_VERSION < 5
 
-protected:
 	UGenericGraphEditorSettings* GenricGraphEditorSettings;
 
 	UGenericGraph* EditingGraph;
 
-	//Toolbar
+	// Toolbar
 	TSharedPtr<class FAssetEditorToolbar_GenericGraph> ToolbarBuilder;
 
 	/** Handle to the registered OnPackageSave delegate */
@@ -133,5 +127,3 @@ protected:
 	/** The command list for this editor */
 	TSharedPtr<FUICommandList> GraphEditorCommands;
 };
-
-

@@ -11,9 +11,8 @@ UENUM(BlueprintType)
 enum class ENodeLimit : uint8
 {
 	Unlimited,
-    Limited
+	Limited
 };
-
 
 UCLASS(Blueprintable)
 class GENERICGRAPHRUNTIME_API UGenericGraphNode : public UObject
@@ -22,7 +21,7 @@ class GENERICGRAPHRUNTIME_API UGenericGraphNode : public UObject
 
 public:
 	UGenericGraphNode();
-	virtual ~UGenericGraphNode();
+	virtual ~UGenericGraphNode() override;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "GenericGraphNode")
 	UGenericGraph* Graph;
@@ -66,15 +65,15 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor")
 	ENodeLimit ParentLimitType;
 
-	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor" ,meta = (ClampMin = "0",EditCondition = "ParentLimitType == ENodeLimit::Limited", EditConditionHides))
+	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor", meta = (ClampMin = "0", EditCondition = "ParentLimitType == ENodeLimit::Limited", EditConditionHides))
 	int32 ParentLimit;
 
 	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor")
 	ENodeLimit ChildrenLimitType;
 
-	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor" ,meta = (ClampMin = "0",EditCondition = "ChildrenLimitType == ENodeLimit::Limited", EditConditionHides))
+	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor", meta = (ClampMin = "0", EditCondition = "ChildrenLimitType == ENodeLimit::Limited", EditConditionHides))
 	int32 ChildrenLimit;
-	
+
 #endif
 
 #if WITH_EDITOR

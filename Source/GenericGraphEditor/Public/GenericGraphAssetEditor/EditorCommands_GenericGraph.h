@@ -10,7 +10,7 @@ public:
 		: TCommands<FEditorCommands_GenericGraph>("GenericGraphEditor", NSLOCTEXT("Contexts", "GenericGraphEditor", "Generic Graph Editor"), NAME_None, FAppStyle::GetAppStyleSetName())
 	{
 	}
-	
+
 	TSharedPtr<FUICommandInfo> GraphSettings;
 	TSharedPtr<FUICommandInfo> AutoArrange;
 

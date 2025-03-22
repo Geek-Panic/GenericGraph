@@ -1,7 +1,7 @@
 #include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
 #include "GenericGraphAssetEditor/EdGraph_GenericGraph.h"
-#include "Kismet2/Kismet2NameValidators.h"
 #include "Kismet2/BlueprintEditorUtils.h"
+#include "Kismet2/Kismet2NameValidators.h"
 
 #define LOCTEXT_NAMESPACE "EdNode_GenericGraph"
 
@@ -10,10 +10,7 @@ UEdNode_GenericGraphNode::UEdNode_GenericGraphNode()
 	bCanRenameNode = true;
 }
 
-UEdNode_GenericGraphNode::~UEdNode_GenericGraphNode()
-{
-
-}
+UEdNode_GenericGraphNode::~UEdNode_GenericGraphNode() {}
 
 void UEdNode_GenericGraphNode::AllocateDefaultPins()
 {
@@ -32,10 +29,7 @@ FText UEdNode_GenericGraphNode::GetNodeTitle(ENodeTitleType::Type TitleType) con
 	{
 		return Super::GetNodeTitle(TitleType);
 	}
-	else
-	{
-		return GenericGraphNode->GetNodeTitle();
-	}
+	return GenericGraphNode->GetNodeTitle();
 }
 
 void UEdNode_GenericGraphNode::PrepareForCopying()

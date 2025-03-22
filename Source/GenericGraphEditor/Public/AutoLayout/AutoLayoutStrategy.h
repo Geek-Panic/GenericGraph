@@ -4,8 +4,8 @@
 #include "EdGraph/EdGraph.h"
 #include "GenericGraph.h"
 #include "GenericGraphAssetEditor/EdGraph_GenericGraph.h"
-#include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
 #include "GenericGraphAssetEditor/EdNode_GenericGraphEdge.h"
+#include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
 #include "GenericGraphAssetEditor/Settings_GenericGraphEditor.h"
 #include "AutoLayoutStrategy.generated.h"
 
@@ -15,9 +15,9 @@ class GENERICGRAPHEDITOR_API UAutoLayoutStrategy : public UObject
 	GENERATED_BODY()
 public:
 	UAutoLayoutStrategy();
-	virtual ~UAutoLayoutStrategy();
+	virtual ~UAutoLayoutStrategy() override;
 
-	virtual void Layout(UEdGraph* G) {};
+	virtual void Layout(UEdGraph* G){};
 
 	class UGenericGraphEditorSettings* Settings;
 
@@ -32,7 +32,6 @@ protected:
 
 	virtual void RandomLayoutOneTree(UGenericGraphNode* RootNode, const FBox2D& Bound);
 
-protected:
 	UGenericGraph* Graph;
 	UEdGraph_GenericGraph* EdGraph;
 	int32 MaxIteration;

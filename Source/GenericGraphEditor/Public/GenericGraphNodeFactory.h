@@ -1,6 +1,6 @@
 #pragma once
-#include <EdGraphUtilities.h>
 #include <EdGraph/EdGraphNode.h>
+#include <EdGraphUtilities.h>
 
 class FGraphPanelNodeFactory_GenericGraph : public FGraphPanelNodeFactory
 {

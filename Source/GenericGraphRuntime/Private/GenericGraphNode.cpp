@@ -12,9 +12,7 @@ UGenericGraphNode::UGenericGraphNode()
 #endif
 }
 
-UGenericGraphNode::~UGenericGraphNode()
-{
-}
+UGenericGraphNode::~UGenericGraphNode() {}
 
 UGenericGraphEdge* UGenericGraphNode::GetEdge(UGenericGraphNode* ChildNode)
 {
@@ -48,7 +46,7 @@ void UGenericGraphNode::SetNodeTitle(const FText& NewTitle)
 }
 
 bool UGenericGraphNode::CanCreateConnection(UGenericGraphNode* Other, FText& ErrorMessage)
-{	
+{
 	return true;
 }
 
@@ -73,7 +71,6 @@ bool UGenericGraphNode::CanCreateConnectionFrom(UGenericGraphNode* Other, int32 
 
 	return true;
 }
-
 
 #endif
 

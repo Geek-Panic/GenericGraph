@@ -13,7 +13,7 @@ class GENERICGRAPHRUNTIME_API UGenericGraphEdge : public UObject
 
 public:
 	UGenericGraphEdge();
-	virtual ~UGenericGraphEdge();
+	virtual ~UGenericGraphEdge() override;
 
 	UPROPERTY(VisibleAnywhere, Category = "GenericGraphNode")
 	UGenericGraph* Graph;
@@ -44,5 +44,4 @@ public:
 
 	virtual void SetNodeTitle(const FText& NewTitle);
 #endif
-	
 };

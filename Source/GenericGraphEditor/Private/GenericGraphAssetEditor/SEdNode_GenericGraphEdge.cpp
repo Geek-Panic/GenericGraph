@@ -1,13 +1,14 @@
 #include "GenericGraphAssetEditor/SEdNode_GenericGraphEdge.h"
-#include "Widgets/SBoxPanel.h"
-#include "Widgets/Images/SImage.h"
-#include "Widgets/Text/SInlineEditableTextBlock.h"
-#include "Widgets/SToolTip.h"
-#include "SGraphPanel.h"
 #include "EdGraphSchema_K2.h"
-#include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
-#include "GenericGraphAssetEditor/EdNode_GenericGraphEdge.h"
 #include "GenericGraphAssetEditor/ConnectionDrawingPolicy_GenericGraph.h"
+#include "GenericGraphAssetEditor/EdNode_GenericGraphEdge.h"
+#include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
+#include "GenericGraphEdge.h"
+#include "SGraphPanel.h"
+#include "Widgets/Images/SImage.h"
+#include "Widgets/SBoxPanel.h"
+#include "Widgets/SToolTip.h"
+#include "Widgets/Text/SInlineEditableTextBlock.h"
 
 #define LOCTEXT_NAMESPACE "SGenericGraphEdge"
 
@@ -22,7 +23,7 @@ bool SEdNode_GenericGraphEdge::RequiresSecondPassLayout() const
 	return true;
 }
 
-void SEdNode_GenericGraphEdge::PerformSecondPassLayout(const TMap< UObject*, TSharedRef<SNode> >& NodeToWidgetLookup) const
+void SEdNode_GenericGraphEdge::PerformSecondPassLayout(const TMap<UObject*, TSharedRef<SNode>>& NodeToWidgetLookup) const
 {
 	UEdNode_GenericGraphEdge* EdgeNode = CastChecked<UEdNode_GenericGraphEdge>(GraphNode);
 
@@ -73,48 +74,26 @@ void SEdNode_GenericGraphEdge::UpdateGraphNode()
 
 	TSharedPtr<SNodeTitle> NodeTitle = SNew(SNodeTitle, GraphNode);
 
-	this->ContentScale.Bind( this, &SGraphNode::GetContentScale );
-	this->GetOrAddSlot( ENodeZone::Center )
+	this->ContentScale.Bind(this, &SGraphNode::GetContentScale);
+	this->GetOrAddSlot(ENodeZone::Center)
 		.HAlign(HAlign_Center)
 		.VAlign(VAlign_Center)
-		[
-			SNew(SOverlay)
-			+ SOverlay::Slot()
-			[
-				SNew(SImage)
-				.Image(FAppStyle::GetBrush("Graph.TransitionNode.ColorSpill"))
-				.ColorAndOpacity(this, &SEdNode_GenericGraphEdge::GetEdgeColor)
-			]
-			+ SOverlay::Slot()
-			[
-				SNew(SImage)
-				.Image(this, &SEdNode_GenericGraphEdge::GetEdgeImage)
-				.Visibility(this, &SEdNode_GenericGraphEdge::GetEdgeImageVisibility)
-			]
+			[SNew(SOverlay) + SOverlay::Slot()[SNew(SImage).Image(FAppStyle::GetBrush("Graph.TransitionNode.ColorSpill")).ColorAndOpacity(this, &SEdNode_GenericGraphEdge::GetEdgeColor)]
+			 + SOverlay::Slot()[SNew(SImage).Image(this, &SEdNode_GenericGraphEdge::GetEdgeImage).Visibility(this, &SEdNode_GenericGraphEdge::GetEdgeImageVisibility)]
 
-			+ SOverlay::Slot()
-			.Padding(FMargin(4.0f, 4.0f, 4.0f, 4.0f))
-			[
-				SNew(SVerticalBox)
-				+ SVerticalBox::Slot()
-				.HAlign(HAlign_Center)
-				.AutoHeight()
-				[
-					SAssignNew(InlineEditableText, SInlineEditableTextBlock)
-					.ColorAndOpacity(FLinearColor::Black)
-					.Visibility(this, &SEdNode_GenericGraphEdge::GetEdgeTitleVisbility)
-					.Font(FCoreStyle::GetDefaultFontStyle("Regular", 12))
-					.Text(NodeTitle.Get(), &SNodeTitle::GetHeadTitle)
-					.OnTextCommitted(this, &SEdNode_GenericGraphEdge::OnNameTextCommited)
-				]
-				+ SVerticalBox::Slot()
-				.AutoHeight()
-				[
-					NodeTitle.ToSharedRef()
-				]
-				
-			]
-		];
+			 + SOverlay::Slot().Padding(FMargin(4.0f, 4.0f, 4.0f, 4.0f))
+				   [SNew(SVerticalBox)
+					+ SVerticalBox::Slot()
+						  .HAlign(HAlign_Center)
+						  .AutoHeight()[SAssignNew(InlineEditableText, SInlineEditableTextBlock)
+											.ColorAndOpacity(FLinearColor::Black)
+											.Visibility(this, &SEdNode_GenericGraphEdge::GetEdgeTitleVisbility)
+											.Font(FCoreStyle::GetDefaultFontStyle("Regular", 12))
+											.Text(NodeTitle.Get(), &SNodeTitle::GetHeadTitle)
+											.OnTextCommitted(this, &SEdNode_GenericGraphEdge::OnNameTextCommited)]
+					+ SVerticalBox::Slot().AutoHeight()[NodeTitle.ToSharedRef()]
+
+	]];
 }
 
 void SEdNode_GenericGraphEdge::PositionBetweenTwoNodesWithOffset(const FGeometry& StartGeom, const FGeometry& EndGeom, int32 NodeIndex, int32 MaxNodes) const
@@ -128,8 +107,9 @@ void SEdNode_GenericGraphEdge::PositionBetweenTwoNodesWithOffset(const FGeometry
 	const FVector2D StartAnchorPoint = FGeometryHelper::FindClosestPointOnGeom(StartGeom, SeedPoint);
 	const FVector2D EndAnchorPoint = FGeometryHelper::FindClosestPointOnGeom(EndGeom, SeedPoint);
 
-	// Position ourselves halfway along the connecting line between the nodes, elevated away perpendicular to the direction of the line
-	const float Height = 30.0f;
+	// Position ourselves halfway along the connecting line between the
+	// nodes, elevated away perpendicular to the direction of the line
+	constexpr float Height = 30.0f;
 
 	const FVector2D DesiredNodeSize = GetDesiredSize();
 
@@ -145,18 +125,23 @@ void SEdNode_GenericGraphEdge::PositionBetweenTwoNodesWithOffset(const FGeometry
 	const FVector2D NewCenter = StartAnchorPoint + (0.5f * DeltaPos) + (Height * Normal);
 
 	FVector2D DeltaNormal = DeltaPos.GetSafeNormal();
-	
-	// Calculate node offset in the case of multiple transitions between the same two nodes
-	// MultiNodeOffset: the offset where 0 is the centre of the transition, -1 is 1 <size of node>
-	// towards the PrevStateNode and +1 is 1 <size of node> towards the NextStateNode.
 
-	const float MutliNodeSpace = 0.2f; // Space between multiple transition nodes (in units of <size of node> )
-	const float MultiNodeStep = (1.f + MutliNodeSpace); //Step between node centres (Size of node + size of node spacer)
+	// Calculate node offset in the case of multiple transitions between the same
+	// two nodes MultiNodeOffset: the offset where 0 is the centre of the
+	// transition, -1 is 1 <size of node>
+	towards the PrevStateNode and
+		// +1 is 1 <size of node> towards the NextStateNode.
+
+		constexpr float MutliNodeSpace = 0.2f;				// Space between multiple transition nodes (in units of <size of
+															// node> )
+	constexpr float MultiNodeStep = (1.f + MutliNodeSpace); // Step between node centres (Size of node + size
+															// of node spacer)
 
 	const float MultiNodeStart = -((MaxNodes - 1) * MultiNodeStep) / 2.f;
 	const float MultiNodeOffset = MultiNodeStart + (NodeIndex * MultiNodeStep);
 
-	// Now we need to adjust the new center by the node size, zoom factor and multi node offset
+	// Now we need to adjust the new center by the node size, zoom factor and
+	// multi node offset
 	const FVector2D NewCorner = NewCenter - (0.5f * DesiredNodeSize) + (DeltaNormal * MultiNodeOffset * DesiredNodeSize.Size());
 
 	GraphNode->NodePosX = NewCorner.X;
@@ -182,7 +167,9 @@ EVisibility SEdNode_GenericGraphEdge::GetEdgeImageVisibility() const
 {
 	UEdNode_GenericGraphEdge* EdgeNode = CastChecked<UEdNode_GenericGraphEdge>(GraphNode);
 	if (EdgeNode && EdgeNode->GenericGraphEdge && EdgeNode->GenericGraphEdge->bShouldDrawTitle)
-			return EVisibility::Hidden;
+	{
+		return EVisibility::Hidden;
+	}
 
 	return EVisibility::Visible;
 }
@@ -191,7 +178,9 @@ EVisibility SEdNode_GenericGraphEdge::GetEdgeTitleVisbility() const
 {
 	UEdNode_GenericGraphEdge* EdgeNode = CastChecked<UEdNode_GenericGraphEdge>(GraphNode);
 	if (EdgeNode && EdgeNode->GenericGraphEdge && EdgeNode->GenericGraphEdge->bShouldDrawTitle)
+	{
 		return EVisibility::Visible;
+	}
 
 	return EVisibility::Collapsed;
 }

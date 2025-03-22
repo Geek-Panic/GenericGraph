@@ -1,14 +1,8 @@
 #include "GenericGraphEdge.h"
 
-UGenericGraphEdge::UGenericGraphEdge()
-{
+UGenericGraphEdge::UGenericGraphEdge() {}
 
-}
-
-UGenericGraphEdge::~UGenericGraphEdge()
-{
-
-}
+UGenericGraphEdge::~UGenericGraphEdge() {}
 
 UGenericGraph* UGenericGraphEdge::GetGraph() const
 {

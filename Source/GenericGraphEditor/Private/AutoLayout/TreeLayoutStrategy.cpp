@@ -1,15 +1,10 @@
 #include "AutoLayout/TreeLayoutStrategy.h"
-#include "GenericGraphEditorPCH.h"
 #include "GenericGraphAssetEditor/SEdNode_GenericGraphNode.h"
+#include "GenericGraphEditorPCH.h"
 
-UTreeLayoutStrategy::UTreeLayoutStrategy()
-{
-}
+UTreeLayoutStrategy::UTreeLayoutStrategy() {}
 
-UTreeLayoutStrategy::~UTreeLayoutStrategy()
-{
-
-}
+UTreeLayoutStrategy::~UTreeLayoutStrategy() {}
 
 void UTreeLayoutStrategy::Layout(UEdGraph* _EdGraph)
 {
@@ -75,7 +70,7 @@ void UTreeLayoutStrategy::InitPass(UGenericGraphNode* RootNode, const FVector2D&
 		ChildAnchor.X += GetNodeWidth(EdNode_ChildNode) / 2;
 		InitPass(Child, ChildAnchor);
 	}
-	
+
 	float NodeWidth = GetNodeWidth(EdNode_RootNode);
 
 	EdNode_RootNode->NodePosY = Anchor.Y;
@@ -108,7 +103,9 @@ bool UTreeLayoutStrategy::ResolveConflictPass(UGenericGraphNode* Node)
 		{
 			UGenericGraphNode* LeftSibling = ParentNode->ChildrenNodes[j];
 			if (LeftSibling == Node)
+			{
 				break;
+			}
 			if (ResolveConflict(LeftSibling, Node))
 			{
 				HasConflict = true;
@@ -131,7 +128,9 @@ bool UTreeLayoutStrategy::ResolveConflict(UGenericGraphNode* LRoot, UGenericGrap
 	for (int32 i = 0; i < Num; ++i)
 	{
 		if (RightContour.Contains(LeftContour[i]) || LeftContour.Contains(RightContour[i]))
+		{
 			break;
+		}
 
 		int32 RightBound = RightContour[i]->NodePosX + GetNodeWidth(RightContour[i]);
 		int32 LeftBound = LeftContour[i]->NodePosX;
@@ -163,10 +162,7 @@ bool UTreeLayoutStrategy::ResolveConflict(UGenericGraphNode* LRoot, UGenericGrap
 
 		return true;
 	}
-	else
-	{
-		return false;
-	}
+	return false;
 }
 
 void UTreeLayoutStrategy::GetLeftContour(UGenericGraphNode* RootNode, int32 Level, TArray<UEdNode_GenericGraphNode*>& Contour)

@@ -1,14 +1,23 @@
 #include "GenericGraphAssetEditor/ConnectionDrawingPolicy_GenericGraph.h"
-#include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
 #include "GenericGraphAssetEditor/EdNode_GenericGraphEdge.h"
+#include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
 
-FConnectionDrawingPolicy_GenericGraph::FConnectionDrawingPolicy_GenericGraph(int32 InBackLayerID, int32 InFrontLayerID, float ZoomFactor, const FSlateRect& InClippingRect, FSlateWindowElementList& InDrawElements, UEdGraph* InGraphObj)
+FConnectionDrawingPolicy_GenericGraph::FConnectionDrawingPolicy_GenericGraph(
+	int32 InBackLayerID,
+	int32 InFrontLayerID,
+	float ZoomFactor,
+	const FSlateRect& InClippingRect,
+	FSlateWindowElementList& InDrawElements,
+	UEdGraph* InGraphObj)
 	: FConnectionDrawingPolicy(InBackLayerID, InFrontLayerID, ZoomFactor, InClippingRect, InDrawElements)
 	, GraphObj(InGraphObj)
 {
 }
 
-void FConnectionDrawingPolicy_GenericGraph::DetermineWiringStyle(UEdGraphPin* OutputPin, UEdGraphPin* InputPin, /*inout*/ FConnectionParams& Params)
+void FConnectionDrawingPolicy_GenericGraph::DetermineWiringStyle(
+	UEdGraphPin* OutputPin,
+	UEdGraphPin* InputPin,
+	/*inout*/ FConnectionParams& Params)
 {
 	Params.AssociatedPin1 = OutputPin;
 	Params.AssociatedPin2 = InputPin;
@@ -17,7 +26,11 @@ void FConnectionDrawingPolicy_GenericGraph::DetermineWiringStyle(UEdGraphPin* Ou
 	const bool bDeemphasizeUnhoveredPins = HoveredPins.Num() > 0;
 	if (bDeemphasizeUnhoveredPins)
 	{
-		ApplyHoverDeemphasis(OutputPin, InputPin, /*inout*/ Params.WireThickness, /*inout*/ Params.WireColor);
+		ApplyHoverDeemphasis(
+			OutputPin,
+			InputPin,
+			/*inout*/ Params.WireThickness,
+			/*inout*/ Params.WireColor);
 	}
 }
 
@@ -41,7 +54,7 @@ void FConnectionDrawingPolicy_GenericGraph::DrawPreviewConnector(const FGeometry
 	FConnectionParams Params;
 	DetermineWiringStyle(Pin, nullptr, /*inout*/ Params);
 
-	if (Pin->Direction == EEdGraphPinDirection::EGPD_Output)
+	if (Pin->Direction == EGPD_Output)
 	{
 		DrawSplineWithArrow(FGeometryHelper::FindClosestPointOnGeom(PinGeometry, EndPoint), EndPoint, Params);
 	}
@@ -53,7 +66,8 @@ void FConnectionDrawingPolicy_GenericGraph::DrawPreviewConnector(const FGeometry
 
 void FConnectionDrawingPolicy_GenericGraph::DrawSplineWithArrow(const FVector2D& StartAnchorPoint, const FVector2D& EndAnchorPoint, const FConnectionParams& Params)
 {
-	// bUserFlag1 indicates that we need to reverse the direction of connection (used by debugger)
+	// bUserFlag1 indicates that we need to reverse the direction of connection
+	// (used by debugger)
 	const FVector2D& P0 = Params.bUserFlag1 ? EndAnchorPoint : StartAnchorPoint;
 	const FVector2D& P1 = Params.bUserFlag1 ? StartAnchorPoint : EndAnchorPoint;
 
@@ -63,7 +77,7 @@ void FConnectionDrawingPolicy_GenericGraph::DrawSplineWithArrow(const FVector2D&
 void FConnectionDrawingPolicy_GenericGraph::Internal_DrawLineWithArrow(const FVector2D& StartAnchorPoint, const FVector2D& EndAnchorPoint, const FConnectionParams& Params)
 {
 	//@TODO: Should this be scaled by zoom factor?
-	const float LineSeparationAmount = 4.5f;
+	constexpr float LineSeparationAmount = 4.5f;
 
 	const FVector2D DeltaPos = EndAnchorPoint - StartAnchorPoint;
 	const FVector2D UnitDelta = DeltaPos.GetSafeNormal();
@@ -91,8 +105,7 @@ void FConnectionDrawingPolicy_GenericGraph::Internal_DrawLineWithArrow(const FVe
 		AngleInRadians,
 		TOptional<FVector2D>(),
 		FSlateDrawElement::RelativeToElement,
-		Params.WireColor
-	);
+		Params.WireColor);
 }
 
 void FConnectionDrawingPolicy_GenericGraph::DrawSplineWithArrow(const FGeometry& StartGeom, const FGeometry& EndGeom, const FConnectionParams& Params)
@@ -117,8 +130,13 @@ FVector2D FConnectionDrawingPolicy_GenericGraph::ComputeSplineTangent(const FVec
 	return NormDelta;
 }
 
-void FConnectionDrawingPolicy_GenericGraph::DetermineLinkGeometry(FArrangedChildren& ArrangedNodes, TSharedRef<SWidget>& OutputPinWidget,
-	UEdGraphPin* OutputPin, UEdGraphPin* InputPin, FArrangedWidget*& StartWidgetGeometry, FArrangedWidget*& EndWidgetGeometry)
+void FConnectionDrawingPolicy_GenericGraph::DetermineLinkGeometry(
+	FArrangedChildren& ArrangedNodes,
+	TSharedRef<SWidget>& OutputPinWidget,
+	UEdGraphPin* OutputPin,
+	UEdGraphPin* InputPin,
+	FArrangedWidget*& StartWidgetGeometry,
+	FArrangedWidget*& EndWidgetGeometry)
 {
 	if (UEdNode_GenericGraphEdge* EdgeNode = Cast<UEdNode_GenericGraphEdge>(InputPin->GetOwningNode()))
 	{
@@ -141,9 +159,8 @@ void FConnectionDrawingPolicy_GenericGraph::DetermineLinkGeometry(FArrangedChild
 
 		if (TSharedPtr<SGraphPin>* pTargetWidget = PinToPinWidgetMap.Find(InputPin))
 		{
-			TSharedRef<SGraphPin> InputWidget = (*pTargetWidget).ToSharedRef();
+			TSharedRef<SGraphPin> InputWidget = pTargetWidget->ToSharedRef();
 			EndWidgetGeometry = PinGeometries->Find(InputWidget);
 		}
 	}
 }
-

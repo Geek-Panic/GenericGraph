@@ -1,6 +1,6 @@
 #include "GenericGraph.h"
-#include "GenericGraphRuntimePCH.h"
 #include "Engine/Engine.h"
+#include "GenericGraphRuntimePCH.h"
 
 #define LOCTEXT_NAMESPACE "GenericGraph"
 
@@ -18,10 +18,7 @@ UGenericGraph::UGenericGraph()
 #endif
 }
 
-UGenericGraph::~UGenericGraph()
-{
-
-}
+UGenericGraph::~UGenericGraph() {}
 
 void UGenericGraph::Print(bool ToConsole /*= true*/, bool ToScreen /*= true*/)
 {
@@ -97,7 +94,9 @@ void UGenericGraph::GetNodesByLevel(int Level, TArray<UGenericGraphNode*>& Nodes
 	while (Nodes.Num() != 0)
 	{
 		if (CurrLEvel == Level)
+		{
 			break;
+		}
 
 		for (int i = 0; i < Nodes.Num(); ++i)
 		{

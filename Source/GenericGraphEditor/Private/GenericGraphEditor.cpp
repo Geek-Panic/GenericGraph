@@ -1,7 +1,7 @@
 #include "GenericGraphEditor.h"
-#include "GenericGraphNodeFactory.h"
 #include "AssetTypeActions_GenericGraph.h"
 #include "GenericGraphAssetEditor/GenericGraphEditorStyle.h"
+#include "GenericGraphNodeFactory.h"
 
 DEFINE_LOG_CATEGORY(GenericGraphEditor)
 
@@ -20,7 +20,6 @@ void FGenericGraphEditor::StartupModule()
 
 	RegisterAssetTypeAction(AssetTools, MakeShareable(new FAssetTypeActions_GenericGraph(GenericGraphAssetCategoryBit)));
 }
-
 
 void FGenericGraphEditor::ShutdownModule()
 {
@@ -52,4 +51,3 @@ void FGenericGraphEditor::RegisterAssetTypeAction(IAssetTools& AssetTools, TShar
 IMPLEMENT_MODULE(FGenericGraphEditor, GenericGraphEditor)
 
 #undef LOCTEXT_NAMESPACE
-

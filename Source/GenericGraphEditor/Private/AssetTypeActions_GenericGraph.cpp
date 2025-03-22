@@ -1,6 +1,6 @@
 #include "AssetTypeActions_GenericGraph.h"
-#include "GenericGraphEditorPCH.h"
 #include "GenericGraphAssetEditor/AssetEditor_GenericGraph.h"
+#include "GenericGraphEditorPCH.h"
 
 #define LOCTEXT_NAMESPACE "AssetTypeActions_GenericGraph"
 

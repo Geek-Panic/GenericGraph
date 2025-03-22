@@ -12,9 +12,9 @@ class GENERICGRAPHEDITOR_API UGenericGraphFactory : public UFactory
 
 public:
 	UGenericGraphFactory();
-	virtual ~UGenericGraphFactory();
+	virtual ~UGenericGraphFactory() override;
 
-	UPROPERTY(EditAnywhere, Category=DataAsset)
+	UPROPERTY(EditAnywhere, Category = DataAsset)
 	TSubclassOf<UGenericGraph> GenericGraphClass;
 
 	virtual bool ConfigureProperties() override;

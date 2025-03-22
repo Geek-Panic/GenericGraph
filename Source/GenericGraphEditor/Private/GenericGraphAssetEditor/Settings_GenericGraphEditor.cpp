@@ -17,8 +17,4 @@ UGenericGraphEditorSettings::UGenericGraphEditorSettings()
 	CoolDownRate = 10.f;
 }
 
-UGenericGraphEditorSettings::~UGenericGraphEditorSettings()
-{
-
-}
-
+UGenericGraphEditorSettings::~UGenericGraphEditorSettings() {}

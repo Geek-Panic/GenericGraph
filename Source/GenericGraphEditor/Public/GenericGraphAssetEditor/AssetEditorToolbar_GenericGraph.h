@@ -11,7 +11,9 @@ class GENERICGRAPHEDITOR_API FAssetEditorToolbar_GenericGraph : public TSharedFr
 {
 public:
 	FAssetEditorToolbar_GenericGraph(TSharedPtr<FAssetEditor_GenericGraph> InGenericGraphEditor)
-		: GenericGraphEditor(InGenericGraphEditor) {}
+		: GenericGraphEditor(InGenericGraphEditor)
+	{
+	}
 
 	void AddGenericGraphToolbar(TSharedPtr<FExtender> Extender);
 

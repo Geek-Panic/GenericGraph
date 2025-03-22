@@ -16,7 +16,7 @@ class UEdNode_GenericGraphNode : public UEdGraphNode
 
 public:
 	UEdNode_GenericGraphNode();
-	virtual ~UEdNode_GenericGraphNode();
+	virtual ~UEdNode_GenericGraphNode() override;
 
 	UPROPERTY(VisibleAnywhere, Instanced, Category = "GenericGraph")
 	UGenericGraphNode* GenericGraphNode;
@@ -38,5 +38,4 @@ public:
 #if WITH_EDITOR
 	virtual void PostEditUndo() override;
 #endif
-
 };

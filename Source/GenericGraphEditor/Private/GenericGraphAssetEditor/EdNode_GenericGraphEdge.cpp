@@ -1,6 +1,6 @@
 #include "GenericGraphAssetEditor/EdNode_GenericGraphEdge.h"
-#include "GenericGraphEdge.h"
 #include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
+#include "GenericGraphEdge.h"
 
 #define LOCTEXT_NAMESPACE "EdNode_GenericGraphEdge"
 
@@ -35,10 +35,12 @@ void UEdNode_GenericGraphEdge::PinConnectionListChanged(UEdGraphPin* Pin)
 {
 	if (Pin->LinkedTo.Num() == 0)
 	{
-		// Commit suicide; transitions must always have an input and output connection
+		// Commit suicide; transitions must always have an input and output
+		// connection
 		Modify();
 
-		// Our parent graph will have our graph in SubGraphs so needs to be modified to record that.
+		// Our parent graph will have our graph in SubGraphs so needs to be modified
+		// to record that.
 		if (UEdGraph* ParentGraph = GetGraph())
 		{
 			ParentGraph->Modify();
@@ -75,10 +77,7 @@ UEdNode_GenericGraphNode* UEdNode_GenericGraphEdge::GetStartNode()
 	{
 		return Cast<UEdNode_GenericGraphNode>(Pins[0]->LinkedTo[0]->GetOwningNode());
 	}
-	else
-	{
-		return nullptr;
-	}
+	return nullptr;
 }
 
 UEdNode_GenericGraphNode* UEdNode_GenericGraphEdge::GetEndNode()
@@ -87,11 +86,7 @@ UEdNode_GenericGraphNode* UEdNode_GenericGraphEdge::GetEndNode()
 	{
 		return Cast<UEdNode_GenericGraphNode>(Pins[1]->LinkedTo[0]->GetOwningNode());
 	}
-	else
-	{
-		return nullptr;
-	}
+	return nullptr;
 }
 
 #undef LOCTEXT_NAMESPACE
-

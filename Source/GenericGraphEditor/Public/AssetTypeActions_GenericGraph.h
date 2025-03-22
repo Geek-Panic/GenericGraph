@@ -1,7 +1,7 @@
 #pragma once
 
-#include "CoreMinimal.h"
 #include "AssetTypeActions_Base.h"
+#include "CoreMinimal.h"
 
 class GENERICGRAPHEDITOR_API FAssetTypeActions_GenericGraph : public FAssetTypeActions_Base
 {

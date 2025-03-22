@@ -1,8 +1,8 @@
 #include "GenericGraphFactory.h"
 #include "GenericGraph.h"
 
-#include "ClassViewerModule.h"
 #include "ClassViewerFilter.h"
+#include "ClassViewerModule.h"
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Kismet2/SClassPickerDialog.h"
 
@@ -12,11 +12,14 @@ class FAssetClassParentFilter : public IClassViewerFilter
 {
 public:
 	FAssetClassParentFilter()
-		: DisallowedClassFlags(CLASS_None), bDisallowBlueprintBase(false)
-	{}
+		: DisallowedClassFlags(CLASS_None)
+		, bDisallowBlueprintBase(false)
+	{
+	}
 
-	/** All children of these classes will be included unless filtered out by another setting. */
-	TSet< const UClass* > AllowedChildrenOfClasses;
+	/** All children of these classes will be included unless filtered out by
+	 * another setting. */
+	TSet<const UClass*> AllowedChildrenOfClasses;
 
 	/** Disallowed class flags. */
 	EClassFlags DisallowedClassFlags;
@@ -24,10 +27,9 @@ public:
 	/** Disallow blueprint base classes. */
 	bool bDisallowBlueprintBase;
 
-	virtual bool IsClassAllowed(const FClassViewerInitializationOptions& InInitOptions, const UClass* InClass, TSharedRef< FClassViewerFilterFuncs > InFilterFuncs) override
+	virtual bool IsClassAllowed(const FClassViewerInitializationOptions& InInitOptions, const UClass* InClass, TSharedRef<FClassViewerFilterFuncs> InFilterFuncs) override
 	{
-		bool bAllowed= !InClass->HasAnyClassFlags(DisallowedClassFlags)
-			&& InFilterFuncs->IfInChildOfClassesSet(AllowedChildrenOfClasses, InClass) != EFilterReturn::Failed;
+		bool bAllowed = !InClass->HasAnyClassFlags(DisallowedClassFlags) && InFilterFuncs->IfInChildOfClassesSet(AllowedChildrenOfClasses, InClass) != EFilterReturn::Failed;
 
 		if (bAllowed && bDisallowBlueprintBase)
 		{
@@ -40,18 +42,17 @@ public:
 		return bAllowed;
 	}
 
-	virtual bool IsUnloadedClassAllowed(const FClassViewerInitializationOptions& InInitOptions, const TSharedRef< const IUnloadedBlueprintData > InUnloadedClassData, TSharedRef< FClassViewerFilterFuncs > InFilterFuncs) override
+	virtual bool
+	IsUnloadedClassAllowed(const FClassViewerInitializationOptions& InInitOptions, const TSharedRef<const IUnloadedBlueprintData> InUnloadedClassData, TSharedRef<FClassViewerFilterFuncs> InFilterFuncs) override
 	{
 		if (bDisallowBlueprintBase)
 		{
 			return false;
 		}
 
-		return !InUnloadedClassData->HasAnyClassFlags(DisallowedClassFlags)
-			&& InFilterFuncs->IfInChildOfClassesSet(AllowedChildrenOfClasses, InUnloadedClassData) != EFilterReturn::Failed;
+		return !InUnloadedClassData->HasAnyClassFlags(DisallowedClassFlags) && InFilterFuncs->IfInChildOfClassesSet(AllowedChildrenOfClasses, InUnloadedClassData) != EFilterReturn::Failed;
 	}
 };
-
 
 UGenericGraphFactory::UGenericGraphFactory()
 {
@@ -60,10 +61,7 @@ UGenericGraphFactory::UGenericGraphFactory()
 	SupportedClass = UGenericGraph::StaticClass();
 }
 
-UGenericGraphFactory::~UGenericGraphFactory()
-{
-
-}
+UGenericGraphFactory::~UGenericGraphFactory() {}
 
 bool UGenericGraphFactory::ConfigureProperties()
 {
@@ -80,7 +78,7 @@ bool UGenericGraphFactory::ConfigureProperties()
 #if ENGINE_MAJOR_VERSION < 5
 	TSharedPtr<FAssetClassParentFilter> Filter = MakeShareable(new FAssetClassParentFilter);
 	Options.ClassFilter = Filter;
-#else // #if ENGINE_MAJOR_VERSION < 5
+#else  // #if ENGINE_MAJOR_VERSION < 5
 	TSharedRef<FAssetClassParentFilter> Filter = MakeShareable(new FAssetClassParentFilter);
 	Options.ClassFilters.Add(Filter);
 #endif // #else // #if ENGINE_MAJOR_VERSION < 5
@@ -92,7 +90,7 @@ bool UGenericGraphFactory::ConfigureProperties()
 	UClass* ChosenClass = nullptr;
 	const bool bPressedOk = SClassPickerDialog::PickClass(TitleText, Options, ChosenClass, UGenericGraph::StaticClass());
 
-	if ( bPressedOk )
+	if (bPressedOk)
 	{
 		GenericGraphClass = ChosenClass;
 	}
@@ -106,12 +104,8 @@ UObject* UGenericGraphFactory::FactoryCreateNew(UClass* Class, UObject* InParent
 	{
 		return NewObject<UGenericGraph>(InParent, GenericGraphClass, Name, Flags | RF_Transactional);
 	}
-	else
-	{
-		check(Class->IsChildOf(UGenericGraph::StaticClass()));
-		return NewObject<UObject>(InParent, Class, Name, Flags | RF_Transactional);
-	}
-
+	check(Class->IsChildOf(UGenericGraph::StaticClass()));
+	return NewObject<UObject>(InParent, Class, Name, Flags | RF_Transactional);
 }
 
 #undef LOCTEXT_NAMESPACE

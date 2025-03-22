@@ -1,7 +1,7 @@
 #include "AutoLayout/AutoLayoutStrategy.h"
-#include "Kismet/KismetMathLibrary.h"
 #include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
 #include "GenericGraphAssetEditor/SEdNode_GenericGraphNode.h"
+#include "Kismet/KismetMathLibrary.h"
 
 UAutoLayoutStrategy::UAutoLayoutStrategy()
 {
@@ -10,10 +10,7 @@ UAutoLayoutStrategy::UAutoLayoutStrategy()
 	OptimalDistance = 150;
 }
 
-UAutoLayoutStrategy::~UAutoLayoutStrategy()
-{
-
-}
+UAutoLayoutStrategy::~UAutoLayoutStrategy() {}
 
 FBox2D UAutoLayoutStrategy::GetNodeBound(UEdGraphNode* EdNode)
 {
@@ -27,7 +24,7 @@ FBox2D UAutoLayoutStrategy::GetNodeBound(UEdGraphNode* EdNode)
 FBox2D UAutoLayoutStrategy::GetActualBounds(UGenericGraphNode* RootNode)
 {
 	int Level = 0;
-	TArray<UGenericGraphNode*> CurrLevelNodes = { RootNode };
+	TArray<UGenericGraphNode*> CurrLevelNodes = {RootNode};
 	TArray<UGenericGraphNode*> NextLevelNodes;
 
 	FBox2D Rtn = GetNodeBound(EdGraph->NodeMap[RootNode]);
@@ -57,7 +54,7 @@ FBox2D UAutoLayoutStrategy::GetActualBounds(UGenericGraphNode* RootNode)
 void UAutoLayoutStrategy::RandomLayoutOneTree(UGenericGraphNode* RootNode, const FBox2D& Bound)
 {
 	int Level = 0;
-	TArray<UGenericGraphNode*> CurrLevelNodes = { RootNode };
+	TArray<UGenericGraphNode*> CurrLevelNodes = {RootNode};
 	TArray<UGenericGraphNode*> NextLevelNodes;
 
 	while (CurrLevelNodes.Num() != 0)
@@ -93,4 +90,3 @@ int32 UAutoLayoutStrategy::GetNodeHeight(UEdNode_GenericGraphNode* EdNode)
 {
 	return EdNode->SEdNode->GetCachedGeometry().GetLocalSize().Y;
 }
-

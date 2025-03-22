@@ -17,7 +17,7 @@ class GENERICGRAPHEDITOR_API UEdGraph_GenericGraph : public UEdGraph
 
 public:
 	UEdGraph_GenericGraph();
-	virtual ~UEdGraph_GenericGraph();
+	virtual ~UEdGraph_GenericGraph() override;
 
 	virtual void RebuildGenericGraph();
 

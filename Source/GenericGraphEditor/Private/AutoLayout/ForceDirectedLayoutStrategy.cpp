@@ -2,7 +2,10 @@
 
 static inline float CoolDown(float Temp, float CoolDownRate)
 {
-	if (Temp < .01) return .01;
+	if (Temp < .01)
+	{
+		return .01;
+	}
 	return Temp - (Temp / CoolDownRate);
 }
 
@@ -23,10 +26,7 @@ UForceDirectedLayoutStrategy::UForceDirectedLayoutStrategy()
 	InitTemperature = 10.f;
 }
 
-UForceDirectedLayoutStrategy::~UForceDirectedLayoutStrategy()
-{
-
-}
+UForceDirectedLayoutStrategy::~UForceDirectedLayoutStrategy() {}
 
 void UForceDirectedLayoutStrategy::Layout(UEdGraph* _EdGraph)
 {
@@ -81,7 +81,9 @@ FBox2D UForceDirectedLayoutStrategy::LayoutOneTree(UGenericGraphNode* RootNode, 
 			for (int32 j = 0; j < EdGraph->Nodes.Num(); ++j)
 			{
 				if (i == j)
+				{
 					continue;
+				}
 				Diff.X = EdGraph->Nodes[i]->NodePosX - EdGraph->Nodes[j]->NodePosX;
 				Diff.Y = EdGraph->Nodes[i]->NodePosY - EdGraph->Nodes[j]->NodePosY;
 				Distance = Diff.Size();
@@ -95,7 +97,7 @@ FBox2D UForceDirectedLayoutStrategy::LayoutOneTree(UGenericGraphNode* RootNode, 
 
 		// Calculate the attractive forces.
 		int Level = 0;
-		TArray<UGenericGraphNode*> CurrLevelNodes = { RootNode };
+		TArray<UGenericGraphNode*> CurrLevelNodes = {RootNode};
 		TArray<UGenericGraphNode*> NextLevelNodes;
 
 		while (CurrLevelNodes.Num() != 0)

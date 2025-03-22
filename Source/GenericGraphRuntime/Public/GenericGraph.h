@@ -1,9 +1,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GenericGraphNode.h"
-#include "GenericGraphEdge.h"
 #include "GameplayTagContainer.h"
+#include "GenericGraphEdge.h"
+#include "GenericGraphNode.h"
 #include "GenericGraph.generated.h"
 
 UCLASS(Blueprintable)
@@ -13,7 +13,7 @@ class GENERICGRAPHRUNTIME_API UGenericGraph : public UObject
 
 public:
 	UGenericGraph();
-	virtual ~UGenericGraph();
+	virtual ~UGenericGraph() override;
 
 	UPROPERTY(EditDefaultsOnly, Category = "GenericGraph")
 	FString Name;

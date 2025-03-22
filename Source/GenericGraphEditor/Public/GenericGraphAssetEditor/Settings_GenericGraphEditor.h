@@ -17,7 +17,7 @@ class GENERICGRAPHEDITOR_API UGenericGraphEditorSettings : public UObject
 
 public:
 	UGenericGraphEditorSettings();
-	virtual ~UGenericGraphEditorSettings();
+	virtual ~UGenericGraphEditorSettings() override;
 
 	UPROPERTY(EditDefaultsOnly, Category = "AutoArrange")
 	float OptimalDistance;
