@@ -196,7 +196,7 @@ EGraphType UAssetGraphSchema_GenericGraph::GetGraphType(const UEdGraph* TestEdGr
 
 void UAssetGraphSchema_GenericGraph::GetGraphContextActions(FGraphContextMenuBuilder& ContextMenuBuilder) const
 {
-	UGenericGraph* Graph = CastChecked<UGenericGraph>(ContextMenuBuilder.CurrentGraph->GetOuter());
+	UGenericGraphDefinition* Graph = CastChecked<UGenericGraphDefinition>(ContextMenuBuilder.CurrentGraph->GetOuter());
 
 	if (Graph->NodeType == nullptr)
 	{
@@ -402,7 +402,7 @@ bool UAssetGraphSchema_GenericGraph::CreateAutomaticConversionNodeAndConnections
 		return false;
 	}
 
-	UGenericGraph* Graph = NodeA->GenericGraphNode->GetGraph();
+	UGenericGraphDefinition* Graph = NodeA->GenericGraphNode->GetGraph();
 
 	FVector2D InitPos((NodeA->NodePosX + NodeB->NodePosX) / 2, (NodeA->NodePosY + NodeB->NodePosY) / 2);
 

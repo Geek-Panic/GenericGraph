@@ -126,22 +126,16 @@ void SEdNode_GenericGraphEdge::PositionBetweenTwoNodesWithOffset(const FGeometry
 
 	FVector2D DeltaNormal = DeltaPos.GetSafeNormal();
 
-	// Calculate node offset in the case of multiple transitions between the same
-	// two nodes MultiNodeOffset: the offset where 0 is the centre of the
-	// transition, -1 is 1 <size of node>
-	towards the PrevStateNode and
-		// +1 is 1 <size of node> towards the NextStateNode.
+	// Calculate node offset in the case of multiple transitions between the same two nodes MultiNodeOffset: the offset where 0 is the centre of the transition, -1 is 1 <size of node> towards the PrevStateNode and +1 is
+	// 1 <size of node> towards the NextStateNode.
 
-		constexpr float MutliNodeSpace = 0.2f;				// Space between multiple transition nodes (in units of <size of
-															// node> )
-	constexpr float MultiNodeStep = (1.f + MutliNodeSpace); // Step between node centres (Size of node + size
-															// of node spacer)
+	constexpr float MutliNodeSpace = 0.2f;					// Space between multiple transition nodes (in units of <size of node> )
+	constexpr float MultiNodeStep = (1.f + MutliNodeSpace); // Step between node centres (Size of node + size of node spacer)
 
 	const float MultiNodeStart = -((MaxNodes - 1) * MultiNodeStep) / 2.f;
 	const float MultiNodeOffset = MultiNodeStart + (NodeIndex * MultiNodeStep);
 
-	// Now we need to adjust the new center by the node size, zoom factor and
-	// multi node offset
+	// Now we need to adjust the new center by the node size, zoom factor and multi node offset
 	const FVector2D NewCorner = NewCenter - (0.5f * DesiredNodeSize) + (DeltaNormal * MultiNodeOffset * DesiredNodeSize.Size());
 
 	GraphNode->NodePosX = NewCorner.X;

@@ -4,7 +4,7 @@
 #include "Templates/SubclassOf.h"
 #include "GenericGraphNode.generated.h"
 
-class UGenericGraph;
+class UGenericGraphDefinition;
 class UGenericGraphEdge;
 
 UENUM(BlueprintType)
@@ -24,7 +24,7 @@ public:
 	virtual ~UGenericGraphNode() override;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "GenericGraphNode")
-	UGenericGraph* Graph;
+	UGenericGraphDefinition* Graph;
 
 	UPROPERTY(BlueprintReadOnly, Category = "GenericGraphNode")
 	TArray<UGenericGraphNode*> ParentNodes;
@@ -42,7 +42,7 @@ public:
 	bool IsLeafNode() const;
 
 	UFUNCTION(BlueprintCallable, Category = "GenericGraphNode")
-	UGenericGraph* GetGraph() const;
+	UGenericGraphDefinition* GetGraph() const;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "GenericGraphNode")
 	FText GetDescription() const;
@@ -54,7 +54,7 @@ public:
 	FText NodeTitle;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "GenericGraphNode_Editor")
-	TSubclassOf<UGenericGraph> CompatibleGraphType;
+	TSubclassOf<UGenericGraphDefinition> CompatibleGraphType;
 
 	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor")
 	FLinearColor BackgroundColor;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GenericGraph.h"
+#include "GenericGraphDefinition.h"
 #include "Settings_GenericGraphEditor.h"
 
 #if ENGINE_MAJOR_VERSION == 5
@@ -16,7 +16,7 @@ public:
 	FAssetEditor_GenericGraph();
 	virtual ~FAssetEditor_GenericGraph() override;
 
-	void InitGenericGraphAssetEditor(const EToolkitMode::Type Mode, const TSharedPtr<IToolkitHost>& InitToolkitHost, UGenericGraph* Graph);
+	void InitGenericGraphAssetEditor(const EToolkitMode::Type Mode, const TSharedPtr<IToolkitHost>& InitToolkitHost, UGenericGraphDefinition* Graph);
 
 	// IToolkit interface
 	virtual void RegisterTabSpawners(const TSharedRef<FTabManager>& TabManager) override;
@@ -112,7 +112,7 @@ protected:
 
 	UGenericGraphEditorSettings* GenricGraphEditorSettings;
 
-	UGenericGraph* EditingGraph;
+	UGenericGraphDefinition* EditingGraph;
 
 	// Toolbar
 	TSharedPtr<class FAssetEditorToolbar_GenericGraph> ToolbarBuilder;

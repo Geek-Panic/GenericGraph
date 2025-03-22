@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GenericGraph.h"
+#include "GenericGraphDefinition.h"
 #include "GenericGraphEdge.h"
 #include "GenericGraphNode.h"
 #include "AssetGraphSchema_GenericGraph.generated.h"

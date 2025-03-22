@@ -1,26 +1,26 @@
-#include "GenericGraph.h"
 #include "Engine/Engine.h"
+#include "GenericGraphDefinition.h"
 #include "GenericGraphRuntimePCH.h"
 
 #define LOCTEXT_NAMESPACE "GenericGraph"
 
-UGenericGraph::UGenericGraph()
+UGenericGraphDefinition::UGenericGraphDefinition(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.Get())
 {
 	NodeType = UGenericGraphNode::StaticClass();
 	EdgeType = UGenericGraphEdge::StaticClass();
 
 	bEdgeEnabled = true;
 
-#if WITH_EDITORONLY_DATA
+	#if WITH_EDITORONLY_DATA
 	EdGraph = nullptr;
 
 	bCanRenameNode = true;
-#endif
+	#endif
 }
 
-UGenericGraph::~UGenericGraph() {}
+UGenericGraphDefinition::~UGenericGraphDefinition() {}
 
-void UGenericGraph::Print(bool ToConsole /*= true*/, bool ToScreen /*= true*/)
+void UGenericGraphDefinition::Print(bool ToConsole /*= true*/, bool ToScreen /*= true*/)
 {
 	int Level = 0;
 	TArray<UGenericGraphNode*> CurrLevelNodes = RootNodes;
@@ -57,7 +57,7 @@ void UGenericGraph::Print(bool ToConsole /*= true*/, bool ToScreen /*= true*/)
 	}
 }
 
-int UGenericGraph::GetLevelNum() const
+int UGenericGraphDefinition::GetLevelNum() const
 {
 	int Level = 0;
 	TArray<UGenericGraphNode*> CurrLevelNodes = RootNodes;
@@ -84,7 +84,7 @@ int UGenericGraph::GetLevelNum() const
 	return Level;
 }
 
-void UGenericGraph::GetNodesByLevel(int Level, TArray<UGenericGraphNode*>& Nodes)
+void UGenericGraphDefinition::GetNodesByLevel(int Level, TArray<UGenericGraphNode*>& Nodes)
 {
 	int CurrLEvel = 0;
 	TArray<UGenericGraphNode*> NextLevelNodes;
@@ -115,7 +115,7 @@ void UGenericGraph::GetNodesByLevel(int Level, TArray<UGenericGraphNode*>& Nodes
 	}
 }
 
-void UGenericGraph::ClearGraph()
+void UGenericGraphDefinition::ClearGraph()
 {
 	for (int i = 0; i < AllNodes.Num(); ++i)
 	{

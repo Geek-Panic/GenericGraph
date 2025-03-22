@@ -4,16 +4,18 @@
 #include "GameplayTagContainer.h"
 #include "GenericGraphEdge.h"
 #include "GenericGraphNode.h"
-#include "GenericGraph.generated.h"
 
-UCLASS(Blueprintable)
-class GENERICGRAPHRUNTIME_API UGenericGraph : public UObject
+#include "GenericGraphDefinition.generated.h"
+
+UCLASS(Blueprintable, Abstract, BlueprintType)
+class GENERICGRAPHRUNTIME_API UGenericGraphDefinition : public UObject
 {
 	GENERATED_BODY()
 
 public:
-	UGenericGraph();
-	virtual ~UGenericGraph() override;
+	
+	UGenericGraphDefinition(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+	virtual ~UGenericGraphDefinition() override;
 
 	UPROPERTY(EditDefaultsOnly, Category = "GenericGraph")
 	FString Name;

@@ -4,7 +4,7 @@
 #include "GenericGraphNode.h"
 #include "GenericGraphEdge.generated.h"
 
-class UGenericGraph;
+class UGenericGraphDefinition;
 
 UCLASS(Blueprintable)
 class GENERICGRAPHRUNTIME_API UGenericGraphEdge : public UObject
@@ -16,7 +16,7 @@ public:
 	virtual ~UGenericGraphEdge() override;
 
 	UPROPERTY(VisibleAnywhere, Category = "GenericGraphNode")
-	UGenericGraph* Graph;
+	UGenericGraphDefinition* Graph;
 
 	UPROPERTY(BlueprintReadOnly, Category = "GenericGraphEdge")
 	UGenericGraphNode* StartNode;
@@ -25,7 +25,7 @@ public:
 	UGenericGraphNode* EndNode;
 
 	UFUNCTION(BlueprintPure, Category = "GenericGraphEdge")
-	UGenericGraph* GetGraph() const;
+	UGenericGraphDefinition* GetGraph() const;
 
 #if WITH_EDITORONLY_DATA
 	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor")

@@ -1,5 +1,5 @@
 #include "GenericGraphFactory.h"
-#include "GenericGraph.h"
+#include "GenericGraphDefinition.h"
 
 #include "ClassViewerFilter.h"
 #include "ClassViewerModule.h"
@@ -58,7 +58,7 @@ UGenericGraphFactory::UGenericGraphFactory()
 {
 	bCreateNew = true;
 	bEditAfterNew = true;
-	SupportedClass = UGenericGraph::StaticClass();
+	SupportedClass = UGenericGraphDefinition::StaticClass();
 }
 
 UGenericGraphFactory::~UGenericGraphFactory() {}
@@ -75,20 +75,15 @@ bool UGenericGraphFactory::ConfigureProperties()
 	FClassViewerInitializationOptions Options;
 	Options.Mode = EClassViewerMode::ClassPicker;
 
-#if ENGINE_MAJOR_VERSION < 5
-	TSharedPtr<FAssetClassParentFilter> Filter = MakeShareable(new FAssetClassParentFilter);
-	Options.ClassFilter = Filter;
-#else  // #if ENGINE_MAJOR_VERSION < 5
 	TSharedRef<FAssetClassParentFilter> Filter = MakeShareable(new FAssetClassParentFilter);
 	Options.ClassFilters.Add(Filter);
-#endif // #else // #if ENGINE_MAJOR_VERSION < 5
 
 	Filter->DisallowedClassFlags = CLASS_Abstract | CLASS_Deprecated | CLASS_NewerVersionExists | CLASS_HideDropDown;
-	Filter->AllowedChildrenOfClasses.Add(UGenericGraph::StaticClass());
+	Filter->AllowedChildrenOfClasses.Add(UGenericGraphDefinition::StaticClass());
 
 	const FText TitleText = LOCTEXT("CreateGenericGraphAssetOptions", "Pick Generic Graph Class");
 	UClass* ChosenClass = nullptr;
-	const bool bPressedOk = SClassPickerDialog::PickClass(TitleText, Options, ChosenClass, UGenericGraph::StaticClass());
+	const bool bPressedOk = SClassPickerDialog::PickClass(TitleText, Options, ChosenClass, UGenericGraphDefinition::StaticClass());
 
 	if (bPressedOk)
 	{
@@ -102,9 +97,9 @@ UObject* UGenericGraphFactory::FactoryCreateNew(UClass* Class, UObject* InParent
 {
 	if (GenericGraphClass != nullptr)
 	{
-		return NewObject<UGenericGraph>(InParent, GenericGraphClass, Name, Flags | RF_Transactional);
+		return NewObject<UGenericGraphDefinition>(InParent, GenericGraphClass, Name, Flags | RF_Transactional);
 	}
-	check(Class->IsChildOf(UGenericGraph::StaticClass()));
+	check(Class->IsChildOf(UGenericGraphDefinition::StaticClass()));
 	return NewObject<UObject>(InParent, Class, Name, Flags | RF_Transactional);
 }
 

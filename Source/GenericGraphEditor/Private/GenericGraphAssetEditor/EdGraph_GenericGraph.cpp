@@ -1,7 +1,7 @@
 #include "GenericGraphAssetEditor/EdGraph_GenericGraph.h"
-#include "GenericGraph.h"
 #include "GenericGraphAssetEditor/EdNode_GenericGraphEdge.h"
 #include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
+#include "GenericGraphDefinition.h"
 #include "GenericGraphEditorPCH.h"
 
 UEdGraph_GenericGraph::UEdGraph_GenericGraph() {}
@@ -12,7 +12,7 @@ void UEdGraph_GenericGraph::RebuildGenericGraph()
 {
 	LOG_INFO(TEXT("UGenericGraphEdGraph::RebuildGenericGraph has been called"));
 
-	UGenericGraph* Graph = GetGenericGraph();
+	UGenericGraphDefinition* Graph = GetGenericGraph();
 
 	Clear();
 
@@ -115,9 +115,9 @@ void UEdGraph_GenericGraph::RebuildGenericGraph()
 		});
 }
 
-UGenericGraph* UEdGraph_GenericGraph::GetGenericGraph() const
+UGenericGraphDefinition* UEdGraph_GenericGraph::GetGenericGraph() const
 {
-	return CastChecked<UGenericGraph>(GetOuter());
+	return CastChecked<UGenericGraphDefinition>(GetOuter());
 }
 
 bool UEdGraph_GenericGraph::Modify(bool bAlwaysMarkDirty /*= true*/)
@@ -136,7 +136,7 @@ bool UEdGraph_GenericGraph::Modify(bool bAlwaysMarkDirty /*= true*/)
 
 void UEdGraph_GenericGraph::Clear()
 {
-	UGenericGraph* Graph = GetGenericGraph();
+	UGenericGraphDefinition* Graph = GetGenericGraph();
 
 	Graph->ClearGraph();
 	NodeMap.Reset();

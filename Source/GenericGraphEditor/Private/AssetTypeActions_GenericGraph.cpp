@@ -21,7 +21,7 @@ FColor FAssetTypeActions_GenericGraph::GetTypeColor() const
 
 UClass* FAssetTypeActions_GenericGraph::GetSupportedClass() const
 {
-	return UGenericGraph::StaticClass();
+	return UGenericGraphDefinition::StaticClass();
 }
 
 void FAssetTypeActions_GenericGraph::OpenAssetEditor(const TArray<UObject*>& InObjects, TSharedPtr<class IToolkitHost> EditWithinLevelEditor)
@@ -30,7 +30,7 @@ void FAssetTypeActions_GenericGraph::OpenAssetEditor(const TArray<UObject*>& InO
 
 	for (auto ObjIt = InObjects.CreateConstIterator(); ObjIt; ++ObjIt)
 	{
-		if (UGenericGraph* Graph = Cast<UGenericGraph>(*ObjIt))
+		if (UGenericGraphDefinition* Graph = Cast<UGenericGraphDefinition>(*ObjIt))
 		{
 			TSharedRef<FAssetEditor_GenericGraph> NewGraphEditor(new FAssetEditor_GenericGraph());
 			NewGraphEditor->InitGenericGraphAssetEditor(Mode, EditWithinLevelEditor, Graph);

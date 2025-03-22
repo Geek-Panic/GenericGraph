@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GenericGraph.h"
+#include "GenericGraphDefinition.h"
 #include "GenericGraphEdge.h"
 #include "GenericGraphNode.h"
 

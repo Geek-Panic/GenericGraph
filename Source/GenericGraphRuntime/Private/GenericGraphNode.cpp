@@ -1,12 +1,12 @@
 #include "GenericGraphNode.h"
-#include "GenericGraph.h"
+#include "GenericGraphDefinition.h"
 
 #define LOCTEXT_NAMESPACE "GenericGraphNode"
 
 UGenericGraphNode::UGenericGraphNode()
 {
 #if WITH_EDITORONLY_DATA
-	CompatibleGraphType = UGenericGraph::StaticClass();
+	CompatibleGraphType = UGenericGraphDefinition::StaticClass();
 
 	BackgroundColor = FLinearColor::Black;
 #endif
@@ -79,7 +79,7 @@ bool UGenericGraphNode::IsLeafNode() const
 	return ChildrenNodes.Num() == 0;
 }
 
-UGenericGraph* UGenericGraphNode::GetGraph() const
+UGenericGraphDefinition* UGenericGraphNode::GetGraph() const
 {
 	return Graph;
 }

@@ -4,7 +4,7 @@ UGenericGraphEdge::UGenericGraphEdge() {}
 
 UGenericGraphEdge::~UGenericGraphEdge() {}
 
-UGenericGraph* UGenericGraphEdge::GetGraph() const
+UGenericGraphDefinition* UGenericGraphEdge::GetGraph() const
 {
 	return Graph;
 }

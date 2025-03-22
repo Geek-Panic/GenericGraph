@@ -4,7 +4,7 @@
 #include "EdGraph/EdGraph.h"
 #include "EdGraph_GenericGraph.generated.h"
 
-class UGenericGraph;
+class UGenericGraphDefinition;
 class UGenericGraphNode;
 class UGenericGraphEdge;
 class UEdNode_GenericGraphNode;
@@ -21,7 +21,7 @@ public:
 
 	virtual void RebuildGenericGraph();
 
-	UGenericGraph* GetGenericGraph() const;
+	UGenericGraphDefinition* GetGenericGraph() const;
 
 	virtual bool Modify(bool bAlwaysMarkDirty = true) override;
 	virtual void PostEditUndo() override;
