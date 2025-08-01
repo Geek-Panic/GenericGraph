@@ -1,6 +1,4 @@
-
 #pragma once
-
 #include "CoreMinimal.h"
 
 class FAssetEditor_GenericGraph;
@@ -10,10 +8,8 @@ class FToolBarBuilder;
 class GENERICGRAPHEDITOR_API FAssetEditorToolbar_GenericGraph : public TSharedFromThis<FAssetEditorToolbar_GenericGraph>
 {
 public:
-	FAssetEditorToolbar_GenericGraph(TSharedPtr<FAssetEditor_GenericGraph> InGenericGraphEditor)
-		: GenericGraphEditor(InGenericGraphEditor)
-	{
-	}
+	explicit FAssetEditorToolbar_GenericGraph(TSharedPtr<FAssetEditor_GenericGraph> InGenericGraphEditor)
+		: GenericGraphEditor(InGenericGraphEditor) {}
 
 	void AddGenericGraphToolbar(TSharedPtr<FExtender> Extender);
 

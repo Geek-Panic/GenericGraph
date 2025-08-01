@@ -1,5 +1,4 @@
 #pragma once
-
 #include "CoreMinimal.h"
 #include "IAssetTools.h"
 #include "Modules/ModuleManager.h"
@@ -11,32 +10,19 @@ DECLARE_LOG_CATEGORY_EXTERN(GraphEditorLog, Log, All);
 
 class FGraphEditorModule : public IModuleInterface
 {
-	/** IModuleInterface implementation */
+	TArray<TSharedPtr<IAssetTypeActions>> CreatedAssetTypeActions;
+	TSharedPtr<FGraphPanelNodeFactory>    GraphNodeFactory;
+
+protected:
+	void RegisterAssetTypeAction(IAssetTools& AssetTools, TSharedRef<IAssetTypeActions> Action);
+	void UnRegisterAssetTypeAction(IAssetTools& AssetTools, TSharedRef<IAssetTypeActions> Action);
+
+public:
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
 	
-	/**
-	 * Singleton-like access to this module's interface.  This is just for
-	 * convenience! Beware of calling this during the shutdown phase, though. Your
-	 * module might have been unloaded already.
-	 *
-	 * @return Returns singleton instance, loading the module on demand if needed
-	 */
 	static FGraphEditorModule& Get() { return FModuleManager::LoadModuleChecked<FGraphEditorModule>("GenericGraphEditor"); }
+	static bool                IsAvailable() { return FModuleManager::Get().IsModuleLoaded("GenericGraphEditor"); }
 
-	/**
-	 * Checks to see if this module is loaded and ready.  It is only valid to call
-	 * Get() if IsAvailable() returns true.
-	 *
-	 * @return True if the module is loaded and ready to use
-	 */
-	static bool IsAvailable() { return FModuleManager::Get().IsModuleLoaded("GenericGraphEditor"); }
-
-protected:
 	
-	void RegisterAssetTypeAction(IAssetTools& AssetTools, TSharedRef<IAssetTypeActions> Action);
-	
-	TArray<TSharedPtr<IAssetTypeActions>> CreatedAssetTypeActions;
-
-	TSharedPtr<FGraphPanelNodeFactory> GraphNodeFactory;
 };

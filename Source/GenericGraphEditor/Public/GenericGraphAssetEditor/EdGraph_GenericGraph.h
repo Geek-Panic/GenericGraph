@@ -1,5 +1,4 @@
 #pragma once
-
 #include "CoreMinimal.h"
 #include "EdGraph/EdGraph.h"
 #include "EdGraph_GenericGraph.generated.h"

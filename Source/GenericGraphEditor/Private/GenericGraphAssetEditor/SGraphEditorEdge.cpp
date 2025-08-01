@@ -1,8 +1,7 @@
+#include "GenericGraphAssetEditor/SGraphEditorEdge.h"
 #include "EdGraphSchema_K2.h"
-#include "GenericGraphAssetEditor/ConnectionDrawingPolicy_GenericGraph.h"
 #include "GenericGraphAssetEditor/GraphEditorEdEdgeNodeBase.h"
 #include "GenericGraphAssetEditor/GraphEditorEdNodeBase.h"
-#include "GenericGraphAssetEditor/SGraphEditorEdge.h"
 #include "GraphEdgeDefinitionBase.h"
 #include "SGraphPanel.h"
 #include "Widgets/Images/SImage.h"
@@ -87,7 +86,7 @@ void SGraphEditorEdge::UpdateGraphNode()
 						  .HAlign(HAlign_Center)
 						  .AutoHeight()[SAssignNew(InlineEditableText, SInlineEditableTextBlock)
 											.ColorAndOpacity(FLinearColor::Black)
-											.Visibility(this, &SGraphEditorEdge::GetEdgeTitleVisbility)
+					.Visibility(this, &SGraphEditorEdge::GetEdgeTitleVisibility)
 											.Font(FCoreStyle::GetDefaultFontStyle("Regular", 12))
 											.Text(NodeTitle.Get(), &SNodeTitle::GetHeadTitle)
 											.OnTextCommitted(this, &SGraphEditorEdge::OnNameTextCommited)]
@@ -168,7 +167,7 @@ EVisibility SGraphEditorEdge::GetEdgeImageVisibility() const
 	return EVisibility::Visible;
 }
 
-EVisibility SGraphEditorEdge::GetEdgeTitleVisbility() const
+EVisibility SGraphEditorEdge::GetEdgeTitleVisibility() const
 {
 	UGraphEditorEdEdgeNodeBase* EdgeNode = CastChecked<UGraphEditorEdEdgeNodeBase>(GraphNode);
 	if (EdgeNode && EdgeNode->GenericGraphEdge && EdgeNode->GenericGraphEdge->bShouldDrawDisplayName)

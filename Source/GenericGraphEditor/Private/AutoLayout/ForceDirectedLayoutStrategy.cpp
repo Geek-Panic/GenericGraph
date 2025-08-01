@@ -1,5 +1,7 @@
 #include "AutoLayout/ForceDirectedLayoutStrategy.h"
 
+#include "GenericGraphAssetEditor/GraphEditorEdNodeBase.h"
+
 static inline float CoolDown(float Temp, float CoolDownRate)
 {
 	if (Temp < .01)
@@ -114,7 +116,6 @@ FBox2D UForceDirectedLayoutStrategy::LayoutOneTree(UGraphNodeDefinitionBase* Roo
 					NextLevelNodes.Add(Node->ChildrenNodes[j]);
 
 					UGraphEditorEdNodeBase* EdNode_ChildNode = EdGraph->NodeMap[Node->ChildrenNodes[j]];
-
 					Diff.X = EdNode_ChildNode->NodePosX - EdNode_ParentNode->NodePosY;
 					Diff.Y = EdNode_ChildNode->NodePosY - EdNode_ParentNode->NodePosY;
 					Distance = Diff.Size();

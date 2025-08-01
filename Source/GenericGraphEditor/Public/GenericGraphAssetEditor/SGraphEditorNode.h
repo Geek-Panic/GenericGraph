@@ -1,5 +1,4 @@
 #pragma once
-
 #include "CoreMinimal.h"
 #include "SGraphNode.h"
 
@@ -12,18 +11,17 @@ public:
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs, UGraphEditorEdNodeBase* InNode);
+	void OnNameTextCommited(const FText& InText, ETextCommit::Type CommitInfo);
 
+	// SGraphNode
 	virtual void UpdateGraphNode() override;
 	virtual void CreatePinWidgets() override;
 	virtual void AddPin(const TSharedRef<SGraphPin>& PinToAdd) override;
 	virtual bool IsNameReadOnly() const override;
-
-	void OnNameTextCommited(const FText& InText, ETextCommit::Type CommitInfo);
-
+	// ~SGraphNode
+	
 	virtual FSlateColor GetBorderBackgroundColor() const;
 	virtual FSlateColor GetBackgroundColor() const;
-
 	virtual EVisibility GetDragOverMarkerVisibility() const;
-
 	virtual const FSlateBrush* GetNameIcon() const;
 };

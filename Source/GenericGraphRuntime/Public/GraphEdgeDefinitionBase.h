@@ -1,5 +1,4 @@
 #pragma once
-
 #include "CoreMinimal.h"
 #include "GraphNodeDefinitionBase.h"
 #include "GraphEdgeDefinitionBase.generated.h"
@@ -12,9 +11,8 @@ class GENERICGRAPHRUNTIME_API UGraphEdgeDefinitionBase : public UObject
 	GENERATED_BODY()
 	
 public:
-	
-	UGraphEdgeDefinitionBase(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-	virtual ~UGraphEdgeDefinitionBase() override;
+	explicit UGraphEdgeDefinitionBase(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+	virtual  ~UGraphEdgeDefinitionBase() override;
 
 	UFUNCTION(BlueprintPure, Category = "Edge")
 	UGraphDefinitionBase* GetGraph() const;
@@ -49,5 +47,4 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Editor")
 	FLinearColor EdgeColour = FLinearColor(0.9f, 0.9f, 0.9f, 1.0f);
 #endif
-
 };

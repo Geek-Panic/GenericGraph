@@ -2,7 +2,6 @@
 
 UGraphEdgeDefinitionBase::UGraphEdgeDefinitionBase(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.Get())
 {
-	
 }
 
 UGraphEdgeDefinitionBase::~UGraphEdgeDefinitionBase() {}

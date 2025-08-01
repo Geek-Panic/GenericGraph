@@ -1,12 +1,10 @@
-#include "GraphDefinitionBase.h"
 #include "GraphDefinitionFactory.h"
-
+#include "GraphDefinitionBase.h"
 #include "ClassFilter/AssetParentClassFilter.h"
 #include "ClassViewerModule.h"
 #include "Kismet2/SClassPickerDialog.h"
 
 #define LOCTEXT_NAMESPACE "GenericGraphFactory"
-
 
 UGraphDefinitionFactory::UGraphDefinitionFactory()
 {

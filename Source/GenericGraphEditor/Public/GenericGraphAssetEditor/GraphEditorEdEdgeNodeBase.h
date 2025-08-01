@@ -1,5 +1,4 @@
 #pragma once
-
 #include "CoreMinimal.h"
 #include "EdGraph/EdGraphNode.h"
 #include "GraphEditorEdEdgeNodeBase.generated.h"
@@ -17,7 +16,7 @@ public:
 	UGraphEditorEdEdgeNodeBase();
 
 	UPROPERTY()
-	class UEdGraph* Graph;
+	TObjectPtr<class UEdGraph> Graph;
 
 	UPROPERTY(VisibleAnywhere, Instanced, Category = "GenericGraph")
 	UGraphEdgeDefinitionBase* GenericGraphEdge;

@@ -1,16 +1,12 @@
-
 #include "GraphNodeDefinitionBase.h"
-
 #include "GraphDefinitionBase.h"
 
 #define LOCTEXT_NAMESPACE "GenericGraphNode"
-
 
 UGraphNodeDefinitionBase::UGraphNodeDefinitionBase(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.Get())
 {
 #if WITH_EDITORONLY_DATA
 	CompatibleGraphType = UGraphDefinitionBase::StaticClass();
-
 	BackgroundColor = FLinearColor::Black;
 #endif
 }

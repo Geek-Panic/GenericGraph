@@ -1,5 +1,4 @@
 #pragma once
-
 #include "AutoLayoutStrategy.h"
 #include "CoreMinimal.h"
 #include "TreeLayoutStrategy.generated.h"

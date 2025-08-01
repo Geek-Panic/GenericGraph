@@ -5,7 +5,7 @@
   "FriendlyName": "Generic Graph Plugin",
   "Description": "",
   "Category": "GenericGraph",
-  "CreatedBy": "jinyuliao",
+  "CreatedBy": "",
   "CreatedByURL": "",
   "DocsURL": "",
   "MarketplaceURL": "",
@@ -18,12 +18,12 @@
     {
       "Name": "GenericGraphRuntime",
       "Type": "Runtime",
-      "LoadingPhase": "PostEngineInit"
+      "LoadingPhase": "Default"
     },
     {
       "Name": "GenericGraphEditor",
       "Type": "Editor",
-      "LoadingPhase": "Default"
+      "LoadingPhase": "PreDefault"
     }
   ]
 }

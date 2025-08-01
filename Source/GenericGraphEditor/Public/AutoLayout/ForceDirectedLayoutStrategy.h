@@ -1,5 +1,4 @@
 #pragma once
-
 #include "AutoLayoutStrategy.h"
 #include "CoreMinimal.h"
 #include "ForceDirectedLayoutStrategy.generated.h"

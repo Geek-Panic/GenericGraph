@@ -1,6 +1,5 @@
-#include "GenericGraphAssetEditor/EdGraph_GenericGraph.h"
 #include "GenericGraphAssetEditor/GraphEditorEdNodeBase.h"
-#include "Kismet2/BlueprintEditorUtils.h"
+#include "GenericGraphAssetEditor/EdGraph_GenericGraph.h"
 #include "Kismet2/Kismet2NameValidators.h"
 
 #define LOCTEXT_NAMESPACE "EdNode_GenericGraph"

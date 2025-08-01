@@ -6,29 +6,23 @@ public class GenericGraphRuntime : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PrivateIncludePaths.AddRange(
-			new[]
-			{
-				"GenericGraphRuntime/Private"
-			}
-		);
+		PrivateIncludePaths.AddRange(new[]
+		{
+			"GenericGraphRuntime/Private"
+		});
 
-		PublicDependencyModuleNames.AddRange(
-			new[]
-			{
-				"Core",
-				"CoreUObject",
-				"Engine"
-			}
-		);
+		PublicDependencyModuleNames.AddRange(new[]
+		{
+			"Core",
+			"CoreUObject",
+			"Engine"
+		});
 
-		PrivateDependencyModuleNames.AddRange(
-			new[]
-			{
-				"Slate",
-				"SlateCore",
-				"GameplayTags"
-			}
-		);
+		PrivateDependencyModuleNames.AddRange(new[]
+		{
+			"Slate",
+			"SlateCore",
+			"GameplayTags"
+		});
 	}
 }

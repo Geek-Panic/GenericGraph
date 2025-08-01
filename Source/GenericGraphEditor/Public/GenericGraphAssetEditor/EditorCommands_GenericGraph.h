@@ -1,5 +1,4 @@
 #pragma once
-
 #include "CoreMinimal.h"
 
 class GENERICGRAPHEDITOR_API FEditorCommands_GenericGraph : public TCommands<FEditorCommands_GenericGraph>

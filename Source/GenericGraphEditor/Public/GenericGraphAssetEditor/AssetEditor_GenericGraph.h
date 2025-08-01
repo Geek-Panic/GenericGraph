@@ -1,5 +1,4 @@
 #pragma once
-
 #include "CoreMinimal.h"
 #include "GraphDefinitionBase.h"
 #include "Settings_GenericGraphEditor.h"
@@ -110,9 +109,9 @@ protected:
 	void OnPackageSavedWithContext(const FString& PackageFileName, UPackage* Package, FObjectPostSaveContext ObjectSaveContext);
 #endif // #else // #if ENGINE_MAJOR_VERSION < 5
 
-	UGenericGraphEditorSettings* GenricGraphEditorSettings;
+	TObjectPtr<UGenericGraphEditorSettings> GenericGraphEditorSettings;
 
-	UGraphDefinitionBase* EditingGraph;
+	TObjectPtr<UGraphDefinitionBase> EditingGraph;
 
 	// Toolbar
 	TSharedPtr<class FAssetEditorToolbar_GenericGraph> ToolbarBuilder;

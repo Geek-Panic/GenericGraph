@@ -1,8 +1,6 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "ClassFilter/AssetParentClassFilter.h"
 #include "Kismet2/KismetEditorUtilities.h"
-
 
 bool FAssetClassParentFilter::IsClassAllowed(const FClassViewerInitializationOptions& InInitOptions, const UClass* InClass, TSharedRef<FClassViewerFilterFuncs> InFilterFuncs)
 {

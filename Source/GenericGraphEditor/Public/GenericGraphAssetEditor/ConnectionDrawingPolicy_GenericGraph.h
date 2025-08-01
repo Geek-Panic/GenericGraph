@@ -1,13 +1,12 @@
 #pragma once
-
 #include "ConnectionDrawingPolicy.h"
 #include "CoreMinimal.h"
 
 class GENERICGRAPHEDITOR_API FConnectionDrawingPolicy_GenericGraph : public FConnectionDrawingPolicy
 {
 protected:
-	UEdGraph* GraphObj;
-	TMap<UEdGraphNode*, int32> NodeWidgetMap;
+	TObjectPtr<UEdGraph>                  GraphObj;
+	TMap<TObjectPtr<UEdGraphNode>, int32> NodeWidgetMap;
 
 public:
 	FConnectionDrawingPolicy_GenericGraph(int32 InBackLayerID, int32 InFrontLayerID, float ZoomFactor, const FSlateRect& InClippingRect, FSlateWindowElementList& InDrawElements, UEdGraph* InGraphObj);

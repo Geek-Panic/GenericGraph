@@ -1,5 +1,4 @@
 #pragma once
-
 #include "CoreMinimal.h"
 #include "EdGraph/EdGraphNode.h"
 #include "GraphNodeDefinitionBase.h"
@@ -19,7 +18,7 @@ public:
 	virtual ~UGraphEditorEdNodeBase() override;
 
 	UPROPERTY(VisibleAnywhere, Instanced, Category = "GenericGraph")
-	UGraphNodeDefinitionBase* GenericGraphNode;
+	TObjectPtr<UGraphNodeDefinitionBase> GenericGraphNode;
 
 	void SetGenericGraphNode(UGraphNodeDefinitionBase* InNode);
 	UEdGraph_GenericGraph* GetGenericGraphEdGraph();

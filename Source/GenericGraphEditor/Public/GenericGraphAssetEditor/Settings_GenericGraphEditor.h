@@ -1,5 +1,4 @@
 #pragma once
-
 #include "CoreMinimal.h"
 #include "Settings_GenericGraphEditor.generated.h"
 

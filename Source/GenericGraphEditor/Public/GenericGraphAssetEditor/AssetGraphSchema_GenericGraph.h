@@ -1,9 +1,5 @@
 #pragma once
-
 #include "CoreMinimal.h"
-#include "GraphDefinitionBase.h"
-#include "GraphEdgeDefinitionBase.h"
-#include "GraphNodeDefinitionBase.h"
 #include "AssetGraphSchema_GenericGraph.generated.h"
 
 class UGraphEditorEdNodeBase;
@@ -30,7 +26,7 @@ struct GENERICGRAPHEDITOR_API FAssetSchemaAction_GenericGraph_NewNode : public F
 	virtual UEdGraphNode* PerformAction(class UEdGraph* ParentGraph, UEdGraphPin* FromPin, const FVector2D Location, bool bSelectNewNode = true) override;
 	virtual void AddReferencedObjects(FReferenceCollector& Collector) override;
 
-	UGraphEditorEdNodeBase* NodeTemplate;
+	TObjectPtr<UGraphEditorEdNodeBase> NodeTemplate;
 };
 
 USTRUCT()
@@ -52,7 +48,7 @@ struct GENERICGRAPHEDITOR_API FAssetSchemaAction_GenericGraph_NewEdge : public F
 	virtual UEdGraphNode* PerformAction(class UEdGraph* ParentGraph, UEdGraphPin* FromPin, const FVector2D Location, bool bSelectNewNode = true) override;
 	virtual void AddReferencedObjects(FReferenceCollector& Collector) override;
 
-	UGraphEditorEdEdgeNodeBase* NodeTemplate;
+	TObjectPtr<UGraphEditorEdEdgeNodeBase> NodeTemplate;
 };
 
 UCLASS(MinimalAPI)

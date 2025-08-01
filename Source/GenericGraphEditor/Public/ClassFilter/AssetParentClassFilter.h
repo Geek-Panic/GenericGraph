@@ -1,20 +1,12 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-#pragma once
-
+﻿#pragma once
 #include "ClassViewerFilter.h"
 
 class FAssetClassParentFilter final : public IClassViewerFilter
 {
 public:
-	FAssetClassParentFilter()
-		: DisallowedClassFlags(CLASS_None)
-		, bDisallowBlueprintBase(false)
-	{
-	}
+	FAssetClassParentFilter(): DisallowedClassFlags(CLASS_None), bDisallowBlueprintBase(false) {}
 
-	/** All children of these classes will be included unless filtered out by
-	 * another setting. */
+	/** All children of these classes will be included unless filtered out by another setting. */
 	TSet<const UClass*> AllowedChildrenOfClasses;
 
 	/** Disallowed class flags. */

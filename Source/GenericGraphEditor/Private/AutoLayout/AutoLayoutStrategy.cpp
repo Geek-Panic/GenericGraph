@@ -14,10 +14,10 @@ UAutoLayoutStrategy::~UAutoLayoutStrategy() {}
 
 FBox2D UAutoLayoutStrategy::GetNodeBound(UEdGraphNode* EdNode)
 {
-	int32 NodeWidth = GetNodeWidth(Cast<UGraphEditorEdNodeBase>(EdNode));
-	int32 NodeHeight = GetNodeHeight(Cast<UGraphEditorEdNodeBase>(EdNode));
-	FVector2D Min(EdNode->NodePosX, EdNode->NodePosY);
-	FVector2D Max(EdNode->NodePosX + NodeWidth, EdNode->NodePosY + NodeHeight);
+	const auto NodeWidth = GetNodeWidth(Cast<UGraphEditorEdNodeBase>(EdNode));
+	const auto NodeHeight = GetNodeHeight(Cast<UGraphEditorEdNodeBase>(EdNode));
+	const auto Min = FVector2D(EdNode->NodePosX, EdNode->NodePosY);
+	const auto Max = FVector2D(EdNode->NodePosX + NodeWidth, EdNode->NodePosY + NodeHeight);
 	return FBox2D(Min, Max);
 }
 

@@ -42,7 +42,7 @@ FAssetEditor_GenericGraph::FAssetEditor_GenericGraph()
 {
 	EditingGraph = nullptr;
 
-	GenricGraphEditorSettings = NewObject<UGenericGraphEditorSettings>(UGenericGraphEditorSettings::StaticClass());
+	GenericGraphEditorSettings = NewObject<UGenericGraphEditorSettings>(UGenericGraphEditorSettings::StaticClass());
 
 #if ENGINE_MAJOR_VERSION < 5
 	OnPackageSavedDelegateHandle = UPackage::PackageSavedEvent.AddRaw(this, &FAssetEditor_GenericGraph::OnPackageSaved);
@@ -196,7 +196,7 @@ void FAssetEditor_GenericGraph::AddReferencedObjects(FReferenceCollector& Collec
 
 UGenericGraphEditorSettings* FAssetEditor_GenericGraph::GetSettings() const
 {
-	return GenricGraphEditorSettings;
+	return GenericGraphEditorSettings;
 }
 
 TSharedRef<SDockTab> FAssetEditor_GenericGraph::SpawnTab_Viewport(const FSpawnTabArgs& Args)
@@ -249,7 +249,7 @@ void FAssetEditor_GenericGraph::CreateInternalWidgets()
 	PropertyWidget->OnFinishedChangingProperties().AddSP(this, &FAssetEditor_GenericGraph::OnFinishedChangingProperties);
 
 	EditorSettingsWidget = PropertyModule.CreateDetailView(Args);
-	EditorSettingsWidget->SetObject(GenricGraphEditorSettings);
+	EditorSettingsWidget->SetObject(GenericGraphEditorSettings);
 }
 
 TSharedRef<SGraphEditor> FAssetEditor_GenericGraph::CreateViewportWidget()
@@ -673,7 +673,7 @@ void FAssetEditor_GenericGraph::AutoArrange()
 	EdGraph->Modify();
 
 	UAutoLayoutStrategy* LayoutStrategy = nullptr;
-	switch (GenricGraphEditorSettings->AutoLayoutStrategy)
+	switch (GenericGraphEditorSettings->AutoLayoutStrategy)
 	{
 		case EAutoLayoutStrategy::Tree:
 			LayoutStrategy = NewObject<UAutoLayoutStrategy>(EdGraph, UTreeLayoutStrategy::StaticClass());
@@ -687,7 +687,7 @@ void FAssetEditor_GenericGraph::AutoArrange()
 
 	if (LayoutStrategy != nullptr)
 	{
-		LayoutStrategy->Settings = GenricGraphEditorSettings;
+		LayoutStrategy->Settings = GenericGraphEditorSettings;
 		LayoutStrategy->Layout(EdGraph);
 		LayoutStrategy->ConditionalBeginDestroy();
 	}

@@ -33,13 +33,9 @@ void FGraphEditorModule::ShutdownModule()
 		IAssetTools& AssetTools = FModuleManager::GetModuleChecked<FAssetToolsModule>("AssetTools").Get();
 		for (auto& AssetTypeAction : CreatedAssetTypeActions)
 		{
-			if (AssetTypeAction.IsValid())
-			{
-				AssetTools.UnregisterAssetTypeActions(AssetTypeAction.ToSharedRef());
-			}
+			UnRegisterAssetTypeAction(AssetTools, AssetTypeAction.ToSharedRef());
 		}
 	}
-	CreatedAssetTypeActions.Empty();
 
 	// Unregister node factories
 	if (GraphNodeFactory.IsValid())
@@ -55,6 +51,12 @@ void FGraphEditorModule::RegisterAssetTypeAction(IAssetTools& AssetTools, TShare
 {
 	AssetTools.RegisterAssetTypeActions(Action);
 	CreatedAssetTypeActions.Add(Action);
+}
+
+void FGraphEditorModule::UnRegisterAssetTypeAction(IAssetTools& AssetTools, TSharedRef<IAssetTypeActions> Action)
+{
+	AssetTools.UnregisterAssetTypeActions(Action);
+	CreatedAssetTypeActions.Remove(Action);
 }
 
 IMPLEMENT_MODULE(FGraphEditorModule, GenericGraphEditor)

@@ -1,5 +1,4 @@
 #pragma once
-
 #include "CoreMinimal.h"
 #include "SGraphNode.h"
 #include "SNodePanel.h"
@@ -12,31 +11,27 @@ class UGraphEditorEdEdgeNodeBase;
 
 class GENERICGRAPHEDITOR_API SGraphEditorEdge : public SGraphNode
 {
+	TSharedPtr<STextEntryPopup> TextEntryWidget;
+
+protected:
+	EVisibility GetEdgeImageVisibility() const;
+	EVisibility GetEdgeTitleVisibility() const;
+
+	FSlateColor        GetEdgeColor() const;
+	const FSlateBrush* GetEdgeImage() const;
+	
 public:
 	SLATE_BEGIN_ARGS(SGraphEditorEdge) {}
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs, UGraphEditorEdEdgeNodeBase* InNode);
 
+	// SGraphNode
 	virtual bool RequiresSecondPassLayout() const override;
 	virtual void PerformSecondPassLayout(const TMap<UObject*, TSharedRef<SNode>>& NodeToWidgetLookup) const override;
-
 	virtual void UpdateGraphNode() override;
-
-	// Calculate position for multiple nodes to be placed between a start and end
-	// point, by providing this nodes index and max expected nodes
+	// ~SGraphNode
+	
 	void PositionBetweenTwoNodesWithOffset(const FGeometry& StartGeom, const FGeometry& EndGeom, int32 NodeIndex, int32 MaxNodes) const;
-
 	void OnNameTextCommited(const FText& InText, ETextCommit::Type CommitInfo);
-
-protected:
-	FSlateColor GetEdgeColor() const;
-
-	const FSlateBrush* GetEdgeImage() const;
-
-	EVisibility GetEdgeImageVisibility() const;
-	EVisibility GetEdgeTitleVisbility() const;
-
-private:
-	TSharedPtr<STextEntryPopup> TextEntryWidget;
 };

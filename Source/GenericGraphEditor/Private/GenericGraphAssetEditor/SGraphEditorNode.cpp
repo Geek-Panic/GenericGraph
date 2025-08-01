@@ -7,7 +7,6 @@
 #include "SCommentBubble.h"
 #include "SGraphPin.h"
 #include "SlateOptMacros.h"
-#include "SLevelOfDetailBranchNode.h"
 #include "Widgets/Text/SInlineEditableTextBlock.h"
 
 #define LOCTEXT_NAMESPACE "EdNode_GenericGraph"

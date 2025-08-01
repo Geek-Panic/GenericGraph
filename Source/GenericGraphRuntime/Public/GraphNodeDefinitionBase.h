@@ -1,5 +1,4 @@
 #pragma once
-
 #include "CoreMinimal.h"
 #include "Templates/SubclassOf.h"
 #include "GraphNodeDefinitionBase.generated.h"
@@ -22,10 +21,8 @@ class GENERICGRAPHRUNTIME_API UGraphNodeDefinitionBase : public UObject
 	friend class UGraphDefinitionBase;
 	
 public:
-	
-	UGraphNodeDefinitionBase(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-	virtual ~UGraphNodeDefinitionBase() override;
-
+	explicit UGraphNodeDefinitionBase(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+	virtual  ~UGraphNodeDefinitionBase() override;
 
 #if WITH_EDITOR
 	virtual bool IsNameEditable() const;
@@ -52,7 +49,6 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Node")
 	FText GetDescription() const;
 	virtual FText GetDescription_Implementation() const;
-
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Node")
 	FText DisplayName = FText();
@@ -68,7 +64,6 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Node")
 	TMap<TObjectPtr<UGraphNodeDefinitionBase>, TObjectPtr<UGraphEdgeDefinitionBase>> Edges = {};
-
 	
 #if WITH_EDITORONLY_DATA
 	UPROPERTY(VisibleDefaultsOnly, Category = "Editor")
@@ -92,5 +87,4 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Editor", meta = (ClampMin = "0", EditCondition = "ChildrenLimitType == ENodeLimit::Limited", EditConditionHides))
 	int32 ChildrenLimit = 0;
 #endif
-	
 };

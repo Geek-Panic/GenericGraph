@@ -1,6 +1,7 @@
 #include "AutoLayout/TreeLayoutStrategy.h"
 #include "GenericGraphAssetEditor/SGraphEditorNode.h"
 #include "GenericGraphEditorPCH.h"
+#include "GenericGraphAssetEditor/GraphEditorEdNodeBase.h"
 
 UTreeLayoutStrategy::UTreeLayoutStrategy() {}
 
@@ -71,9 +72,9 @@ void UTreeLayoutStrategy::InitPass(UGraphNodeDefinitionBase* RootNode, const FVe
 		InitPass(Child, ChildAnchor);
 	}
 
-	float NodeWidth = GetNodeWidth(EdNode_RootNode);
-
+	const float NodeWidth = GetNodeWidth(EdNode_RootNode);
 	EdNode_RootNode->NodePosY = Anchor.Y;
+
 	if (RootNode->ChildrenNodes.Num() == 0)
 	{
 		EdNode_RootNode->NodePosX = Anchor.X - NodeWidth / 2;
