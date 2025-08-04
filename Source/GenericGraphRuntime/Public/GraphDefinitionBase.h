@@ -5,7 +5,7 @@
 
 #include "GraphDefinitionBase.generated.h"
 
-UCLASS(Blueprintable, BlueprintType)
+UCLASS(Abstract, Blueprintable, BlueprintType)
 class GENERICGRAPHRUNTIME_API UGraphDefinitionBase : public UObject
 {
 	GENERATED_BODY()
@@ -30,24 +30,24 @@ public:
 	void ClearGraph();
 	
 	/** Class for graph nodes */
-	UPROPERTY(EditDefaultsOnly, Category = "Graph")
+	UPROPERTY(EditDefaultsOnly, Category = "Graph", AdvancedDisplay)
 	TSubclassOf<UGraphNodeDefinitionBase> NodeType = nullptr;
 
 	/** Class for graph edges */
-	UPROPERTY(EditDefaultsOnly, Category = "Graph")
+	UPROPERTY(EditDefaultsOnly, Category = "Graph", AdvancedDisplay)
 	TSubclassOf<UGraphEdgeDefinitionBase> EdgeType = nullptr;
+
+	/** Enable/disable edge connections between nodes */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Graph", AdvancedDisplay)
+	bool bEdgeEnabled = true;
 
 	/** Root nodes of the graph hierarchy */
 	UPROPERTY(BlueprintReadOnly, Category = "Graph")
-	TArray<UGraphNodeDefinitionBase*> RootNodes = {};
+	TArray<TObjectPtr<UGraphNodeDefinitionBase>> RootNodes = {};
 
 	/** All nodes in the graph */
 	UPROPERTY(BlueprintReadOnly, Category = "Graph")
-	TArray<UGraphNodeDefinitionBase*> AllNodes = {};
-	
-	/** Enable/disable edge connections between nodes */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Graph")
-	bool bEdgeEnabled = true;
+	TArray<TObjectPtr<UGraphNodeDefinitionBase>> AllNodes = {};
 
 #if WITH_EDITORONLY_DATA
 	/** Editor-time graph representation.*/
@@ -55,11 +55,11 @@ public:
 	TObjectPtr<class UEdGraph> EditorGraph = nullptr;
 
 	/** Allow node renaming in editor */
-	UPROPERTY(EditDefaultsOnly, Category = "Editor")
+	UPROPERTY(EditDefaultsOnly, Category = "Editor", AdvancedDisplay)
 	bool bCanRenameNode = true;
 
 	/** Allow cyclic connections between nodes */
-	UPROPERTY(EditDefaultsOnly, Category = "Editor")
+	UPROPERTY(EditDefaultsOnly, Category = "Editor", AdvancedDisplay)
 	bool bCanBeCyclical = true;
 #endif
 };

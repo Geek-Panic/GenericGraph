@@ -209,7 +209,7 @@ void UAssetGraphSchema_GenericGraph::GetGraphContextActions(FGraphContextMenuBui
 
 	TSet<TSubclassOf<UGraphNodeDefinitionBase>> Visited;
 
-	FText Desc = Graph->NodeType.GetDefaultObject()->ContextMenuName;
+	FText Desc = Graph->NodeType.GetDefaultObject()->GetDisplayName();
 
 	if (Desc.IsEmpty())
 	{
@@ -245,7 +245,7 @@ void UAssetGraphSchema_GenericGraph::GetGraphContextActions(FGraphContextMenuBui
 				continue;
 			}
 
-			Desc = NodeType.GetDefaultObject()->ContextMenuName;
+			Desc = NodeType.GetDefaultObject()->GetDisplayName();
 
 			if (Desc.IsEmpty())
 			{

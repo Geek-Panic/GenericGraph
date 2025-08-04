@@ -1,7 +1,7 @@
+#include "GenericGraphAssetEditor/SGraphEditorNode.h"
 #include "GenericGraphAssetEditor/Colors_GenericGraph.h"
 #include "GenericGraphAssetEditor/GenericGraphDragConnection.h"
 #include "GenericGraphAssetEditor/GraphEditorEdNodeBase.h"
-#include "GenericGraphAssetEditor/SGraphEditorNode.h"
 #include "GenericGraphEditorPCH.h"
 #include "GraphEditorSettings.h"
 #include "SCommentBubble.h"

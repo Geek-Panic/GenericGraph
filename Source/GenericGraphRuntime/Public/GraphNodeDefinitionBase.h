@@ -13,7 +13,7 @@ enum class ENodeLimit : uint8
 	Limited
 };
 
-UCLASS(Blueprintable)
+UCLASS(Abstract, Blueprintable)
 class GENERICGRAPHRUNTIME_API UGraphNodeDefinitionBase : public UObject
 {
 	GENERATED_BODY()
@@ -30,7 +30,7 @@ public:
 	virtual FLinearColor GetBackgroundColor() const;
 
 	virtual FText GetDisplayName() const;
-	virtual void SetDisplayName(const FText& InDisplayName);
+	virtual void  SetDisplayName(const FText& InDisplayName);
 
 	virtual bool CanCreateConnection(UGraphNodeDefinitionBase* Other, FText& ErrorMessage);
 	virtual bool CanCreateConnectionTo(UGraphNodeDefinitionBase* Other, int32 NumberOfChildrenNodes, FText& ErrorMessage);
@@ -66,14 +66,11 @@ public:
 	TMap<TObjectPtr<UGraphNodeDefinitionBase>, TObjectPtr<UGraphEdgeDefinitionBase>> Edges = {};
 	
 #if WITH_EDITORONLY_DATA
-	UPROPERTY(VisibleDefaultsOnly, Category = "Editor")
+	UPROPERTY(EditDefaultsOnly, Category = "Editor")
 	TSubclassOf<UGraphDefinitionBase> CompatibleGraphType = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Editor")
 	FLinearColor BackgroundColor = FLinearColor::Black;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Editor")
-	FText ContextMenuName = FText();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Editor")
 	ENodeLimit ParentLimitType = ENodeLimit::Unlimited;

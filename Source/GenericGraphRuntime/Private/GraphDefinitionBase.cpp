@@ -8,12 +8,10 @@ UGraphDefinitionBase::UGraphDefinitionBase(const FObjectInitializer& ObjectIniti
 {
 	NodeType = UGraphNodeDefinitionBase::StaticClass();
 	EdgeType = UGraphEdgeDefinitionBase::StaticClass();
-
 	bEdgeEnabled = true;
 
 	#if WITH_EDITORONLY_DATA
 	EditorGraph = nullptr;
-
 	bCanRenameNode = true;
 	#endif
 }

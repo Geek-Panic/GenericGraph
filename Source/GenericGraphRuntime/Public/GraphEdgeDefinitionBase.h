@@ -5,7 +5,7 @@
 
 class UGraphDefinitionBase;
 
-UCLASS(Blueprintable)
+UCLASS(Abstract, Blueprintable)
 class GENERICGRAPHRUNTIME_API UGraphEdgeDefinitionBase : public UObject
 {
 	GENERATED_BODY()
