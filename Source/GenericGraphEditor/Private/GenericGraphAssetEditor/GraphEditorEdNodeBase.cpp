@@ -1,5 +1,8 @@
 #include "GenericGraphAssetEditor/GraphEditorEdNodeBase.h"
+
+#include "SGraphPin.h"
 #include "GenericGraphAssetEditor/EdGraph_GenericGraph.h"
+#include "GenericGraphAssetEditor/SGraphEditorNode.h"
 #include "Kismet2/Kismet2NameValidators.h"
 
 #define LOCTEXT_NAMESPACE "EdNode_GenericGraph"
@@ -8,8 +11,6 @@ UGraphEditorEdNodeBase::UGraphEditorEdNodeBase()
 {
 	bCanRenameNode = true;
 }
-
-UGraphEditorEdNodeBase::~UGraphEditorEdNodeBase() {}
 
 void UGraphEditorEdNodeBase::AllocateDefaultPins()
 {
@@ -69,9 +70,21 @@ UEdGraphPin* UGraphEditorEdNodeBase::GetOutputPin() const
 	return Pins[1];
 }
 
+TSharedPtr<SGraphNode> UGraphEditorEdNodeBase::GetNodeView()
+{
+	return SNew(SGraphEditorNode, this);
+}
+
+TSubclassOf<UGraphNodeDefinitionBase> UGraphEditorEdNodeBase::GetNodeClass()
+{
+	return UGraphNodeDefinitionBase::StaticClass();
+}
+
+#if WITH_EDITOR
 void UGraphEditorEdNodeBase::PostEditUndo()
 {
 	UEdGraphNode::PostEditUndo();
 }
+#endif
 
 #undef LOCTEXT_NAMESPACE

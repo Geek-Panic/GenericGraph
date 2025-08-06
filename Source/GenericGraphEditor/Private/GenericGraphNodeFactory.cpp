@@ -8,14 +8,16 @@
 TSharedPtr<SGraphNode> FGraphEditorNodeFactory::CreateNode(UEdGraphNode* Node) const
 {
 	// TODO : Add entry node
-	
+
 	if (UGraphEditorEdNodeBase* GraphNode = Cast<UGraphEditorEdNodeBase>(Node))
 	{
-		return SNew(SGraphEditorNode, GraphNode);
+		return GraphNode->GetNodeView();
 	}
+	
 	if (UGraphEditorEdEdgeNodeBase* GraphEdge = Cast<UGraphEditorEdEdgeNodeBase>(Node))
 	{
 		return SNew(SGraphEditorEdge, GraphEdge);
 	}
+	
 	return nullptr;
 }

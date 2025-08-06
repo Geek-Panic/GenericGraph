@@ -78,8 +78,7 @@ void SGraphEditorNode::UpdateGraphNode()
 	InputPins.Empty();
 	OutputPins.Empty();
 
-	// Reset variables that are going to be exposed, in case we are refreshing an
-	// already setup node.
+	// Reset variables that are going to be exposed, in case we are refreshing an already setup node.
 	RightNodeBox.Reset();
 	LeftNodeBox.Reset();
 

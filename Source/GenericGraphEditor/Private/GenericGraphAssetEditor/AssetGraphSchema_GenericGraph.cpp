@@ -218,10 +218,38 @@ void UAssetGraphSchema_GenericGraph::GetGraphContextActions(FGraphContextMenuBui
 		Desc = FText::FromString(Title);
 	}
 
+	// Extract all editor nodes subclass
+	TSet<TSubclassOf<UGraphEditorEdNodeBase>> EdNodesVisited;
+	{
+		const UClass* BaseClass = UGraphEditorEdNodeBase::StaticClass();
+		for (TObjectIterator<UClass> It; It; ++It)
+		{
+			if (It->IsChildOf(BaseClass) && !EdNodesVisited.Contains(*It))
+			{
+				TSubclassOf<UGraphEditorEdNodeBase> EdNodeType = *It;
+				EdNodesVisited.Add(EdNodeType);
+			}
+		}
+	}
+	
 	if (!Graph->NodeType->HasAnyClassFlags(CLASS_Abstract))
 	{
 		TSharedPtr<FAssetSchemaAction_GenericGraph_NewNode> NewNodeAction(new FAssetSchemaAction_GenericGraph_NewNode(LOCTEXT("GenericGraphNodeAction", "Generic Graph Node"), Desc, AddToolTip, 0));
-		NewNodeAction->NodeTemplate = NewObject<UGraphEditorEdNodeBase>(ContextMenuBuilder.OwnerOfTemporaries);
+
+		// Find editor node template
+		auto EdNodeClassToUse = UGraphEditorEdNodeBase::StaticClass();
+		{
+			for (const auto& EdNodeClass : EdNodesVisited)
+			{
+				const auto DefaultEdNodeObject = Cast<UGraphEditorEdNodeBase>(EdNodeClass->GetDefaultObject());
+				if (Graph->NodeType->IsChildOf(DefaultEdNodeObject->GetNodeClass()))
+				{
+					EdNodeClassToUse = EdNodeClass;
+				}
+			}
+		}
+
+		NewNodeAction->NodeTemplate = NewObject<UGraphEditorEdNodeBase>(ContextMenuBuilder.OwnerOfTemporaries, EdNodeClassToUse);
 		NewNodeAction->NodeTemplate->GenericGraphNode = NewObject<UGraphNodeDefinitionBase>(NewNodeAction->NodeTemplate, Graph->NodeType);
 		NewNodeAction->NodeTemplate->GenericGraphNode->Graph = Graph;
 		ContextMenuBuilder.AddAction(NewNodeAction);
@@ -255,7 +283,21 @@ void UAssetGraphSchema_GenericGraph::GetGraphContextActions(FGraphContextMenuBui
 			}
 
 			TSharedPtr<FAssetSchemaAction_GenericGraph_NewNode> Action(new FAssetSchemaAction_GenericGraph_NewNode(LOCTEXT("GenericGraphNodeAction", "Generic Graph Node"), Desc, AddToolTip, 0));
-			Action->NodeTemplate = NewObject<UGraphEditorEdNodeBase>(ContextMenuBuilder.OwnerOfTemporaries);
+
+			// Find editor node template 
+			auto EdNodeClassToUse = UGraphEditorEdNodeBase::StaticClass();
+			{
+				for (const auto& EdNodeClass : EdNodesVisited)
+				{
+					const auto DefaultEdNodeObject = Cast<UGraphEditorEdNodeBase>(EdNodeClass->GetDefaultObject());
+					if (NodeType->IsChildOf(DefaultEdNodeObject->GetNodeClass()) && !EdNodeClassToUse->IsChildOf(EdNodeClass))
+					{
+						EdNodeClassToUse = EdNodeClass;
+					}
+				}
+			}
+
+			Action->NodeTemplate = NewObject<UGraphEditorEdNodeBase>(ContextMenuBuilder.OwnerOfTemporaries, EdNodeClassToUse);
 			Action->NodeTemplate->GenericGraphNode = NewObject<UGraphNodeDefinitionBase>(Action->NodeTemplate, NodeType);
 			Action->NodeTemplate->GenericGraphNode->Graph = Graph;
 			ContextMenuBuilder.AddAction(Action);
@@ -343,10 +385,22 @@ const FPinConnectionResponse UAssetGraphSchema_GenericGraph::CanCreateConnection
 	}
 
 	FText ErrorMessage;
+
+	if (!EdNode_Out->GetOutputPin())
+	{
+		return FPinConnectionResponse(CONNECT_RESPONSE_DISALLOW, TEXT("Output connection not allowed"));
+	}
+	
 	if (!EdNode_Out->GenericGraphNode->CanCreateConnectionTo(EdNode_In->GenericGraphNode, EdNode_Out->GetOutputPin()->LinkedTo.Num(), ErrorMessage))
 	{
 		return FPinConnectionResponse(CONNECT_RESPONSE_DISALLOW, ErrorMessage);
 	}
+
+	if (!EdNode_In->GetInputPin())
+	{
+		return FPinConnectionResponse(CONNECT_RESPONSE_DISALLOW, TEXT("Input connection not allowed"));
+	}
+	
 	if (!EdNode_In->GenericGraphNode->CanCreateConnectionFrom(EdNode_Out->GenericGraphNode, EdNode_In->GetInputPin()->LinkedTo.Num(), ErrorMessage))
 	{
 		return FPinConnectionResponse(CONNECT_RESPONSE_DISALLOW, ErrorMessage);

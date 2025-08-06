@@ -8,14 +8,13 @@ class UGraphEditorEdEdgeNodeBase;
 class UEdGraph_GenericGraph;
 class SGraphEditorNode;
 
-UCLASS(MinimalAPI)
-class UGraphEditorEdNodeBase : public UEdGraphNode
+UCLASS()
+class GENERICGRAPHEDITOR_API UGraphEditorEdNodeBase : public UEdGraphNode
 {
 	GENERATED_BODY()
 
 public:
-	UGraphEditorEdNodeBase();
-	virtual ~UGraphEditorEdNodeBase() override;
+	explicit UGraphEditorEdNodeBase();
 
 	UPROPERTY(VisibleAnywhere, Instanced, Category = "GenericGraph")
 	TObjectPtr<UGraphNodeDefinitionBase> GenericGraphNode;
@@ -25,14 +24,19 @@ public:
 
 	SGraphEditorNode* SEdNode;
 
+	//~ Begin UEdGraphNode Interface
 	virtual void AllocateDefaultPins() override;
 	virtual FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
 	virtual void PrepareForCopying() override;
 	virtual void AutowireNewNode(UEdGraphPin* FromPin) override;
+	//~ End UEdGraphNode Interface
 
 	virtual FLinearColor GetBackgroundColor() const;
 	virtual UEdGraphPin* GetInputPin() const;
 	virtual UEdGraphPin* GetOutputPin() const;
+
+	virtual TSharedPtr<SGraphNode>                GetNodeView();
+	virtual TSubclassOf<UGraphNodeDefinitionBase> GetNodeClass();
 
 #if WITH_EDITOR
 	virtual void PostEditUndo() override;
